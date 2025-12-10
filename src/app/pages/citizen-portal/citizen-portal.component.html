@@ -1,0 +1,90 @@
+<header class="navbar">
+  <div class="logo-area">
+    <img src="assets/cs logo.png" alt="CrimeShark Logo" class="logo-img" />
+    <span class="logo-text">CrimeShark</span>
+  </div>
+
+  <div class="search">
+    <input [(ngModel)]="search" placeholder="Search crimes, areas, or hotzones" />
+    <button class="search-btn" aria-label="search">🔍</button>
+  </div>
+
+  <div class="nav-links">
+    <a routerLink="/" class="nav-link">Citizen Portal</a>
+    <a routerLink="/live-map" class="nav-link">Live Map</a>
+    <a routerLink="/tips" class="nav-link">Safety Tips</a>
+    <a routerLink="/report" class="nav-link">Report</a>
+    <a routerLink="/profile" class="nav-link">Profile</a>
+  </div>
+</header>
+
+<div class="portal-wrap">
+
+  <section class="categories">
+    <div class="category-pill" 
+         *ngFor="let c of categories"
+         [class.active]="selectedCategory === c"
+         (click)="setCategory(c)">
+      {{ c }}
+    </div>
+  </section>
+
+  <main class="main-grid">
+    <!-- left column: map + trending -->
+    <aside class="left-col">
+      <div class="map-card">
+        <!-- placeholder map graphic -->
+        <div class="map-placeholder">
+          <div class="pin" *ngFor="let p of [1,2,3,4]"></div>
+        </div>
+      </div>
+
+      <div class="trending">
+        <h3>Trending</h3>
+        <div class="trend-card" *ngFor="let t of trending">
+          <div class="trend-icon">⚠️</div>
+          <div class="trend-body">
+            <div class="trend-title">{{ t.title }}</div>
+            <div class="trend-time">{{ t.when }}</div>
+          </div>
+        </div>
+
+        <button class="see-details">See Details</button>
+      </div>
+    </aside>
+
+    <!-- right column: feed -->
+    <section class="right-col">
+      <div class="feed-header">
+        <div class="feed-title">Live Alerts</div>
+      </div>
+
+      <div class="alert-list">
+        <article class="alert-card" *ngFor="let a of filteredAlerts()">
+          <div class="alert-left">
+            <div class="alert-icon">{{ a.icon }}</div>
+          </div>
+
+          <div class="alert-right">
+            <h4 class="alert-title">{{ a.title }}</h4>
+            <div class="alert-sub">{{ a.subtitle }}</div>
+
+            <div class="alert-meta">
+              <div class="meta-item">📍 {{ a.location }}</div>
+              <div class="meta-item">👁️ {{ a.viewers }} people nearby viewed this alert</div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="news-block">
+        <div class="news-item">⚠️ 3 thefts reported near Liberty Market this week</div>
+        <div class="news-item">🔔 Local police increased patrolling in your area</div>
+      </div>
+    </section>
+  </main>
+
+  <button class="report-btn" routerLink="/report">
+  <div class="plus">+</div>
+  <div class="report-text">Report a<br/>Crime</div>
+</button>

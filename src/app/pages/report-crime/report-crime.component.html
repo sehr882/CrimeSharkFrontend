@@ -1,0 +1,122 @@
+<!-- CrimeShark - Report a Crime Page (Matching Your Existing UI Style) -->
+<div class="report-wrap">
+
+  <h2 class="page-title">Report a Crime</h2>
+
+  <!-- FORM CONTAINER -->
+  <div class="form-box">
+
+    <!-- Crime Type -->
+    <div class="form-field">
+      <label class="field-label">Crime Type</label>
+      <select [(ngModel)]="crimeType" (change)="updateCrimeOptions()" class="field-input">
+        <option value="">Select type...</option>
+        <option value="static">Static</option>
+        <option value="moving">Moving</option>
+      </select>
+    </div>
+
+    <!-- Crime -->
+    <div class="form-field">
+      <label class="field-label">Crime</label>
+      <select [(ngModel)]="selectedCrime" class="field-input">
+        <option value="">Select crime...</option>
+        <option *ngFor="let crime of crimeOptions" [value]="crime">{{ crime }}</option>
+      </select>
+    </div>
+
+    <!-- Description -->
+    <div class="form-field">
+      <label class="field-label">Description</label>
+      <textarea rows="4" class="field-input textarea-input" placeholder="Describe what happened..."></textarea>
+    </div>
+
+    <!-- Evidence Upload -->
+    <div class="form-field">
+      <label class="field-label">Evidence (optional)</label>
+      <input type="file" class="file-input" />
+    </div>
+
+    <!-- Submit Button -->
+    <button class="submit-btn">Submit Report</button>
+
+  </div>
+</div>
+
+<style>
+  .report-wrap {
+    width: 100%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #e5e5e5;
+  }
+
+  .page-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 25px;
+  }
+
+  .form-box {
+    width: 100%;
+    max-width: 600px;
+    background: #0f1a22;
+    padding: 25px;
+    border: 1px solid #1f2b34;
+    border-radius: 10px;
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+  }
+
+  .field-label {
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #d0d0d0;
+  }
+
+  .field-input {
+    padding: 10px;
+    border: 1px solid #2c3a44;
+    background: #0b151c;
+    color: #e5e5e5;
+    border-radius: 6px;
+    outline: none;
+  }
+
+  .field-input:focus {
+    border-color: #3f92ff;
+  }
+
+  .textarea-input {
+    resize: vertical;
+  }
+
+  .file-input {
+    color: #bdbdbd;
+  }
+
+  .submit-btn {
+    margin-top: 10px;
+    width: 100%;
+    padding: 12px;
+    background: #d62828;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .submit-btn:hover {
+    background: #b71f1f;
+  }
+</style>
+<a routerLink="/report" class="nav-link">Report</a>
+
