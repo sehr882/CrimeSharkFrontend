@@ -51,7 +51,7 @@
           name="crimeArea"
           [(ngModel)]="crimeArea"
           class="field-input"
-          placeholder="e.g. Liberty Market, Saddar, Clifton..."
+          placeholder="Exact Place, City..."
         />
       </div>
 
@@ -77,6 +77,10 @@
       <button class="submit-btn" (click)="submitReport()">Submit Report</button>
 
     </div>
+    <div class="success-box" *ngIf="showSuccess">
+  Report submitted successfully!
+</div>
+
 
   </div>
 

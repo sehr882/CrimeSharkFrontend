@@ -22,6 +22,9 @@ export class ReportCrimeComponent implements OnInit {
   description = '';
   uploadedFile?: File | null = null;
 
+  submitted = false;
+  showSuccess = false;
+
   staticCrimes: string[] = [
     "Burglary",
     "Robbery (moving)",
@@ -86,10 +89,11 @@ export class ReportCrimeComponent implements OnInit {
       description: this.description,
       file: this.uploadedFile
     });
-
+this.submitted = true;
     if (!this.crimeType) { alert('Choose crime type'); return; }
     if (!this.selectedCrime) { alert('Choose a crime'); return; }
-
+    if (!this.crimeArea) { alert('Choose crime area'); return; }
+ this.showSuccess = true;
     // reset for demo
     this.crimeType = '';
     this.selectedCrime = '';
@@ -97,6 +101,11 @@ export class ReportCrimeComponent implements OnInit {
     this.crimeArea = '';
     this.description = '';
     this.uploadedFile = null;
+
+    this.submitted = false;
+
+  // Auto-hide success message after 3 seconds
+  setTimeout(() => this.showSuccess = false, 3000);
   }
 }
 
