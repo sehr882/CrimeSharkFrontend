@@ -19,11 +19,14 @@ export const routes: Routes = [
 
   // Report Crime
   {
-    path: 'report',
-    loadComponent: () =>
-      import('./pages/report-crime/report-crime.component')
-        .then(m => m.ReportCrimeComponent)
-  },
+  path: 'report',
+  loadComponent: () =>
+    import('./pages/report-crime/report-crime.component').then(
+      (m) => m.ReportCrimeComponent
+    ),
+},
+
+
 
   // Authority Login
   {

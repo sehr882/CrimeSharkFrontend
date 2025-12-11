@@ -1,22 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-report-crime',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './report-crime.component.html',
   styleUrls: ['./report-crime.component.scss']
 })
-export class ReportCrimeComponent {
+export class ReportCrimeComponent implements OnInit {
 
-  crimeType = '';
+  // Logs help us verify this exact runtime class is loaded
+  constructor() {
+    console.log('[REPORT-COMP] constructor');
+  }
+
+  crimeType: string = '';       // start empty to match your preference
   selectedCrime = '';
   crimeArea = '';
   description = '';
   uploadedFile?: File | null = null;
 
-  staticCrimes = [
+  staticCrimes: string[] = [
     "Burglary",
     "Robbery (moving)",
     "Arson",
@@ -29,7 +35,7 @@ export class ReportCrimeComponent {
     "Extortion"
   ];
 
-  movingCrimes = [
+  movingCrimes: string[] = [
     "Pickpocketing",
     "Snatching",
     "Mugging",
@@ -44,9 +50,17 @@ export class ReportCrimeComponent {
 
   crimeOptions: string[] = [];
 
-  updateCrimeOptions() {
-    // reset selectedCrime whenever type changes
+  ngOnInit() {
+    console.log('[REPORT-COMP] ngOnInit - initial crimeType:', this.crimeType);
+    // do NOT auto-select — but ensure the function exists and logs when called
+    this.updateCrimeOptions(); // will populate if crimeType non-empty (mostly logs)
+  }
+
+  // called both on (ngModelChange) and can be called manually
+  updateCrimeOptions(): void {
+    console.log('[REPORT-COMP] updateCrimeOptions() called — crimeType=', this.crimeType);
     this.selectedCrime = '';
+
     if (this.crimeType === 'static') {
       this.crimeOptions = [...this.staticCrimes];
     } else if (this.crimeType === 'moving') {
@@ -54,46 +68,39 @@ export class ReportCrimeComponent {
     } else {
       this.crimeOptions = [];
     }
+
+    console.log('[REPORT-COMP] crimeOptions =>', this.crimeOptions);
   }
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length) {
-      this.uploadedFile = input.files[0];
-    } else {
-      this.uploadedFile = null;
-    }
+    this.uploadedFile = input.files?.[0] || null;
+    console.log('[REPORT-COMP] onFileSelected', this.uploadedFile);
   }
 
   submitReport() {
-    // basic client-side validation
-    if (!this.crimeType) {
-      alert('Please select a crime type.');
-      return;
-    }
-    if (!this.selectedCrime) {
-      alert('Please select a crime.');
-      return;
-    }
-    // build payload example
-    const payload = {
-      type: this.crimeType,
-      crime: this.selectedCrime,
+    console.log('[REPORT-COMP] submitReport called', {
+      crimeType: this.crimeType,
+      selectedCrime: this.selectedCrime,
+      crimeArea: this.crimeArea,
       description: this.description,
-      fileName: this.uploadedFile?.name ?? null,
-      timestamp: new Date().toISOString()
-    };
-    console.log('Submitting report:', payload);
-    // TODO: send payload + file to backend service
-    alert('Report submitted (demo). Check console for payload.');
-    // reset form (optional)
+      file: this.uploadedFile
+    });
+
+    if (!this.crimeType) { alert('Choose crime type'); return; }
+    if (!this.selectedCrime) { alert('Choose a crime'); return; }
+
+    // reset for demo
     this.crimeType = '';
     this.selectedCrime = '';
     this.crimeOptions = [];
+    this.crimeArea = '';
     this.description = '';
     this.uploadedFile = null;
   }
 }
+
+
 
 
 
