@@ -12,6 +12,7 @@ export class ReportCrimeComponent {
 
   crimeType = '';
   selectedCrime = '';
+  crimeArea = '';
   description = '';
   uploadedFile?: File | null = null;
 
