@@ -3,15 +3,105 @@
   width: 100%;
 }
 
-.report-wrap {
+/* Full-screen background */
+.report-page {
   width: 100%;
-  min-height: 100vh;   /* full height */
-  padding: 0;
-  margin: 0;
+  min-height: 100vh;
+  background: #07131a; /* slightly darker full background */
+  padding: 48px 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
+/* Centers content */
+.form-container {
+  width: 100%;
+  max-width: 920px;     /* made bigger */
+  padding: 0 28px;
+}
+
+/* Page title */
+.page-title {
+  color: rgba(255,255,255,0.92);
+  font-size: 30px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 22px;
+  opacity: 0.9;
+}
+
+/* Form card */
 .form-box {
   width: 100%;
-  max-width: 600px;   /* form stays neat */
-  margin: 0 auto;     /* center the card */
+  background: #0e1b22;
+  padding: 32px;
+  border: 1px solid #16262e;
+  border-radius: 12px;
+  box-shadow: 0 6px 26px rgba(2,6,10,0.45);
 }
+
+/* Fields */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.field-label {
+  font-size: 13px;
+  margin-bottom: 8px;
+  color: #cfcfcf;
+}
+
+.field-input {
+  padding: 12px 14px;
+  border: 1px solid #21313a;
+  background: #071216;
+  color: #eaeaea;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 120ms ease;
+}
+
+.field-input:focus {
+  border-color: #3f92ff;
+}
+
+/* placeholder-disabled select style help */
+select[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.textarea-input {
+  resize: vertical;
+  min-height: 110px;
+}
+
+/* file input */
+.file-input {
+  color: #cfcfcf;
+}
+
+/* Button */
+.submit-btn {
+  margin-top: 12px;
+  width: 100%;
+  padding: 14px;
+  background: #d43a36;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.submit-btn:hover {
+  background: #b8302d;
+}
+
+
