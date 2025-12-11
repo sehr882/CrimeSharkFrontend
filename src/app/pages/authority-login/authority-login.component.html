@@ -1,0 +1,42 @@
+<div class="auth-container">
+  <div class="auth-card">
+
+    <div class="auth-header">
+      <img src="assets/cs logo.png" class="badge" alt="badge">
+      <h2>Authority Login</h2>
+      <p class="warning">Authorized Personnel Only</p>
+    </div>
+
+    <form>
+
+      <label>Authority ID / Email</label>
+      <input 
+        type="text" 
+        [(ngModel)]="authorityId" 
+        name="authorityId"
+        placeholder="Enter your official ID">
+
+      <label>Password</label>
+      <input 
+        type="password" 
+        [(ngModel)]="password"
+        name="password"
+        placeholder="Enter password">
+
+      <label>Authority Access Code</label>
+      <input 
+        type="text" 
+        [(ngModel)]="accessCode"
+        name="accessCode"
+        placeholder="Enter secret authority code">
+
+      <button type="button" (click)="login()">Login</button>
+
+      <p class="danger-text">
+        🛑 Unauthorized access is strictly prohibited.
+      </p>
+    </form>
+    
+  </div>
+</div>
+
