@@ -1,0 +1,17 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.report-wrap {
+  width: 100%;
+  min-height: 100vh;   /* full height */
+  padding: 0;
+  margin: 0;
+}
+
+.form-box {
+  width: 100%;
+  max-width: 600px;   /* form stays neat */
+  margin: 0 auto;     /* center the card */
+}
