@@ -1,41 +1,42 @@
 <div class="auth-container">
   <div class="auth-card">
-
     <div class="auth-header">
       <h2>Authority Login</h2>
       <p class="warning">Authorized Personnel Only</p>
     </div>
 
     <form>
-
-      <label>Authority ID / Email</label>
+      <!-- CNIC FIELD -->
+      <label>CNIC</label>
       <input 
-        type="text" 
-        [(ngModel)]="authorityId" 
-        name="authorityId"
-        placeholder="Enter your official ID">
+        type="text"
+        [(ngModel)]="cnic"
+        name="cnic"
+        placeholder="Enter your CNIC (e.g. 35202-1234567-8)"
+      >
 
+      <!-- PASSWORD -->
       <label>Password</label>
       <input 
-        type="password" 
+        type="password"
         [(ngModel)]="password"
         name="password"
-        placeholder="Enter password">
+        placeholder="Enter password"
+      >
 
+      <!-- ACCESS CODE -->
       <label>Authority Access Code</label>
       <input 
-        type="text" 
+        type="text"
         [(ngModel)]="accessCode"
         name="accessCode"
-        placeholder="Enter secret authority code">
+        placeholder="Enter secret authority code"
+      >
 
       <button type="button" (click)="login()">Login</button>
 
-      <p class="danger-text">
-        🛑 Unauthorized access is strictly prohibited.
-      </p>
+      <p class="danger-text"> 🛑 Unauthorized access is strictly prohibited. </p>
     </form>
-    
   </div>
 </div>
 

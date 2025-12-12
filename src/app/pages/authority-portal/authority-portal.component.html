@@ -1,0 +1,110 @@
+<div class="portal-container">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2 class="brand">Authority Portal</h2>
+
+    <ul>
+      <li routerLink="/authority/portal" class="active">Dashboard</li>
+      <li>Manage Reports</li>
+      <li routerLink="/live-map">Hotzones</li>
+      <li>Settings</li>
+      <li class="logout" (click)="logout()">Logout</li>
+    </ul>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <h1>Welcome, Officer</h1>
+    <p class="sub-text">City-wide crime analytics dashboard.</p>
+
+    <!-- STAT CARDS -->
+    <div class="stats-grid">
+      <div class="card red">
+        <h3>Total Crime Reports</h3>
+        <p class="value">{{ totalReports }}</p>
+      </div>
+
+      <div class="card yellow">
+        <h3>Pending Cases</h3>
+        <p class="value">{{ pendingReports }}</p>
+      </div>
+
+      <div class="card green">
+        <h3>Resolved Cases</h3>
+        <p class="value">{{ resolvedReports }}</p>
+      </div>
+    </div>
+
+    <!-- CHARTS SECTION -->
+    <div class="charts-grid">
+
+      <div class="chart-box">
+        <h2>Crime Trend (Last 6 Months)</h2>
+        <canvas baseChart 
+                [data]="lineChartData"
+                [labels]="lineChartLabels"
+                [type]="'line'">
+        </canvas>
+      </div>
+
+      <div class="chart-box">
+        <h2>Crime Categories Distribution</h2>
+        <canvas baseChart 
+                [data]="pieChartData"
+                [labels]="pieChartLabels"
+                [type]="'pie'">
+        </canvas>
+      </div>
+
+      <div class="chart-box">
+        <h2>Pending vs Resolved</h2>
+        <canvas baseChart 
+                [data]="barChartData"
+                [labels]="barChartLabels"
+                [type]="'bar'">
+        </canvas>
+      </div>
+
+    </div>
+
+    <!-- LIVE HEATMAP SECTION -->
+    <div class="heatmap-section">
+      <h2>Live Crime Heatmap</h2>
+      <p>This map will show real-time crime density. (API integration pending)</p>
+
+      <!-- Placeholder map UI -->
+      <div class="map-placeholder">
+        <p>🔍 Crime Heatmap Loading...</p>
+      </div>
+    </div>
+
+    <!-- RECENT REPORTS -->
+    <div class="table-container">
+      <h2>Recent Crime Reports</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Location</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let report of recentReports">
+            <td>{{ report.id }}</td>
+            <td>{{ report.type }}</td>
+            <td>{{ report.location }}</td>
+            <td>{{ report.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+

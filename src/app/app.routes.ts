@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { CitizenPortalComponent } from './pages/citizen-portal/citizen-portal.component';
+import { AuthorityPortalComponent } from './pages/authority-portal/authority-portal.component';
+
 
 export const routes: Routes = [
   // Home Screen
@@ -8,6 +10,11 @@ export const routes: Routes = [
 
   // Citizen Portal
   { path: 'citizen', component: CitizenPortalComponent },
+  {
+  path: 'authority-portal',
+  component: AuthorityPortalComponent
+},
+
 
   // Live Map
   {
@@ -36,8 +43,14 @@ export const routes: Routes = [
         .then(m => m.AuthorityLoginComponent)
   },
 
-  // Default unknown route → redirect to home
-  { path: '**', redirectTo: '' }
+  {
+  path: 'authority/portal',
+  loadComponent: () =>
+    import('./pages/authority-portal/authority-portal.component')
+      .then(m => m.AuthorityPortalComponent)
+}
+
+ 
 ];
 
 
