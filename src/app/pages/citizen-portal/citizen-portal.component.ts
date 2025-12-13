@@ -27,11 +27,74 @@ export class CitizenPortalComponent implements AfterViewInit {
   categories = ['Robbery', 'Burglary', 'Cybercrime', 'Missing Person', 'Assault'];
   selectedCategory = '';
 
+  onSearch() {
+  // Triggered only to refresh UI
+  // Actual filtering is handled in filteredAlerts()
+}
+
   alerts: Alert[] = [
-    { id: 1, title: 'Robbery in Model Town', subtitle: 'Reported 15 mins ago', location: 'Lahore', time: '15 mins', viewers: 250, icon: '🔴', verified: true },
-    { id: 2, title: 'Burglary in Gulberg', subtitle: '1 hour ago - Verified', location: 'Lahore', time: '1 hour', viewers: 170, icon: '🏠', verified: true },
-    { id: 3, title: 'Assault in Saddar', subtitle: '2 hours ago - Verified', location: 'Karachi', time: '2 hours', viewers: 140, icon: '⚠️', verified: false }
-  ];
+  {
+    id: 1,
+    title: 'Robbery in Model Town',
+    subtitle: 'Reported 15 mins ago',
+    location: 'Lahore',
+    time: '15 mins',
+    viewers: 250,
+    icon: '🔴',
+    verified: true
+  },
+  {
+    id: 2,
+    title: 'Burglary in Gulberg',
+    subtitle: '1 hour ago - Verified',
+    location: 'Lahore',
+    time: '1 hour',
+    viewers: 170,
+    icon: '🏠',
+    verified: true
+  },
+  {
+    id: 3,
+    title: 'Assault in Saddar',
+    subtitle: '2 hours ago',
+    location: 'Karachi',
+    time: '2 hours',
+    viewers: 140,
+    icon: '⚠️',
+    verified: false
+  },
+  {
+    id: 4,
+    title: 'Cybercrime Scam Reported',
+    subtitle: 'Online fraud case',
+    location: 'Islamabad',
+    time: '3 hours',
+    viewers: 95,
+    icon: '💻',
+    verified: true
+  },
+  {
+    id: 5,
+    title: 'Robbery Attempt Foiled',
+    subtitle: 'Suspect fled the scene',
+    location: 'Rawalpindi',
+    time: '30 mins',
+    viewers: 110,
+    icon: '🚨',
+    verified: true
+  },
+  {
+    id: 6,
+    title: 'Burglary at Electronics Shop',
+    subtitle: 'CCTV footage under review',
+    location: 'Lahore',
+    time: '4 hours',
+    viewers: 200,
+    icon: '🏪',
+    verified: false
+  }
+];
+
 
   trending = [
     { title: 'Scam Alert', when: '3 hours ago' },
@@ -103,11 +166,20 @@ export class CitizenPortalComponent implements AfterViewInit {
   }
 
   filteredAlerts() {
-    if (!this.selectedCategory) return this.alerts;
-    return this.alerts.filter(a =>
-      a.title.toLowerCase().includes(this.selectedCategory.toLowerCase())
-    );
-  }
+  return this.alerts.filter(alert => {
+
+    const matchesCategory = this.selectedCategory
+      ? alert.title.toLowerCase().includes(this.selectedCategory.toLowerCase())
+      : true;
+
+    const matchesSearch = this.search
+      ? alert.title.toLowerCase().includes(this.search.toLowerCase())
+      : true;
+
+    return matchesCategory && matchesSearch;
+  });
+}
+
 }
 
 

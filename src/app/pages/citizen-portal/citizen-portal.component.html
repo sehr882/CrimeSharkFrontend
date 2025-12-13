@@ -5,8 +5,13 @@
   </div>
 
   <div class="search">
-    <input [(ngModel)]="search" placeholder="Search crimes, areas, or hotzones" />
-    <button class="search-btn" aria-label="search">🔍</button>
+    <input
+  [(ngModel)]="search"
+  placeholder="Search crimes"
+  (keyup.enter)="onSearch()"
+/>
+
+    <button class="search-btn" aria-label="search" (click)="onSearch()">🔍</button>
   </div>
 
   <div class="nav-links">
@@ -72,6 +77,10 @@
           </div>
         </article>
       </div>
+      <div class="no-results" *ngIf="filteredAlerts().length === 0">
+  ❌ No results found
+</div>
+
 
       <div class="news-block">
         <div class="news-item">⚠️ 3 thefts reported near Liberty Market this week</div>

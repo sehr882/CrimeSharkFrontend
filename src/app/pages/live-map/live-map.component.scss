@@ -1,4 +1,89 @@
-#map {
+/* =========================
+   MAP CONTAINER
+========================= */
+.map-wrapper {
+  position: relative;
   height: 100vh;
   width: 100%;
 }
+
+/* =========================
+   SEARCH BAR
+========================= */
+.map-search {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  gap: 10px;
+  background: rgba(13, 17, 23, 0.95);
+  padding: 12px 15px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  backdrop-filter: blur(10px);
+}
+
+.map-search input {
+  width: 260px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: #161b22;
+  color: #fff;
+  font-size: 14px;
+}
+
+.map-search {
+  width: 420px;
+}
+
+.map-search input {
+  flex: 1;
+  font-size: 15px;
+  padding: 14px 16px;
+}
+
+.map-search button {
+  font-size: 15px;
+  padding: 14px 20px;
+}
+
+
+/* =========================
+   MAP ITSELF
+========================= */
+#map {
+  height: 100%;
+  width: 100%;
+}
+
+/* =========================
+   LEAFLET DARK THEME FIXES
+========================= */
+.leaflet-popup-content-wrapper {
+  background: #161b22;
+  color: #fff;
+  border-radius: 10px;
+}
+
+.leaflet-popup-tip {
+  background: #161b22;
+}
+
+.leaflet-control-zoom a {
+  background: #161b22 !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: #21262d !important;
+}
+.emoji-marker {
+  font-size: 28px;
+}
+
+

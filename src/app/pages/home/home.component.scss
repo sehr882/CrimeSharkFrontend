@@ -15,14 +15,30 @@ $muted: #9aa6b2;
 /* Top bar */
 .top-bar {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   padding: 18px;
   background: rgba(255, 255, 255, 0.02);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.logo-img { width: 38px; }
-.logo-text { font-size: 22px; font-weight: 700; }
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-img {
+  width: 36px;
+  height: 36px;
+}
+
+.logo-text {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  font-style: italic;
+}
 
 /* Hero Section */
 .hero-section {
@@ -78,9 +94,10 @@ $muted: #9aa6b2;
 }
 
 .title {
-  font-size: 36px;
-  font-weight: 800;
+  font-size: 34px;
+  font-weight: 800px;
   margin-bottom: 10px;
+  color: cadetblue;
 }
 
 .subtitle {

@@ -1,3 +1,17 @@
-<div id="map"></div>
+<div class="map-wrapper">
+
+  <div class="map-search">
+    <input
+      [(ngModel)]="searchQuery"
+      placeholder="Search city or area (e.g. Lahore, Karachi)"
+    />
+    <button (click)="searchLocation()">Search</button>
+  </div>
+
+  <div id="map"></div>
+
+</div>
+
+
 
 

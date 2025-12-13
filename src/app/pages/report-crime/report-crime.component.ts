@@ -27,7 +27,7 @@ export class ReportCrimeComponent implements OnInit {
 
   staticCrimes: string[] = [
     "Burglary",
-    "Robbery (moving)",
+    "Robbery (static)",
     "Arson",
     "Vandalism",
     "Trespassing",
@@ -48,7 +48,7 @@ export class ReportCrimeComponent implements OnInit {
     "Reckless driving",
     "Speeding",
     "DUI (Driving Under Influence)",
-    "Robbery (static)"
+    "Robbery (moving)"
   ];
 
   crimeOptions: string[] = [];
