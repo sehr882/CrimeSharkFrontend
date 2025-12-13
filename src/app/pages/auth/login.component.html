@@ -1,0 +1,30 @@
+<form (ngSubmit)="login()">
+  <div class="form-group">
+    <label for="username">Username</label>
+    <input
+      id="username"
+      type="text"
+      [(ngModel)]="username"
+      name="username"
+      placeholder="Enter your username"
+      required
+      autocomplete="off"
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input
+      id="password"
+      type="password"
+      [(ngModel)]="password"
+      name="password"
+      placeholder="Enter your password"
+      required
+      autocomplete="new-password"
+      autofill="off"
+    />
+  </div>
+
+  <button type="submit" class="btn-login">Login</button>
+</form>

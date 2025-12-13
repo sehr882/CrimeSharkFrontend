@@ -1,0 +1,13 @@
+<div class="auth-wrapper">
+  <div class="auth-container">
+    <div class="tabs">
+      <span class="tab" [class.active]="isLogin" (click)="toggleTab(true)">Login</span>
+      <span class="tab" [class.active]="!isLogin" (click)="toggleTab(false)">Sign Up</span>
+    </div>
+
+    <div class="tab-content">
+      <app-login *ngIf="isLogin"></app-login>
+      <app-signup *ngIf="!isLogin"></app-signup>
+    </div>
+  </div>
+</div>

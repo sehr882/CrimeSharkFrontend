@@ -24,6 +24,12 @@ export const routes: Routes = [
         .then(m => m.LiveMapComponent)
   },
 
+  {
+    path: 'auth',
+    loadComponent: () =>
+      import('./pages/auth/auth.component').then(m => m.AuthComponent),
+  },
+
   // Report Crime
   {
   path: 'report',
@@ -48,8 +54,14 @@ export const routes: Routes = [
   loadComponent: () =>
     import('./pages/authority-portal/authority-portal.component')
       .then(m => m.AuthorityPortalComponent)
-}
+},
 
+{
+    path: 'safety-tips',
+    loadComponent: () =>
+      import('./pages/safety-tips/safety-tips.component')
+         .then(m => m.SafetyTipsComponent),
+  }
  
 ];
 

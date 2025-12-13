@@ -1,0 +1,56 @@
+.info-text {
+  color: #d9534f; // red warning
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #2c3e50;
+      font-size: 16px;
+    }
+
+    input {
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+
+      &:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 6px rgba(40, 167, 69, 0.35);
+      }
+    }
+  }
+
+  .btn-signup {
+    padding: 14px;
+    background-color: #28a745;
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+
+    &:hover {
+      background-color: #218838;
+      transform: translateY(-2px);
+    }
+  }
+}
