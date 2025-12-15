@@ -6,12 +6,11 @@ import { RouterModule } from '@angular/router';
 interface Alert {
   id: number;
   title: string;
-  subtitle?: string;
+  subtitle: string;
   location: string;
   time: string;
-  viewers?: number;
-  icon?: string;
-  verified?: boolean;
+  viewers: number;
+  icon: string;
 }
 
 @Component({
@@ -24,13 +23,9 @@ interface Alert {
 export class CitizenPortalComponent implements AfterViewInit {
 
   search = '';
-  categories = ['Robbery', 'Burglary', 'Cybercrime', 'Missing Person', 'Assault'];
   selectedCategory = '';
 
-  onSearch() {
-  // Triggered only to refresh UI
-  // Actual filtering is handled in filteredAlerts()
-}
+  categories = ['Robbery', 'Burglary', 'Cybercrime', 'Missing Person', 'Assault'];
 
   alerts: Alert[] = [
   {
@@ -41,7 +36,6 @@ export class CitizenPortalComponent implements AfterViewInit {
     time: '15 mins',
     viewers: 250,
     icon: '🔴',
-    verified: true
   },
   {
     id: 2,
@@ -51,7 +45,6 @@ export class CitizenPortalComponent implements AfterViewInit {
     time: '1 hour',
     viewers: 170,
     icon: '🏠',
-    verified: true
   },
   {
     id: 3,
@@ -61,7 +54,6 @@ export class CitizenPortalComponent implements AfterViewInit {
     time: '2 hours',
     viewers: 140,
     icon: '⚠️',
-    verified: false
   },
   {
     id: 4,
@@ -71,7 +63,6 @@ export class CitizenPortalComponent implements AfterViewInit {
     time: '3 hours',
     viewers: 95,
     icon: '💻',
-    verified: true
   },
   {
     id: 5,
@@ -81,7 +72,6 @@ export class CitizenPortalComponent implements AfterViewInit {
     time: '30 mins',
     viewers: 110,
     icon: '🚨',
-    verified: true
   },
   {
     id: 6,
@@ -91,7 +81,6 @@ export class CitizenPortalComponent implements AfterViewInit {
     time: '4 hours',
     viewers: 200,
     icon: '🏪',
-    verified: false
   }
 ];
 
@@ -164,6 +153,7 @@ export class CitizenPortalComponent implements AfterViewInit {
   setCategory(cat: string) {
     this.selectedCategory = this.selectedCategory === cat ? '' : cat;
   }
+  onSearch() {}
 
   filteredAlerts() {
   return this.alerts.filter(alert => {
@@ -179,7 +169,5 @@ export class CitizenPortalComponent implements AfterViewInit {
     return matchesCategory && matchesSearch;
   });
 }
-
 }
-
 

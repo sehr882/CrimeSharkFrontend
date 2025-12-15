@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -13,18 +14,18 @@ import { FormsModule } from '@angular/forms';
 
     <form (ngSubmit)="signup()">
       <div class="form-group">
-        <label for="username">Username</label>
-        <input id="username" type="text" [(ngModel)]="username" name="username" placeholder="Enter your username" required />
+        <label>Username</label>
+        <input type="text" [(ngModel)]="username" name="username" required />
       </div>
 
       <div class="form-group">
-        <label for="password">Password</label>
-        <input id="password" type="password" [(ngModel)]="password" name="password" placeholder="Enter your password" required />
+        <label>Password</label>
+        <input type="password" [(ngModel)]="password" name="password" required />
       </div>
 
       <div class="form-group">
-        <label for="confirmPassword">Confirm Password</label>
-        <input id="confirmPassword" type="password" [(ngModel)]="confirmPassword" name="confirmPassword" placeholder="Confirm password" required />
+        <label>Confirm Password</label>
+        <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required />
       </div>
 
       <button type="submit" class="btn-submit">Sign Up</button>
@@ -67,15 +68,49 @@ import { FormsModule } from '@angular/forms';
   `]
 })
 export class SignupComponent {
+
   username = '';
   password = '';
   confirmPassword = '';
 
+  constructor(private router: Router) {}
+
+  ngOnInit() {
+  this.username = '';
+  this.password = '';
+  this.confirmPassword = '';
+}
+
+
   signup() {
     if (this.password !== this.confirmPassword) {
-      alert('Passwords do not match!');
+      alert('Passwords do not match');
       return;
     }
-    alert(`Signup clicked!\nUsername: ${this.username}`);
+
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+    const exists = users.find((u: any) => u.username === this.username);
+    if (exists) {
+      alert('Username already exists');
+      return;
+    }
+
+    users.push({
+      username: this.username,
+      password: this.password
+    });
+
+    localStorage.setItem('users', JSON.stringify(users));
+
+    alert('Signup successful!');
+    this.resetForm();
+    this.router.navigate(['/citizen']); // Citizen portal
+  }
+
+  resetForm() {
+    this.username = '';
+    this.password = '';
+    this.confirmPassword = '';
   }
 }

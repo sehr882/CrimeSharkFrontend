@@ -1,28 +1,17 @@
-<header class="navbar">
-  <div class="logo-area">
-    <img src="assets/cs-logo.png" alt="CrimeShark Logo" class="logo-img" />
-    <span class="logo-text">CrimeShark</span>
-  </div>
-
-  <div class="search">
-    <input
-  [(ngModel)]="search"
-  placeholder="Search crimes"
-  (keyup.enter)="onSearch()"
-/>
-
-    <button class="search-btn" aria-label="search" (click)="onSearch()">🔍</button>
-  </div>
-
-  <div class="nav-links">
-    <a routerLink="/live-map" class="nav-link">Hotzones</a>
-    <a routerLink="/safety-tips" class="nav-link">Safety Tips</a> 
-    <a routerLink="/auth" class="nav-link">login/sign up</a>
-  </div>
-</header>
-
+<!-- ================= PAGE ================= -->
 <div class="portal-wrap">
 
+  <!-- 🔍 SEARCH BAR (DASHBOARD ONLY) -->
+   <div class="dashboard-search">
+    <input
+      [(ngModel)]="search"
+      placeholder="Search crimes (e.g. burglary, robbery...)"
+      (keyup.enter)="onSearch()"
+    />
+    <button (click)="onSearch()">🔍</button>
+  </div>
+
+  <!-- ================= CATEGORIES ================= -->
   <section class="categories">
     <div class="category-pill" 
          *ngFor="let c of categories"
@@ -93,3 +82,5 @@
   <div class="plus">+</div>
   <div class="report-text">Report a<br/>Crime</div>
 </button>
+</div>
+

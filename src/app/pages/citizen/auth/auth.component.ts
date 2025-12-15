@@ -41,6 +41,7 @@ import { SignupComponent } from './signup.component';
       box-shadow: 0 10px 35px rgba(0,0,0,0.7);
       text-align: center;
       color: #f0f0f0;
+      position: relative;
     }
 
     .tabs {
@@ -48,6 +49,8 @@ import { SignupComponent } from './signup.component';
       justify-content: center;
       gap: 50px;
       margin-bottom: 30px;
+      position: relative;
+      z-index: 20;
     }
 
     .tabs span {
@@ -68,6 +71,9 @@ import { SignupComponent } from './signup.component';
     .tabs span:hover {
       color: #0056b3;
     }
+    .tab-content {
+  margin-top: 20px;
+}
 
     @media (max-width: 480px) {
       .auth-card { padding: 25px 15px; }
@@ -79,7 +85,17 @@ import { SignupComponent } from './signup.component';
 export class AuthComponent {
   isLogin = true;
 
-  toggleTab(loginTab: boolean) {
-    this.isLogin = loginTab;
+  toggleTab(val: boolean) {
+    this.isLogin = val;
+
+    // 🔥 force component recreation
+    if (val) {
+      this.isLogin = false;
+      setTimeout(() => {
+        this.isLogin = true;
+      });
+    }
   }
 }
+
+

@@ -1,47 +1,72 @@
 import { Routes } from '@angular/router';
+
 import { HomeComponent } from './pages/home/home.component';
-import { CitizenPortalComponent } from './pages/citizen-portal/citizen-portal.component';
 import { AuthorityPortalComponent } from './pages/authority-portal/authority-portal.component';
+import { CitizenLayoutComponent } from './layout/citizen-layout/citizen-layout.component';
+
+// Citizen dashboard
+import { CitizenPortalComponent } from './pages/citizen/citizen-portal/citizen-portal.component';
 
 
 export const routes: Routes = [
-  // Home Screen
+
+  // HOME
   { path: '', component: HomeComponent },
 
-  // Citizen Portal
-  { path: 'citizen', component: CitizenPortalComponent },
+  // CITIZEN AREA (STATIC NAVBAR)
+  // ----------------------------------
+  // CITIZEN AREA (STATIC NAVBAR)
+  // ----------------------------------
   {
-  path: 'authority-portal',
-  component: AuthorityPortalComponent
-},
+    path: 'citizen',
+    component: CitizenLayoutComponent,
+    children: [
 
+      // DASHBOARD
+      {
+        path: '',
+        component: CitizenPortalComponent
+      },
 
-  // Live Map
-  {
-    path: 'live-map',
-    loadComponent: () =>
-      import('./pages/live-map/live-map.component')
-        .then(m => m.LiveMapComponent)
-  },
+      // LIVE MAP
+      {
+        path: 'live-map',
+        loadComponent: () =>
+          import('./pages/citizen/live-map/live-map.component')
+            .then(m => m.LiveMapComponent)
+      },
 
+      // SAFETY TIPS
+      {
+        path: 'safety-tips',
+        loadComponent: () =>
+          import('./pages/citizen/safety-tips/safety-tips.component')
+            .then(m => m.SafetyTipsComponent)
+      },
+
+      // ----------------------------------
+  // AUTH
+  // ----------------------------------
   {
     path: 'auth',
     loadComponent: () =>
-      import('./pages/auth/auth.component').then(m => m.AuthComponent),
+      import('./pages/citizen/auth/auth.component')
+        .then(m => m.AuthComponent)
   },
 
-  // Report Crime
+    ]
+  },
+
+  // ----------------------------------
+  // REPORT CRIME
+  // ----------------------------------
   {
-  path: 'report',
-  loadComponent: () =>
-    import('./pages/report-crime/report-crime.component').then(
-      (m) => m.ReportCrimeComponent
-    ),
-},
+    path: 'report',
+    loadComponent: () =>
+      import('./pages/citizen/report-crime/report-crime.component')
+        .then(m => m.ReportCrimeComponent)
+  },
 
-
-
-  // Authority Login
   {
     path: 'authority/login',
     loadComponent: () =>
@@ -49,21 +74,13 @@ export const routes: Routes = [
         .then(m => m.AuthorityLoginComponent)
   },
 
-  {
-  path: 'authority/portal',
-  loadComponent: () =>
-    import('./pages/authority-portal/authority-portal.component')
-      .then(m => m.AuthorityPortalComponent)
-},
+  // AUTHORITY
+  { path: 'authority/portal', component: AuthorityPortalComponent },
 
-{
-    path: 'safety-tips',
-    loadComponent: () =>
-      import('./pages/safety-tips/safety-tips.component')
-         .then(m => m.SafetyTipsComponent),
-  }
- 
+
 ];
+
+
 
 
 

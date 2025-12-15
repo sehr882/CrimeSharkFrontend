@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -8,18 +9,18 @@ import { FormsModule } from '@angular/forms';
   template: `
     <form (ngSubmit)="login()">
       <div class="form-group">
-        <label for="username">Username</label>
-        <input id="username" type="text" [(ngModel)]="username" name="username" placeholder="Enter your username" required />
+        <label>Username</label>
+        <input type="text" [(ngModel)]="username" name="username" required />
       </div>
 
       <div class="form-group">
-        <label for="password">Password</label>
-        <input id="password" type="password" [(ngModel)]="password" name="password" placeholder="Enter your password" required />
+        <label>Password</label>
+        <input type="password" [(ngModel)]="password" name="password" required />
       </div>
 
       <button type="submit" class="btn-submit">Login</button>
     </form>
-  `,
+`,
   styles: [`
     form { display: flex; flex-direction: column; gap: 20px; }
 
@@ -48,11 +49,44 @@ import { FormsModule } from '@angular/forms';
     }
   `]
 })
+
 export class LoginComponent {
+
   username = '';
   password = '';
 
+  constructor(
+    private router: Router
+  ) {}
+  
+  ngOnInit() {
+  this.username = '';
+  this.password = '';
+}
+
+
   login() {
-    alert(`Login clicked!\nUsername: ${this.username}\nPassword: ${this.password}`);
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+    const user = users.find(
+      (u: any) =>
+        u.username === this.username && u.password === this.password
+    );
+
+    if (!user) {
+      alert('Invalid username or password');
+      return;
+    }
+
+    localStorage.setItem('loggedInUser', this.username);
+
+    alert('Login successful!');
+    this.resetForm();
+    this.router.navigate(['/citizen']); // Citizen portal
+  }
+
+  resetForm() {
+    this.username = '';
+    this.password = '';
   }
 }

@@ -37,6 +37,9 @@
       color: #9fb3c8;
       border-bottom: 2px solid transparent;
       transition: all 0.3s ease;
+      pointer-events: auto;
+      position: relative;
+      z-index: 1;
 
       &.active {
         color: #1f6feb;
