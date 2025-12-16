@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Input } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
 
 @Component({
   selector: 'app-login',
@@ -55,9 +58,13 @@ export class LoginComponent {
   username = '';
   password = '';
 
-  constructor(
-    private router: Router
-  ) {}
+
+
+ constructor(
+  private router: Router,
+  private route: ActivatedRoute
+) {}
+
   
   ngOnInit() {
   this.username = '';
@@ -67,6 +74,8 @@ export class LoginComponent {
 
   login() {
     const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+    
 
     const user = users.find(
       (u: any) =>
@@ -81,9 +90,17 @@ export class LoginComponent {
     localStorage.setItem('loggedInUser', this.username);
 
     alert('Login successful!');
-    this.resetForm();
-    this.router.navigate(['/citizen']); // Citizen portal
+    const from = this.route.snapshot.queryParamMap.get('from');
+   
+    const redirect = localStorage.getItem('postLoginRedirect');
+
+  if (redirect) {
+    localStorage.removeItem('postLoginRedirect');
+    this.router.navigate([redirect]);
+  } else {
+    this.router.navigate(['/citizen']);
   }
+}
 
   resetForm() {
     this.username = '';

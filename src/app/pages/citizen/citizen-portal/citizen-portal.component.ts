@@ -1,7 +1,7 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 
 interface Alert {
   id: number;
@@ -21,6 +21,15 @@ interface Alert {
   styleUrls: ['./citizen-portal.component.scss']
 })
 export class CitizenPortalComponent implements AfterViewInit {
+
+  constructor(
+  private router: Router
+) {}
+
+  goToReport() {
+  localStorage.setItem('postLoginRedirect', '/report');
+  this.router.navigate(['/citizen/auth']);
+}
 
   search = '';
   selectedCategory = '';

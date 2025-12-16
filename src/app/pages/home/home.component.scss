@@ -12,14 +12,11 @@ $muted: #9aa6b2;
   flex-direction: column;
 }
 
-/* Top bar */
+/* TOP BAR */
 .top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding: 18px;
-  background: rgba(255, 255, 255, 0.02);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: #05080f;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
 .logo-area {
@@ -29,136 +26,119 @@ $muted: #9aa6b2;
 }
 
 .logo-img {
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
 }
 
 .logo-text {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 700;
-  color: #ffffff;
-  font-style: italic;
+  color: #fff;
 }
 
-/* Hero Section */
+/* HERO */
 .hero-section {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px 20px;
-
-  /* ✨ Smooth animated gradient background — no image needed */
-  background: radial-gradient(circle at center, #1a2433 0%, #0a1018 90%);
-  position: relative;
-  overflow: hidden;
-
-  /* ✨ Floating subtle glow animation */
-  &::before {
-    content: "";
-    position: absolute;
-    width: 480px;
-    height: 480px;
-    border-radius: 50%;
-    background: rgba(209, 74, 69, 0.12); /* soft red glow from accent color */
-    top: -120px;
-    left: -120px;
-    filter: blur(120px);
-    animation: floatGlow 6s ease-in-out infinite alternate;
-  }
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(15, 17, 32, 0.78); /* original dark overlay */
-    backdrop-filter: blur(6px);
-  }
-
-  .hero-content {
-    position: relative;
-    text-align: center;
-    max-width: 580px;
-    z-index: 3;
-  }
-}
-
-/* ✨ Keyframes for glow movement */
-@keyframes floatGlow {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(40px, 40px);
-  }
+  padding: 80px 20px 60px;
+  text-align: center;
 }
 
 .title {
-  font-size: 34px;
-  font-weight: 800px;
-  margin-bottom: 10px;
-  color: #d14a45;
+  font-size: 46px;
+  font-weight: 900;
+  margin-bottom: 20px;
+
+  span {
+    color: $accent;
+  }
 }
 
 .subtitle {
-  font-size: 16px;
+  max-width: 620px;
+  margin: 0 auto 36px;
+  font-size: 17px;
   color: $muted;
-  margin-bottom: 32px;
 }
 
 .action-buttons {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
+  align-items: center;
 
   .btn {
+    width: 260px;
     padding: 14px;
-    border-radius: 12px;
-    border: none;
+    border-radius: 14px;
     font-size: 17px;
+    border: none;
     cursor: pointer;
   }
 
   .citizen-btn {
-    background: linear-gradient(180deg, lighten($accent, 12%), $accent);
-    color: white;
-    box-shadow: 0 4px 15px rgba($accent, 0.35);
+    background: linear-gradient(180deg, lighten($accent, 10%), $accent);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba($accent, 0.4);
   }
 
   .authority-btn {
-    background: rgba(255, 255, 255, 0.06);
-    color: #dbeaf5;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
   }
 }
 
-/* Features */
-.features {
+/* CRIME IMAGES */
+.crime-showcase {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  padding: 24px;
   gap: 14px;
-  background: $panel;
+  padding: 24px;
+  background: #060b13;
+}
 
-  .feature-card {
-    background: rgba(255, 255, 255, 0.03);
-    padding: 16px;
-    border-radius: 12px;
-    text-align: center;
-    transition: 0.2s;
+.crime-card {
+  position: relative;
+  height: 260px;
+  overflow: hidden;
+  border-radius: 16px;
+}
 
-    .icon { font-size: 28px; }
-    .text { margin-top: 8px; font-size: 14px; }
+.crime-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-    &:hover {
-      background: rgba(209, 74, 69, 0.15);
-    }
+.crime-card .label {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(180deg, transparent, rgba(0,0,0,0.85));
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* FOOTER */
+.footer {
+  padding: 14px;
+  text-align: center;
+  font-size: 13px;
+  color: $muted;
+  background: #05080f;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .crime-showcase {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-.footer {
-  text-align: center;
-  padding: 10px;
-  color: $muted;
-  font-size: 12px;
+@media (max-width: 500px) {
+  .crime-showcase {
+    grid-template-columns: 1fr;
+  }
 }
+

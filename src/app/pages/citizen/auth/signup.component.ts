@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { Input } from '@angular/core';
 
 @Component({
   selector: 'app-signup',
@@ -73,7 +74,13 @@ export class SignupComponent {
   password = '';
   confirmPassword = '';
 
-  constructor(private router: Router) {}
+  @Input() redirectFrom: string | null = null;
+
+  constructor(
+  private router: Router,
+  private route: ActivatedRoute
+) {}
+
 
   ngOnInit() {
   this.username = '';
@@ -105,8 +112,15 @@ export class SignupComponent {
 
     alert('Signup successful!');
     this.resetForm();
-    this.router.navigate(['/citizen']); // Citizen portal
+    const redirect = localStorage.getItem('postLoginRedirect');
+
+  if (redirect) {
+    localStorage.removeItem('postLoginRedirect');
+    this.router.navigate([redirect]);
+  } else {
+    this.router.navigate(['/citizen']);
   }
+}
 
   resetForm() {
     this.username = '';

@@ -6,8 +6,16 @@
     </div>
 
     <div class="tab-content">
-      <app-login [hidden]="!isLogin" [key]="componentKey"></app-login>
-      <app-signup [hidden]="isLogin" [key]="componentKey"></app-signup>
+     <app-login
+  *ngIf="isLogin"
+  [redirectFrom]="redirectFrom">
+</app-login>
+
+<app-signup
+  *ngIf="!isLogin"
+  [redirectFrom]="redirectFrom">
+</app-signup>
+
     </div>
   </div>
 </div>

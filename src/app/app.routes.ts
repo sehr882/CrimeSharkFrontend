@@ -52,7 +52,7 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/citizen/auth/auth.component')
         .then(m => m.AuthComponent)
-  },
+  }
 
     ]
   },

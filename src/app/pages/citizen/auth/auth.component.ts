@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from './login.component';
 import { SignupComponent } from './signup.component';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-auth',
@@ -83,6 +85,14 @@ import { SignupComponent } from './signup.component';
   `]
 })
 export class AuthComponent {
+  redirectFrom: string | null = null;
+constructor(private route: ActivatedRoute) {}
+
+ngOnInit() {
+  this.redirectFrom = this.route.snapshot.queryParamMap.get('from');
+}
+
+
   isLogin = true;
 
   toggleTab(val: boolean) {
