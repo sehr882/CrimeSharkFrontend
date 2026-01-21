@@ -22,25 +22,31 @@ $muted: #9aa6b2;
 .logo-area {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
+  justify-content: center;
 }
 
 .logo-img {
-  width: 42px;
-  height: 42px;
+  width: 47px;
+  height: 47px;
 }
 
 .logo-text {
-  font-size: 26px;
+  font-size: 38px;
   font-weight: 700;
   color: #fff;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 /* HERO */
 .hero-section {
-  padding: 80px 20px 60px;
+  padding: 110px 20px 50px;
   text-align: center;
+  background:
+    linear-gradient(rgba(10,15,25,0.75), rgba(10,15,25,0.85)),
+    url('/assets/cs-background.jpg') center / cover no-repeat;
 }
+
 
 .title {
   font-size: 46px;
@@ -69,7 +75,7 @@ $muted: #9aa6b2;
     width: 260px;
     padding: 14px;
     border-radius: 14px;
-    font-size: 17px;
+    font-size: 20px;
     border: none;
     cursor: pointer;
   }
@@ -141,4 +147,5 @@ $muted: #9aa6b2;
     grid-template-columns: 1fr;
   }
 }
+
 

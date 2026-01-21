@@ -1,14 +1,41 @@
-<header class="navbar">
-  <div class="logo-area">
+<div class="navbar">
+
+  <!-- Logo -->
+  <div class="logo">
     <img src="assets/cs-logo.png" class="logo-img" />
     <span class="logo-text">CrimeShark</span>
   </div>
 
-  <div class="nav-links">
-    <a routerLink="/citizen" routerLinkActive="active">Dashboard</a>
-    <a routerLink="/citizen/live-map" routerLinkActive="active">Hotzones</a>
-    <a routerLink="/citizen/safety-tips" routerLinkActive="active">Safety Tips</a>
-    <a routerLink="/citizen/auth" routerLinkActive="active">Login/Sign up</a>
+  <!-- Menu -->
+  <nav class="menu">
+    <a routerLink="/citizen" routerLinkActive="active">
+      <span class="material-icons-outlined">dashboard</span>
+      Home
+    </a>
+
+    <a routerLink="/citizen/live-map" routerLinkActive="active">
+      <span class="material-icons-outlined">local_fire_department</span>
+      Hotzones
+    </a>
+
+    <a routerLink="/citizen/safety-tips" routerLinkActive="active">
+      <span class="material-icons-outlined">security</span>
+      Safety Tips
+    </a>
+  </nav>
+
+  <!-- Bottom actions -->
+  <div class="auth">
+    <a class="login-btn" routerLink="/citizen/auth">
+      Login / Sign Up
+    </a>
+
+    <button class="report-btn" (click)="goToReport()">
+      <span class="material-icons-outlined">add</span>
+      Report a Crime
+    </button>
   </div>
-</header>
+
+</div>
+
 

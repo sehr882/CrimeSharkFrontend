@@ -1,0 +1,30 @@
+.citizen-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f6fa;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 260px;
+  background: linear-gradient(
+    180deg,
+    #0b1220,
+    #0f1a2e,
+    #0b1220
+  );
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Main content */
+.content {
+  margin-left: 260px;
+  padding: 24px 32px;
+  width: calc(100% - 260px);
+}
+

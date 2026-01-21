@@ -179,4 +179,3 @@ export class CitizenPortalComponent implements AfterViewInit {
   });
 }
 }
-

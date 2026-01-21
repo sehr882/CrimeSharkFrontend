@@ -1,19 +1,20 @@
-<!-- ================= PAGE ================= -->
-<div class="portal-wrap">
+ <div class="portal-wrap">
 
-  <!-- 🔍 SEARCH BAR (DASHBOARD ONLY) -->
-   <div class="dashboard-search">
+  <!-- SEARCH -->
+  <div class="dashboard-search">
     <input
       [(ngModel)]="search"
       placeholder="Search crimes (e.g. burglary, robbery...)"
-      (keyup.enter)="onSearch()"
-    />
-    <button (click)="onSearch()">🔍</button>
+      (keyup.enter)="onSearch()" />
+
+    <button (click)="onSearch()">
+      <span class="material-icons-outlined">search</span>
+    </button>
   </div>
 
-  <!-- ================= CATEGORIES ================= -->
+  <!-- CATEGORIES -->
   <section class="categories">
-    <div class="category-pill" 
+    <div class="category-pill"
          *ngFor="let c of categories"
          [class.active]="selectedCategory === c"
          (click)="setCategory(c)">
@@ -22,18 +23,21 @@
   </section>
 
   <main class="main-grid">
-    <!-- left column: map + trending -->
+
+    <!-- MAP + TRENDING -->
     <aside class="left-col">
       <div class="map-card">
-  <div id="mini-map" class="mini-map"></div>
-</div>
-
+        <div id="mini-map" class="mini-map"></div>
+      </div>
 
       <div class="trending">
         <h3>Trending</h3>
+
         <div class="trend-card" *ngFor="let t of trending">
-          <div class="trend-icon">⚠️</div>
-          <div class="trend-body">
+          <div class="trend-icon">
+            <span class="material-icons-outlined">warning_amber</span>
+          </div>
+          <div>
             <div class="trend-title">{{ t.title }}</div>
             <div class="trend-time">{{ t.when }}</div>
           </div>
@@ -43,44 +47,56 @@
       </div>
     </aside>
 
-    <!-- right column: feed -->
+    <!-- ALERTS -->
     <section class="right-col">
-      <div class="feed-header">
-        <div class="feed-title">Live Alerts</div>
-      </div>
+      <div class="feed-title">Live Alerts</div>
 
-      <div class="alert-list">
-        <article class="alert-card" *ngFor="let a of filteredAlerts()">
-          <div class="alert-left">
-            <div class="alert-icon">{{ a.icon }}</div>
-          </div>
+      <article class="alert-card" *ngFor="let a of filteredAlerts()">
 
-          <div class="alert-right">
-            <h4 class="alert-title">{{ a.title }}</h4>
-            <div class="alert-sub">{{ a.subtitle }}</div>
+        <div class="alert-icon">
+          <span class="material-icons-outlined">
+            {{ 
+              a.title.includes('Robbery') ? 'gpp_bad' :
+              a.title.includes('Burglary') ? 'home' :
+              a.title.includes('Cyber') ? 'computer' :
+              a.title.includes('Assault') ? 'report_problem' :
+              'notifications'
+            }}
+          </span>
+        </div>
 
-            <div class="alert-meta">
-              <div class="meta-item">📍 {{ a.location }}</div>
-              <div class="meta-item">👁️ {{ a.viewers }} people nearby viewed this alert</div>
+        <div>
+          <h4>{{ a.title }}</h4>
+          <div class="alert-sub">{{ a.subtitle }}</div>
+
+          <div class="alert-meta">
+            <div>
+              <span class="material-icons-outlined">location_on</span>
+              {{ a.location }}
+            </div>
+            <div>
+              <span class="material-icons-outlined">visibility</span>
+              {{ a.viewers }} people nearby viewed this alert
             </div>
           </div>
-        </article>
-      </div>
-      <div class="no-results" *ngIf="filteredAlerts().length === 0">
-  ❌ No results found
-</div>
+        </div>
 
+      </article>
 
       <div class="news-block">
-        <div class="news-item">⚠️ 3 thefts reported near Liberty Market this week</div>
-        <div class="news-item">🔔 Local police increased patrolling in your area</div>
+        <div class="news-item">
+          <span class="material-icons-outlined">warning</span>
+          3 thefts reported near Liberty Market
+        </div>
+        <div class="news-item">
+          <span class="material-icons-outlined">campaign</span>
+          Police increased patrolling
+        </div>
       </div>
-    </section>
-  </main>
 
-  <button class="report-btn" (click)="goToReport()">
-  <div class="plus">+</div>
-  <div class="report-text">Report a<br/>Crime</div>
-</button>
+    </section>
+
+  </main>
 </div>
+
 

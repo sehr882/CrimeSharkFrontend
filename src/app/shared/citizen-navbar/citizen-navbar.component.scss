@@ -1,44 +1,107 @@
-.navbar {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background: #0b1622;   // slightly different from page
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px 24px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+:host {
+  display: block;
+  height: 100%;
 }
 
-.logo-area {
+.navbar {
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 20px 16px;
+
+  background: linear-gradient(
+    180deg,
+    #0b1220 0%,
+    #101e36 50%,
+    #0b1220 100%
+  );
+  color: #e5e7eb;
+}
+
+/* Logo */
+.logo {
   display: flex;
   align-items: center;
   gap: 12px;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom:40px;
+  margin-left: 12px;
 }
 
 .logo-img {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
 }
 
-.logo-text {
-  font-size: 22px;
-  font-weight: 700;
-  color: white;
-}
-
-.nav-links {
+/* Menu */
+.menu {
   display: flex;
-  gap: 18px;
+  flex-direction: column;
+  gap: 8px;
 
   a {
-    color: #9aa6b2;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    color: #cbd5e1;
+    font-size: 18px;
     text-decoration: none;
-  }
+    transition: background 0.2s;
 
-  a.active {
-    color: white;
-    border-bottom: 2px solid rgba(255,255,255,0.2);
-    padding-bottom: 6px;
+    span {
+      font-size: 20px;
+    }
+
+    &.active,
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
   }
 }
+
+/* Bottom auth */
+.auth {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Login button */
+.login-btn {
+  text-align: center;
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* Report button */
+.report-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  background: #e84545;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 20px;
+  cursor: pointer;
+
+  span {
+    font-size: 20px;
+  }
+}
+
+
