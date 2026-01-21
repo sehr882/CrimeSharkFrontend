@@ -17,14 +17,14 @@
 /* CONTAINER */
 .form-container {
   width: 100%;
-  max-width: 920px;
+  max-width: 1400px;
   padding: 0 28px;
 }
 
 /* TITLE */
 .page-title {
   color: #1f2d3d;
-  font-size: 34px;
+  font-size: 38px;
   font-weight: 700;
   text-align: center;
   margin-bottom: 26px;
@@ -49,7 +49,7 @@
 }
 
 .field-label {
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 600;
   margin-bottom: 8px;
   color: #2b3a4a;
@@ -63,7 +63,7 @@
   color: #1f2d3d;
   border-radius: 10px;
   outline: none;
-  font-size: 15px;
+  font-size: 17px;
   transition: all 0.2s ease;
 }
 
@@ -89,7 +89,7 @@ select[disabled] {
 
 /* FILE INPUT */
 .file-input {
-  font-size: 14px;
+  font-size: 16px;
   color: #2b3a4a;
 }
 
