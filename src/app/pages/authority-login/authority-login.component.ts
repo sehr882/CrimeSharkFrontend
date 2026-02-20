@@ -51,7 +51,7 @@ export class AuthorityLoginComponent implements OnDestroy {
     }
 
     this.resetForm();
-    this.router.navigate(['/authority/portal']);
+    this.router.navigate(['/authority']);
   }
 
   ngOnDestroy(): void {

@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
 
 @Component({
   selector: 'app-safety-tips',
   standalone: true,
-  imports: [CommonModule],
-  template: `
+  imports: [CommonModule, BackButtonComponent],
+  template:
+    `<app-back-button></app-back-button>
+    <div class="center-wrapper">
     <div class="safety-wrapper">
       <h1>🛡️ Safety Tips</h1>
       <p class="intro">
@@ -141,24 +144,25 @@ import { CommonModule } from '@angular/common';
         CrimeShark — Empowering citizens through awareness and action.
       </p>
     </div>
+    </div>
   `,
   styles: [`
-    :host {
+    .center-wrapper {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background: #121212;
+      background: radial-gradient(circle at top, #10263f 0%, #0b1c2d 60%);
       overflow: hidden;
     }
 
     .safety-wrapper {
-      width: 90%;
+      width: 100%;
       max-width: 1000px;
       height: 90vh;
       overflow-y: auto;
       padding: 40px;
-      background: #1e1e1e;
+      background: radial-gradient(circle at top, #10263f 0%, #0b1c2d 60%);
       border-radius: 20px;
       box-shadow: 0 0 40px rgba(0,0,0,0.7);
       color: #f0f0f0;
@@ -218,4 +222,4 @@ import { CommonModule } from '@angular/common';
     }
   `]
 })
-export class SafetyTipsComponent {}
+export class SafetyTipsComponent { }

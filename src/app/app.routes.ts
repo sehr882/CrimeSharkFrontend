@@ -1,34 +1,21 @@
 import { Routes } from '@angular/router';
 
 import { HomeComponent } from './pages/home/home.component';
-import { AuthorityPortalComponent } from './pages/authority-portal/authority-portal.component';
 import { CitizenLayoutComponent } from './layout/citizen-layout/citizen-layout.component';
-
-// Citizen dashboard
 import { CitizenPortalComponent } from './pages/citizen/citizen-portal/citizen-portal.component';
-
+import { AuthorityLayoutComponent } from './layout/authority-layout/authority-layout.component';
 
 export const routes: Routes = [
 
-  // HOME
   { path: '', component: HomeComponent },
 
-  // CITIZEN AREA (STATIC NAVBAR)
-  // ----------------------------------
-  // CITIZEN AREA (STATIC NAVBAR)
-  // ----------------------------------
   {
     path: 'citizen',
     component: CitizenLayoutComponent,
     children: [
 
-      // DASHBOARD
-      {
-        path: '',
-        component: CitizenPortalComponent
-      },
+      { path: '', component: CitizenPortalComponent },
 
-      // LIVE MAP
       {
         path: 'live-map',
         loadComponent: () =>
@@ -36,7 +23,6 @@ export const routes: Routes = [
             .then(m => m.LiveMapComponent)
       },
 
-      // SAFETY TIPS
       {
         path: 'safety-tips',
         loadComponent: () =>
@@ -44,27 +30,19 @@ export const routes: Routes = [
             .then(m => m.SafetyTipsComponent)
       },
 
-      // ----------------------------------
-  // AUTH
-  // ----------------------------------
-  {
-    path: 'auth',
-    loadComponent: () =>
-      import('./pages/citizen/auth/auth.component')
-        .then(m => m.AuthComponent)
-  }
-
+      {
+        path: 'auth',
+        loadComponent: () =>
+          import('./pages/citizen/auth/auth.component')
+            .then(m => m.AuthComponent)
+      },
+      {
+        path: 'report',
+        loadComponent: () =>
+          import('./pages/citizen/report-crime/report-crime.component')
+            .then(m => m.ReportCrimeComponent)
+      }
     ]
-  },
-
-  // ----------------------------------
-  // REPORT CRIME
-  // ----------------------------------
-  {
-    path: 'report',
-    loadComponent: () =>
-      import('./pages/citizen/report-crime/report-crime.component')
-        .then(m => m.ReportCrimeComponent)
   },
 
   {
@@ -74,11 +52,39 @@ export const routes: Routes = [
         .then(m => m.AuthorityLoginComponent)
   },
 
-  // AUTHORITY
-  { path: 'authority/portal', component: AuthorityPortalComponent },
+  {
+    path: 'authority',
+    component: AuthorityLayoutComponent,
+    children: [
 
+
+      {
+        path: '',
+        loadComponent: () =>
+          import('./pages/authority/authority-portal/authority-portal.component')
+            .then(m => m.AuthorityPortalComponent)
+      },
+
+      {
+        path: 'reports',
+        loadComponent: () =>
+          import('./pages/authority/reports/reports.component')
+            .then(m => m.ReportsComponent)
+      },
+
+      {
+        path: 'authority/reports/:id',
+        loadComponent: () =>
+          import('./pages/authority/reports/report-details/report-details.component')
+            .then(m => m.ReportDetailsComponent)
+      }
+
+
+    ]
+  }
 
 ];
+
 
 
 

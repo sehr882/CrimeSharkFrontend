@@ -2,6 +2,7 @@ import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
 
 interface Alert {
   id: number;
@@ -16,20 +17,20 @@ interface Alert {
 @Component({
   selector: 'app-citizen-portal',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, BackButtonComponent],
   templateUrl: './citizen-portal.component.html',
   styleUrls: ['./citizen-portal.component.scss']
 })
 export class CitizenPortalComponent implements AfterViewInit {
 
   constructor(
-  private router: Router
-) {}
+    private router: Router
+  ) { }
 
   goToReport() {
-  localStorage.setItem('postLoginRedirect', '/report');
-  this.router.navigate(['/citizen/auth']);
-}
+    localStorage.setItem('postLoginRedirect', '/report');
+    this.router.navigate(['/citizen/auth']);
+  }
 
   search = '';
   selectedCategory = '';
@@ -37,61 +38,61 @@ export class CitizenPortalComponent implements AfterViewInit {
   categories = ['Robbery', 'Burglary', 'Cybercrime', 'Missing Person', 'Assault'];
 
   alerts: Alert[] = [
-  {
-    id: 1,
-    title: 'Robbery in Model Town',
-    subtitle: 'Reported 15 mins ago',
-    location: 'Lahore',
-    time: '15 mins',
-    viewers: 250,
-    icon: '🔴',
-  },
-  {
-    id: 2,
-    title: 'Burglary in Gulberg',
-    subtitle: '1 hour ago - Verified',
-    location: 'Lahore',
-    time: '1 hour',
-    viewers: 170,
-    icon: '🏠',
-  },
-  {
-    id: 3,
-    title: 'Assault in Saddar',
-    subtitle: '2 hours ago',
-    location: 'Karachi',
-    time: '2 hours',
-    viewers: 140,
-    icon: '⚠️',
-  },
-  {
-    id: 4,
-    title: 'Cybercrime Scam Reported',
-    subtitle: 'Online fraud case',
-    location: 'Islamabad',
-    time: '3 hours',
-    viewers: 95,
-    icon: '💻',
-  },
-  {
-    id: 5,
-    title: 'Robbery Attempt Foiled',
-    subtitle: 'Suspect fled the scene',
-    location: 'Rawalpindi',
-    time: '30 mins',
-    viewers: 110,
-    icon: '🚨',
-  },
-  {
-    id: 6,
-    title: 'Burglary at Electronics Shop',
-    subtitle: 'CCTV footage under review',
-    location: 'Lahore',
-    time: '4 hours',
-    viewers: 200,
-    icon: '🏪',
-  }
-];
+    {
+      id: 1,
+      title: 'Robbery in Model Town',
+      subtitle: 'Reported 15 mins ago',
+      location: 'Lahore',
+      time: '15 mins',
+      viewers: 250,
+      icon: '🔴',
+    },
+    {
+      id: 2,
+      title: 'Burglary in Gulberg',
+      subtitle: '1 hour ago - Verified',
+      location: 'Lahore',
+      time: '1 hour',
+      viewers: 170,
+      icon: '🏠',
+    },
+    {
+      id: 3,
+      title: 'Assault in Saddar',
+      subtitle: '2 hours ago',
+      location: 'Karachi',
+      time: '2 hours',
+      viewers: 140,
+      icon: '⚠️',
+    },
+    {
+      id: 4,
+      title: 'Cybercrime Scam Reported',
+      subtitle: 'Online fraud case',
+      location: 'Islamabad',
+      time: '3 hours',
+      viewers: 95,
+      icon: '💻',
+    },
+    {
+      id: 5,
+      title: 'Robbery Attempt Foiled',
+      subtitle: 'Suspect fled the scene',
+      location: 'Rawalpindi',
+      time: '30 mins',
+      viewers: 110,
+      icon: '🚨',
+    },
+    {
+      id: 6,
+      title: 'Burglary at Electronics Shop',
+      subtitle: 'CCTV footage under review',
+      location: 'Lahore',
+      time: '4 hours',
+      viewers: 200,
+      icon: '🏪',
+    }
+  ];
 
 
   trending = [
@@ -162,20 +163,20 @@ export class CitizenPortalComponent implements AfterViewInit {
   setCategory(cat: string) {
     this.selectedCategory = this.selectedCategory === cat ? '' : cat;
   }
-  onSearch() {}
+  onSearch() { }
 
   filteredAlerts() {
-  return this.alerts.filter(alert => {
+    return this.alerts.filter(alert => {
 
-    const matchesCategory = this.selectedCategory
-      ? alert.title.toLowerCase().includes(this.selectedCategory.toLowerCase())
-      : true;
+      const matchesCategory = this.selectedCategory
+        ? alert.title.toLowerCase().includes(this.selectedCategory.toLowerCase())
+        : true;
 
-    const matchesSearch = this.search
-      ? alert.title.toLowerCase().includes(this.search.toLowerCase())
-      : true;
+      const matchesSearch = this.search
+        ? alert.title.toLowerCase().includes(this.search.toLowerCase())
+        : true;
 
-    return matchesCategory && matchesSearch;
-  });
-}
+      return matchesCategory && matchesSearch;
+    });
+  }
 }

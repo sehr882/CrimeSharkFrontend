@@ -1,56 +1,63 @@
 .info-text {
-  color: #d9534f; // red warning
-  font-size: 18px;
+  color: #ff6b6b;
+  font-size: 17px;
   font-weight: 600;
-  margin-bottom: 30px;
-  line-height: 1.7;
+  margin-bottom: 25px;
   text-align: center;
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 25px;
 
   .form-group {
     display: flex;
     flex-direction: column;
+    text-align: left;
 
     label {
       margin-bottom: 5px;
       font-weight: 600;
-      color: #2c3e50;
+      color: #e6eef8; // ✅ change this
       font-size: 16px;
     }
 
     input {
-      padding: 12px;
+      padding: 15px;
       font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
+      border: 1px solid #2a3f55;
+      border-radius: 12px;
       outline: none;
+      background: linear-gradient(180deg, #13283d, #0f2236);
+      color: #ffffff;
+      transition: all 0.3s ease;
+
+      &::placeholder {
+        color: #8fa9c2;
+      }
 
       &:focus {
-        border-color: #28a745;
-        box-shadow: 0 0 6px rgba(40, 167, 69, 0.35);
+        border-color: #4caf50;
+        box-shadow: 0 0 10px rgba(76, 175, 80, 0.35);
       }
     }
   }
 
   .btn-signup {
-    padding: 14px;
-    background-color: #28a745;
+    padding: 16px;
+    background: linear-gradient(90deg, #28a745, #3ddc84);
     color: white;
     font-size: 18px;
     font-weight: 700;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
+    transition: all 0.3s ease;
 
     &:hover {
-      background-color: #218838;
       transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(40, 167, 69, 0.35);
     }
   }
 }

@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { NgChartsModule } from 'ng2-charts';
+import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
 
 @Component({
   selector: 'app-authority-portal',
   standalone: true,
-  imports: [CommonModule, RouterModule, NgChartsModule],
+  imports: [CommonModule, RouterModule, NgChartsModule, BackButtonComponent],
   templateUrl: './authority-portal.component.html',
   styleUrls: ['./authority-portal.component.scss']
 })
@@ -29,7 +30,7 @@ export class AuthorityPortalComponent {
   lineChartData = {
     labels: this.lineChartLabels,
     datasets: [
-      { 
+      {
         data: [20, 34, 28, 45, 50, 62],
         label: 'Crime Reports',
         fill: true,
@@ -43,7 +44,7 @@ export class AuthorityPortalComponent {
   pieChartData = {
     labels: this.pieChartLabels,
     datasets: [
-      { 
+      {
         data: [30, 20, 18, 25, 10]
       }
     ]
@@ -59,7 +60,7 @@ export class AuthorityPortalComponent {
     ]
   };
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   logout() {
     alert("Logged out successfully.");

@@ -1,7 +1,8 @@
 form {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 30px;
+  /* more breathing space */
 
   .form-group {
     display: flex;
@@ -11,39 +12,45 @@ form {
     label {
       margin-bottom: 8px;
       font-weight: 600;
-      color: #2c3e50;
+      color: #e6eef8;
       font-size: 16px;
     }
 
     input {
-      padding: 14px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
+      padding: 16px;
+      font-size: 17px;
+      border: 1px solid #2a3f55;
+      border-radius: 12px;
       outline: none;
-      transition: border-color 0.3s, box-shadow 0.3s;
+      background: linear-gradient(180deg, #13283d, #0f2236);
+      color: #ffffff;
+      transition: all 0.3s ease;
+
+      &::placeholder {
+        color: #8fa9c2;
+      }
 
       &:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 6px rgba(0, 123, 255, 0.35);
+        border-color: #3ea6ff;
+        box-shadow: 0 0 10px rgba(62, 166, 255, 0.4);
       }
     }
   }
 
   .btn-login {
-    padding: 14px;
-    background-color: #007bff;
+    padding: 16px;
+    background: linear-gradient(90deg, #1f6feb, #3ea6ff);
     color: white;
-    font-size: 18px;
+    font-size: 19px;
     font-weight: 700;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
+    transition: all 0.3s ease;
 
     &:hover {
-      background-color: #0056b3;
       transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(31, 111, 235, 0.4);
     }
   }
 }

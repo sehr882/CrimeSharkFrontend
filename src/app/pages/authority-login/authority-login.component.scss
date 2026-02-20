@@ -8,22 +8,25 @@
 }
 
 .auth-card {
-  width: 370px;
+  width: 600px;
+  height: 450px;
   padding: 25px;
   background: #1c1f2e;
   border-radius: 12px;
-  box-shadow: 0 0 18px rgba(0,0,0,0.4);
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
   text-align: center;
 }
 
 .auth-header h2 {
   color: #fff;
   margin-bottom: 5px;
+  font-size: 30px;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .warning {
   color: #ffcc00;
-  font-size: 14px;
+  font-size: 15px;
   margin-bottom: 20px;
 }
 
@@ -33,7 +36,7 @@ form {
 
 label {
   color: #ccc;
-  font-size: 14px;
+  font-size: 18px;
 }
 
 input {
@@ -52,6 +55,7 @@ button {
   border: none;
   background: #0074ff;
   color: white;
+  font-size: 18px;
   font-weight: bold;
   border-radius: 6px;
   margin-top: 5px;
@@ -66,6 +70,6 @@ button:hover {
 .danger-text {
   margin-top: 12px;
   color: #ff4747;
-  font-size: 13px;
+  font-size: 16px;
   text-align: center;
 }

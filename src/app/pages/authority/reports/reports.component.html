@@ -1,0 +1,49 @@
+<app-back-button></app-back-button>
+<div class="reports-page">
+
+  <div class="page-header">
+    <h1>Reports Management</h1>
+    <p>View, track, and manage reported crimes</p>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <input type="text" placeholder="Search by crime or location" [(ngModel)]="search" />
+
+    <select [(ngModel)]="statusFilter">
+      <option value="">All Status</option>
+      <option value="Pending">Pending</option>
+      <option value="In Review">In Review</option>
+      <option value="Closed">Closed</option>
+    </select>
+  </div>
+
+  <!-- Reports Table -->
+  <div class="reports-table">
+    <div class="table-head">
+      <span>Case ID</span>
+      <span>Crime Type</span>
+      <span>Location</span>
+      <span>Date</span>
+      <span>Status</span>
+      <span>Action</span>
+    </div>
+
+    <div class="table-row" *ngFor="let r of filteredReports()">
+      <span>#{{ r.id }}</span>
+      <span>{{ r.crimeType }}</span>
+      <span>{{ r.location }}</span>
+      <span>{{ r.date }}</span>
+
+      <span class="status" [class]="r.status.toLowerCase()">
+        {{ r.status }}
+      </span>
+
+      <button class="view-btn" [routerLink]="['/authority-portal/reports', r.id]">
+        View
+      </button>
+
+    </div>
+  </div>
+
+</div>

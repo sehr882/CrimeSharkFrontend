@@ -1,17 +1,6 @@
+<app-back-button></app-back-button>
 <div class="portal-container">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <h2 class="brand">Authority Portal</h2>
-
-    <ul>
-      <li routerLink="/authority/portal" class="active">Dashboard</li>
-      <li>Manage Reports</li>
-      <li routerLink="/live-map">Hotzones</li>
-      <li>Settings</li>
-      <li class="logout" (click)="logout()">Logout</li>
-    </ul>
-  </aside>
 
   <!-- MAIN CONTENT -->
   <main class="content">
@@ -41,28 +30,19 @@
 
       <div class="chart-box">
         <h2>Crime Trend (Last 6 Months)</h2>
-        <canvas baseChart 
-                [data]="lineChartData"
-                [labels]="lineChartLabels"
-                [type]="'line'">
+        <canvas baseChart [data]="lineChartData" [labels]="lineChartLabels" [type]="'line'">
         </canvas>
       </div>
 
       <div class="chart-box">
         <h2>Crime Categories Distribution</h2>
-        <canvas baseChart 
-                [data]="pieChartData"
-                [labels]="pieChartLabels"
-                [type]="'pie'">
+        <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [type]="'pie'">
         </canvas>
       </div>
 
       <div class="chart-box">
         <h2>Pending vs Resolved</h2>
-        <canvas baseChart 
-                [data]="barChartData"
-                [labels]="barChartLabels"
-                [type]="'bar'">
+        <canvas baseChart [data]="barChartData" [labels]="barChartLabels" [type]="'bar'">
         </canvas>
       </div>
 
@@ -106,5 +86,3 @@
 
   </main>
 </div>
-
-

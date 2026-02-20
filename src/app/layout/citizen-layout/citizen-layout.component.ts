@@ -10,7 +10,7 @@ import { CitizenNavbarComponent } from '../../shared/citizen-navbar/citizen-navb
   imports: [
     CommonModule,
     RouterOutlet,
-    CitizenNavbarComponent   // ✅ THIS FIXES THE ERROR
+    CitizenNavbarComponent  
   ],
   templateUrl: './citizen-layout.component.html',
   styleUrls: ['./citizen-layout.component.scss']

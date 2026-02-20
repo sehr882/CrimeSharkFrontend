@@ -1,11 +1,12 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
 
 @Component({
   selector: 'app-live-map',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, BackButtonComponent],
   templateUrl: './live-map.component.html',
   styleUrls: ['./live-map.component.scss']
 })
@@ -115,8 +116,8 @@ export class LiveMapComponent implements AfterViewInit {
         fillOpacity: 0.35,
         radius: zone.radius
       })
-      .addTo(this.map)
-      .bindPopup(`<strong>${zone.label}</strong>`);
+        .addTo(this.map)
+        .bindPopup(`<strong>${zone.label}</strong>`);
     });
   }
 }

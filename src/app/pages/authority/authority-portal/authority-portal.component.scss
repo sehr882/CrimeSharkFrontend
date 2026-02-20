@@ -1,61 +1,12 @@
-/* =======================
-   MAIN LAYOUT – DARK MODE
-========================== */
 .portal-container {
+  position: relative;
   display: flex;
   height: 100vh;
-  background: #0a0f14; /* deep dark blue-black */
+  background: white;
+  /* deep dark blue-black */
   overflow: hidden;
   font-family: 'Poppins', sans-serif;
   color: #e5e5e5;
-}
-
-/* =======================
-   SIDEBAR
-========================== */
-.sidebar {
-  width: 260px;
-  background: #0d1117;
-  color: #fff;
-  padding: 25px;
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid #161b22;
-}
-
-.sidebar .brand {
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 30px;
-  text-transform: uppercase;
-  color: #ff4d4d;
-}
-
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-}
-
-.sidebar li {
-  padding: 14px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  font-size: 15px;
-  transition: 0.2s;
-  color: #c9d1d9;
-}
-
-.sidebar li:hover,
-.sidebar .active {
-  background: #161b22;
-  color: #fff;
-}
-
-.sidebar .logout {
-  margin-top: auto;
-  color: #ff6b6b;
-  font-weight: bold;
 }
 
 /* =======================
@@ -69,11 +20,11 @@
 
 .content h1 {
   font-weight: 700;
-  color: #fff;
+  color: black;
 }
 
 .sub-text {
-  color: #9ca3af;
+  color: black;
   margin-bottom: 25px;
 }
 
@@ -91,27 +42,28 @@
   padding: 25px;
   border-radius: 15px;
   background: rgba(22, 27, 34, 0.7);
-  border: 1px solid rgba(255,255,255,0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(12px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
   color: #e5e5e5;
 }
 
 .card.red {
-  border-left: 5px solid #ff4d4d;
+  border-left: 7px solid #ff4d4d;
 }
 
 .card.yellow {
-  border-left: 5px solid #facc15;
+  border-left: 7px solid #facc15;
 }
 
 .card.green {
-  border-left: 5px solid #4ade80;
+  border-left: 7px solid #4ade80;
 }
 
 .card h3 {
-  font-size: 18px;
-  color: #cbd5e1;
+  font-size: 20px;
+  color: #e5e7eb;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .value {
@@ -136,7 +88,7 @@
   padding: 25px;
   border-radius: 15px;
   border: 1px solid #1f2937;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
 }
 
 .chart-box h2 {
@@ -148,7 +100,11 @@
    HEATMAP PLACEHOLDER
 ========================== */
 .heatmap-section h2 {
-  color: #e5e5e5;
+  color: black;
+}
+
+.heatmap-section p {
+  color: black;
 }
 
 .map-placeholder {
@@ -157,7 +113,7 @@
   border-radius: 15px;
   border: 1px solid #1f2937;
   text-align: center;
-  color: #9ca3af;
+  color: white;
   font-size: 18px;
   margin-bottom: 35px;
 }
@@ -170,7 +126,7 @@
   padding: 20px;
   border-radius: 15px;
   border: 1px solid #1f2937;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
 }
 
 .table-container h2 {
@@ -190,7 +146,8 @@ th {
   color: #cbd5e1;
 }
 
-th, td {
+th,
+td {
   padding: 12px;
   border-bottom: 1px solid #2a2f36;
 }
@@ -198,4 +155,3 @@ th, td {
 tr:hover {
   background: #1a2029;
 }
-

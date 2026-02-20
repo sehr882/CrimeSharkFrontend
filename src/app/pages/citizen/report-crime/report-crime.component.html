@@ -1,3 +1,4 @@
+<app-back-button></app-back-button>
 <div class="report-page">
 
   <div class="form-container">
@@ -10,12 +11,7 @@
       <div class="form-field">
         <label class="field-label">Crime Type</label>
 
-        <select
-          name="crimeType"
-          [(ngModel)]="crimeType"
-          (ngModelChange)="updateCrimeOptions()"
-          class="field-input"
-        >
+        <select name="crimeType" [(ngModel)]="crimeType" (ngModelChange)="updateCrimeOptions()" class="field-input">
           <!-- disabled placeholder (not selectable) -->
           <option value="" disabled [selected]="!crimeType">-- Choose type --</option>
           <option value="static">Static</option>
@@ -27,12 +23,8 @@
       <div class="form-field">
         <label class="field-label">Crime</label>
 
-        <select
-          name="selectedCrime"
-          [(ngModel)]="selectedCrime"
-          [disabled]="crimeOptions.length === 0"
-          class="field-input"
-        >
+        <select name="selectedCrime" [(ngModel)]="selectedCrime" [disabled]="crimeOptions.length === 0"
+          class="field-input">
           <option *ngIf="crimeOptions.length === 0" value="" disabled>
             Select crime...
           </option>
@@ -46,25 +38,15 @@
       <!-- Area of Crime -->
       <div class="form-field">
         <label class="field-label">Area of Crime</label>
-        <input
-          type="text"
-          name="crimeArea"
-          [(ngModel)]="crimeArea"
-          class="field-input"
-          placeholder="Exact Place, City..."
-        />
+        <input type="text" name="crimeArea" [(ngModel)]="crimeArea" class="field-input"
+          placeholder="Exact Place, City..." />
       </div>
 
       <!-- Description -->
       <div class="form-field">
         <label class="field-label">Description</label>
-        <textarea
-          name="description"
-          rows="4"
-          [(ngModel)]="description"
-          class="field-input textarea-input"
-          placeholder="Describe what happened..."
-        ></textarea>
+        <textarea name="description" rows="4" [(ngModel)]="description" class="field-input textarea-input"
+          placeholder="Describe what happened..."></textarea>
       </div>
 
       <!-- Evidence Upload -->
@@ -78,12 +60,10 @@
 
     </div>
     <div class="success-box" *ngIf="showSuccess">
-  Report submitted successfully!
-</div>
+      Report submitted successfully!
+    </div>
 
 
   </div>
 
 </div>
-
-

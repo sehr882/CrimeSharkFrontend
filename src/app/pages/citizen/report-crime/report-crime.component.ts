@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
 
 @Component({
   selector: 'app-report-crime',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, BackButtonComponent],
   templateUrl: './report-crime.component.html',
   styleUrls: ['./report-crime.component.scss']
 })
@@ -89,11 +90,11 @@ export class ReportCrimeComponent implements OnInit {
       description: this.description,
       file: this.uploadedFile
     });
-this.submitted = true;
+    this.submitted = true;
     if (!this.crimeType) { alert('Choose crime type'); return; }
     if (!this.selectedCrime) { alert('Choose a crime'); return; }
     if (!this.crimeArea) { alert('Choose crime area'); return; }
- this.showSuccess = true;
+    this.showSuccess = true;
     // reset for demo
     this.crimeType = '';
     this.selectedCrime = '';
@@ -104,8 +105,8 @@ this.submitted = true;
 
     this.submitted = false;
 
-  // Auto-hide success message after 3 seconds
-  setTimeout(() => this.showSuccess = false, 3000);
+    // Auto-hide success message after 3 seconds
+    setTimeout(() => this.showSuccess = false, 3000);
   }
 }
 

@@ -1,0 +1,11 @@
+.authority-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f6fa;
+}
+
+.authority-content {
+  margin-left: 260px; /* sidebar width */
+  padding: 24px 32px;
+  width: calc(100% - 260px);
+}

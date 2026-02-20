@@ -9,12 +9,12 @@ import { RouterModule, Router } from '@angular/router';
   styleUrls: ['./citizen-navbar.component.scss']
 })
 export class CitizenNavbarComponent {
-   constructor(
-  private router: Router
-) {}
-   goToReport() {
-  localStorage.setItem('postLoginRedirect', '/report');
-  this.router.navigate(['/citizen/auth']);
-}
+  constructor(
+    private router: Router
+  ) { }
+  goToReport() {
+    localStorage.setItem('postLoginRedirect', '/citizen/report');
+    this.router.navigate(['/citizen/auth']);
+  }
 }
 

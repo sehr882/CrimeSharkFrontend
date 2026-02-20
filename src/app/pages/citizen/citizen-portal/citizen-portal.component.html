@@ -1,11 +1,9 @@
- <div class="portal-wrap">
+<app-back-button></app-back-button>
+<div class="portal-wrap">
 
   <!-- SEARCH -->
   <div class="dashboard-search">
-    <input
-      [(ngModel)]="search"
-      placeholder="Search crimes (e.g. burglary, robbery...)"
-      (keyup.enter)="onSearch()" />
+    <input [(ngModel)]="search" placeholder="Search crimes (e.g. burglary, robbery...)" (keyup.enter)="onSearch()" />
 
     <button (click)="onSearch()">
       <span class="material-icons-outlined">search</span>
@@ -14,10 +12,8 @@
 
   <!-- CATEGORIES -->
   <section class="categories">
-    <div class="category-pill"
-         *ngFor="let c of categories"
-         [class.active]="selectedCategory === c"
-         (click)="setCategory(c)">
+    <div class="category-pill" *ngFor="let c of categories" [class.active]="selectedCategory === c"
+      (click)="setCategory(c)">
       {{ c }}
     </div>
   </section>
@@ -55,12 +51,12 @@
 
         <div class="alert-icon">
           <span class="material-icons-outlined">
-            {{ 
-              a.title.includes('Robbery') ? 'gpp_bad' :
-              a.title.includes('Burglary') ? 'home' :
-              a.title.includes('Cyber') ? 'computer' :
-              a.title.includes('Assault') ? 'report_problem' :
-              'notifications'
+            {{
+            a.title.includes('Robbery') ? 'gpp_bad' :
+            a.title.includes('Burglary') ? 'home' :
+            a.title.includes('Cyber') ? 'computer' :
+            a.title.includes('Assault') ? 'report_problem' :
+            'notifications'
             }}
           </span>
         </div>
@@ -98,5 +94,3 @@
 
   </main>
 </div>
-
-
