@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
@@ -24,16 +24,28 @@ interface Alert {
   templateUrl: './citizen-portal.component.html',
   styleUrls: ['./citizen-portal.component.scss']
 })
-export class CitizenPortalComponent implements AfterViewInit {
+export class CitizenPortalComponent implements OnInit, AfterViewInit {
 
   constructor(
     private router: Router,
-    private crimeService: CrimeService // ✅ inject service
+    private crimeService: CrimeService, // ✅ inject service
+    private cdr: ChangeDetectorRef
   ) { }
 
+  ngOnInit() {
+    // Fetch crimes early
+    this.fetchCrimes();
+  }
+
   goToReport() {
-    localStorage.setItem('postLoginRedirect', '/report');
-    this.router.navigate(['/citizen/auth']);
+    if (typeof window !== 'undefined') {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      if (isLoggedIn) {
+        this.router.navigate(['/citizen/report']);
+      } else {
+        this.router.navigate(['/citizen/auth']);
+      }
+    }
   }
 
   search = '';
@@ -91,9 +103,6 @@ export class CitizenPortalComponent implements AfterViewInit {
         radius: z.radius
       }).addTo(this.miniMap);
     });
-
-    // Fetch crimes after map is ready
-    this.fetchCrimes();
   }
 
   // ---------------------------------------------------
@@ -106,20 +115,22 @@ export class CitizenPortalComponent implements AfterViewInit {
         // Map backend data to Alert interface
         this.alerts = data.map(crime => ({
           id: crime._id,
-          title: crime.title,
-          subtitle: crime.type + ' - Reported',
-          location: crime.area,
+          title: crime.crimeTitle,
+          subtitle: crime.crimeType + ' - Reported',
+          location: crime.location,
           time: new Date(crime.createdAt).toLocaleString(),
           viewers: Math.floor(Math.random() * 200) + 50, // optional demo
-          icon: crime.type === 'static' ? '🏠' : '🚨',
+          icon: crime.crimeType === 'theft' ? '🚨' : '🏠',
           description: crime.description,
-          type: crime.type
+          type: crime.crimeType
         }));
         this.loading = false;
+        this.cdr.markForCheck(); // Ensure change detection
       },
       error: (err) => {
         console.error('Failed to fetch crimes', err);
         this.loading = false;
+        this.cdr.markForCheck();
       }
     });
   }

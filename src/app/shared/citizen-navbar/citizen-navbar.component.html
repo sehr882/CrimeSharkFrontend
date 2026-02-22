@@ -26,9 +26,16 @@
 
   <!-- Bottom actions -->
   <div class="auth">
-    <a class="login-btn" routerLink="/citizen/auth">
+    <!-- Show Login/Signup if not logged in -->
+    <a *ngIf="!isLoggedIn" class="login-btn" routerLink="/citizen/auth">
       Login / Sign Up
     </a>
+
+    <!-- Show Logout button if logged in -->
+    <button *ngIf="isLoggedIn" class="login-btn logout-btn" (click)="logout()">
+      <span class="material-icons-outlined">logout</span>
+      Logout
+    </button>
 
     <button class="report-btn" (click)="goToReport()">
       <span class="material-icons-outlined">add</span>

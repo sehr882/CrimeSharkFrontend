@@ -6,14 +6,23 @@ import {
   HttpEvent
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, PLATFORM_ID } from '@angular/core';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+
+    // Only access localStorage in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      return next.handle(req);
+    }
 
     const token = localStorage.getItem('token');
 

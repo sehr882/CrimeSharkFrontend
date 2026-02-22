@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
 import { CrimeService } from '@app/services/crime.service'; // ✅ your service
 
@@ -13,7 +14,10 @@ import { CrimeService } from '@app/services/crime.service'; // ✅ your service
 })
 export class ReportCrimeComponent implements OnInit {
 
-  constructor(private crimeService: CrimeService) {
+  constructor(
+    private crimeService: CrimeService,
+    private router: Router
+  ) {
     console.log('[REPORT-COMP] constructor');
   }
 
@@ -25,6 +29,7 @@ export class ReportCrimeComponent implements OnInit {
 
   submitted = false;
   showSuccess = false;
+  isLoggedIn = false;
 
   staticCrimes: string[] = [
     "Burglary", "Robbery (static)", "Arson", "Vandalism",
@@ -42,6 +47,17 @@ export class ReportCrimeComponent implements OnInit {
 
   ngOnInit() {
     console.log('[REPORT-COMP] ngOnInit - initial crimeType:', this.crimeType);
+    
+    // Check if user is logged in
+    if (typeof window !== 'undefined') {
+      this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      if (!this.isLoggedIn) {
+        alert('You must be logged in to report a crime');
+        this.router.navigate(['/citizen/auth']);
+        return;
+      }
+    }
+    
     this.updateCrimeOptions();
   }
 
@@ -90,6 +106,7 @@ export class ReportCrimeComponent implements OnInit {
       next: res => {
         alert(res.message || 'Crime reported successfully!');
         this.resetForm();
+        this.router.navigate(['/citizen']);
       },
       error: err => {
         alert(err.error?.message || 'Failed to report crime');
