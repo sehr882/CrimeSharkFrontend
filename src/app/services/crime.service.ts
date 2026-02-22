@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class CrimeService {
-  private baseUrl = 'http://localhost:3000/crimes'; // your backend URL
+  private baseUrl = 'http://localhost:3000/crime'; // your backend URL
 
   constructor(private http: HttpClient) {}
 
@@ -14,12 +14,12 @@ export class CrimeService {
   }
 
   reportCrime(data: any, file?: File | null): Observable<any> {
-  const formData = new FormData();
-  formData.append('title', data.title);
-  formData.append('description', data.description);
-  formData.append('area', data.area);
-  formData.append('type', data.type);
-  if (file) formData.append('file', file);
-  return this.http.post(this.baseUrl, formData);
+    const formData = new FormData();
+    formData.append('crimeType', data.type);
+    formData.append('crimeTitle', data.title);
+    formData.append('location', data.area);
+    formData.append('description', data.description);
+    if (file) formData.append('evidence', file);
+    return this.http.post(`${this.baseUrl}/report`, formData);
 }
 }

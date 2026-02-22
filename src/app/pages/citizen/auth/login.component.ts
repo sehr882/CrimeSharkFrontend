@@ -30,14 +30,20 @@ export class LoginComponent {
 
   login() {
     const data = {
-      name: this.username,      // map to backend "name"
+      username: this.username,
       password: this.password
     };
 
     this.authService.login(data).subscribe({
       next: res => {
-        // Backend should return a JWT token
-        localStorage.setItem('token', res.access_token); // store token for protected routes only
+        // Store user login data
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('user', JSON.stringify({
+            username: this.username,
+            loginTime: new Date().toISOString()
+          }));
+          localStorage.setItem('isLoggedIn', 'true');
+        }
 
         alert('Login successful!');
         this.resetForm();

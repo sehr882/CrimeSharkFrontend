@@ -38,8 +38,7 @@ export class SignupComponent {
     }
 
     const data = {
-      name: this.username,
-      email: '',
+      username: this.username,
       password: this.password
     };
 

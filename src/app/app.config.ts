@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { CitizenPortalComponent } from './pages/citizen/citizen-portal/citizen-portal.component';
-import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withFetch, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
@@ -11,8 +11,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimations(),
 
-    // ✅ Enable HttpClient and allow interceptors
-    provideHttpClient(withInterceptorsFromDi()),
+    // ✅ Enable HttpClient with fetch APIs and interceptors
+    provideHttpClient(withInterceptorsFromDi(), withFetch()),
 
     // ✅ Register the AuthInterceptor
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
