@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Input } from '@angular/core';
+import { AuthService } from  '@app/services/auth.service'; // ⬅ inject AuthService
 
 @Component({
   selector: 'app-login',
@@ -19,7 +19,8 @@ export class LoginComponent {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -28,30 +29,31 @@ export class LoginComponent {
   }
 
   login() {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const data = {
+      name: this.username,      // map to backend "name"
+      password: this.password
+    };
 
-    const user = users.find(
-      (u: any) =>
-        u.username === this.username && u.password === this.password
-    );
+    this.authService.login(data).subscribe({
+      next: res => {
+        // Backend should return a JWT token
+        localStorage.setItem('token', res.access_token); // store token for protected routes only
 
-    if (!user) {
-      alert('Invalid username or password');
-      return;
-    }
+        alert('Login successful!');
+        this.resetForm();
 
-    localStorage.setItem('loggedInUser', this.username);
-
-    alert('Login successful!');
-
-    const redirect = localStorage.getItem('postLoginRedirect');
-
-    if (redirect) {
-      localStorage.removeItem('postLoginRedirect');
-      this.router.navigate([redirect]);
-    } else {
-      this.router.navigate(['/citizen']);
-    }
+        // redirect logic
+        if (this.redirectFrom) {
+          this.router.navigate([this.redirectFrom]);
+        } else {
+          this.router.navigate(['/citizen']);
+        }
+      },
+      error: err => {
+        alert(err.error?.message || 'Login failed');
+        console.error(err);
+      }
+    });
   }
 
   resetForm() {

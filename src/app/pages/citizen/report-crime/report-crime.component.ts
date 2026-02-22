@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
+import { CrimeService } from '@app/services/crime.service'; // ✅ your service
 
 @Component({
   selector: 'app-report-crime',
@@ -12,12 +13,11 @@ import { BackButtonComponent } from '@app/shared/back-button/back-button.compone
 })
 export class ReportCrimeComponent implements OnInit {
 
-  // Logs help us verify this exact runtime class is loaded
-  constructor() {
+  constructor(private crimeService: CrimeService) {
     console.log('[REPORT-COMP] constructor');
   }
 
-  crimeType: string = '';       // start empty to match your preference
+  crimeType: string = '';
   selectedCrime = '';
   crimeArea = '';
   description = '';
@@ -27,40 +27,24 @@ export class ReportCrimeComponent implements OnInit {
   showSuccess = false;
 
   staticCrimes: string[] = [
-    "Burglary",
-    "Robbery (static)",
-    "Arson",
-    "Vandalism",
-    "Trespassing",
-    "Shoplifting",
-    "Embezzlement",
-    "Forgery",
-    "Counterfeiting",
-    "Extortion"
+    "Burglary", "Robbery (static)", "Arson", "Vandalism",
+    "Trespassing", "Shoplifting", "Embezzlement", "Forgery",
+    "Counterfeiting", "Extortion"
   ];
 
   movingCrimes: string[] = [
-    "Pickpocketing",
-    "Snatching",
-    "Mugging",
-    "Vehicle theft",
-    "Street racing",
-    "Hit-and-run",
-    "Reckless driving",
-    "Speeding",
-    "DUI (Driving Under Influence)",
-    "Robbery (moving)"
+    "Pickpocketing", "Snatching", "Mugging", "Vehicle theft",
+    "Street racing", "Hit-and-run", "Reckless driving",
+    "Speeding", "DUI (Driving Under Influence)", "Robbery (moving)"
   ];
 
   crimeOptions: string[] = [];
 
   ngOnInit() {
     console.log('[REPORT-COMP] ngOnInit - initial crimeType:', this.crimeType);
-    // do NOT auto-select — but ensure the function exists and logs when called
-    this.updateCrimeOptions(); // will populate if crimeType non-empty (mostly logs)
+    this.updateCrimeOptions();
   }
 
-  // called both on (ngModelChange) and can be called manually
   updateCrimeOptions(): void {
     console.log('[REPORT-COMP] updateCrimeOptions() called — crimeType=', this.crimeType);
     this.selectedCrime = '';
@@ -90,27 +74,38 @@ export class ReportCrimeComponent implements OnInit {
       description: this.description,
       file: this.uploadedFile
     });
-    this.submitted = true;
+
     if (!this.crimeType) { alert('Choose crime type'); return; }
     if (!this.selectedCrime) { alert('Choose a crime'); return; }
     if (!this.crimeArea) { alert('Choose crime area'); return; }
-    this.showSuccess = true;
-    // reset for demo
+
+    const crimeData = {
+      title: this.selectedCrime,
+      description: this.description,
+      area: this.crimeArea,
+      type: this.crimeType
+    };
+
+    this.crimeService.reportCrime(crimeData, this.uploadedFile).subscribe({
+      next: res => {
+        alert(res.message || 'Crime reported successfully!');
+        this.resetForm();
+      },
+      error: err => {
+        alert(err.error?.message || 'Failed to report crime');
+        console.error(err);
+      }
+    });
+  }
+
+  resetForm() {
     this.crimeType = '';
     this.selectedCrime = '';
     this.crimeOptions = [];
     this.crimeArea = '';
     this.description = '';
     this.uploadedFile = null;
-
     this.submitted = false;
-
-    // Auto-hide success message after 3 seconds
-    setTimeout(() => this.showSuccess = false, 3000);
+    this.showSuccess = false;
   }
 }
-
-
-
-
-

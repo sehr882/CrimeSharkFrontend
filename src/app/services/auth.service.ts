@@ -1,26 +1,39 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private USER_KEY = 'crimeshark_user';
+  private baseUrl = 'http://localhost:3000/auth'; // NestJS backend URL
 
-  login(username: string) {
-    localStorage.setItem(this.USER_KEY, username);
+  constructor(private http: HttpClient) {}
+
+  // Register API call
+  register(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/register`, data);
   }
 
-  logout() {
-    localStorage.removeItem(this.USER_KEY);
+  // Login API call
+  login(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/login`, data);
   }
 
+  // ✅ NEW: check if user is logged in
   isLoggedIn(): boolean {
-    return !!localStorage.getItem(this.USER_KEY);
+    // Example: check if a token exists in localStorage
+    return !!localStorage.getItem('token');
   }
 
-  getUsername(): string | null {
-    return localStorage.getItem(this.USER_KEY);
+  // Optional: store token after login
+  setToken(token: string) {
+    localStorage.setItem('token', token);
+  }
+
+  // Optional: remove token on logout
+  logout() {
+    localStorage.removeItem('token');
   }
 }
-

@@ -3,15 +3,18 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
+import { CrimeService } from '@app/services/crime.service'; // ✅ backend service
 
 interface Alert {
-  id: number;
+  id: string;
   title: string;
   subtitle: string;
   location: string;
   time: string;
-  viewers: number;
-  icon: string;
+  viewers?: number;
+  icon?: string;
+  description?: string;
+  type?: string;
 }
 
 @Component({
@@ -24,7 +27,8 @@ interface Alert {
 export class CitizenPortalComponent implements AfterViewInit {
 
   constructor(
-    private router: Router
+    private router: Router,
+    private crimeService: CrimeService // ✅ inject service
   ) { }
 
   goToReport() {
@@ -37,92 +41,25 @@ export class CitizenPortalComponent implements AfterViewInit {
 
   categories = ['Robbery', 'Burglary', 'Cybercrime', 'Missing Person', 'Assault'];
 
-  alerts: Alert[] = [
-    {
-      id: 1,
-      title: 'Robbery in Model Town',
-      subtitle: 'Reported 15 mins ago',
-      location: 'Lahore',
-      time: '15 mins',
-      viewers: 250,
-      icon: '🔴',
-    },
-    {
-      id: 2,
-      title: 'Burglary in Gulberg',
-      subtitle: '1 hour ago - Verified',
-      location: 'Lahore',
-      time: '1 hour',
-      viewers: 170,
-      icon: '🏠',
-    },
-    {
-      id: 3,
-      title: 'Assault in Saddar',
-      subtitle: '2 hours ago',
-      location: 'Karachi',
-      time: '2 hours',
-      viewers: 140,
-      icon: '⚠️',
-    },
-    {
-      id: 4,
-      title: 'Cybercrime Scam Reported',
-      subtitle: 'Online fraud case',
-      location: 'Islamabad',
-      time: '3 hours',
-      viewers: 95,
-      icon: '💻',
-    },
-    {
-      id: 5,
-      title: 'Robbery Attempt Foiled',
-      subtitle: 'Suspect fled the scene',
-      location: 'Rawalpindi',
-      time: '30 mins',
-      viewers: 110,
-      icon: '🚨',
-    },
-    {
-      id: 6,
-      title: 'Burglary at Electronics Shop',
-      subtitle: 'CCTV footage under review',
-      location: 'Lahore',
-      time: '4 hours',
-      viewers: 200,
-      icon: '🏪',
-    }
-  ];
-
+  alerts: Alert[] = []; // will be filled from backend
+  loading = true;
 
   trending = [
     { title: 'Scam Alert', when: '3 hours ago' },
   ];
 
-  // ⭐ Leaflet variables
-  private L: any;        // Leaflet Namespace
-  private miniMap: any;  // Mini-map instance
+  // Leaflet variables
+  private L: any;        
+  private miniMap: any;  
 
-  // ---------------------------------------------------
-  // ⭐ After view loads, initialize map
-  // ---------------------------------------------------
   async ngAfterViewInit() {
-
-    // IMPORTANT: Prevent Angular Universal SSR crash
     if (typeof window === 'undefined') return;
-
-    // Load Leaflet dynamically (fixes SSR + TS errors)
     const leaflet = await import('leaflet');
     this.L = leaflet;
-
     this.initMiniMap();
   }
 
-  // ---------------------------------------------------
-  // ⭐ MINI MAP INITIALIZER
-  // ---------------------------------------------------
   initMiniMap() {
-
     this.miniMap = this.L.map('mini-map', {
       zoomControl: false,
       attributionControl: false
@@ -133,7 +70,6 @@ export class CitizenPortalComponent implements AfterViewInit {
       minZoom: 3
     }).addTo(this.miniMap);
 
-    // More hotzones added ⭐
     const hotzones = [
       { lat: 33.7000, lng: 73.0500, radius: 400 },
       { lat: 33.6900, lng: 73.0400, radius: 300 },
@@ -155,19 +91,47 @@ export class CitizenPortalComponent implements AfterViewInit {
         radius: z.radius
       }).addTo(this.miniMap);
     });
+
+    // Fetch crimes after map is ready
+    this.fetchCrimes();
   }
 
   // ---------------------------------------------------
-  // CATEGORY FILTERING
+  // Fetch crimes from backend
   // ---------------------------------------------------
+  fetchCrimes() {
+    this.loading = true;
+    this.crimeService.getAllCrimes().subscribe({
+      next: (data) => {
+        // Map backend data to Alert interface
+        this.alerts = data.map(crime => ({
+          id: crime._id,
+          title: crime.title,
+          subtitle: crime.type + ' - Reported',
+          location: crime.area,
+          time: new Date(crime.createdAt).toLocaleString(),
+          viewers: Math.floor(Math.random() * 200) + 50, // optional demo
+          icon: crime.type === 'static' ? '🏠' : '🚨',
+          description: crime.description,
+          type: crime.type
+        }));
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Failed to fetch crimes', err);
+        this.loading = false;
+      }
+    });
+  }
+
   setCategory(cat: string) {
     this.selectedCategory = this.selectedCategory === cat ? '' : cat;
   }
+
   onSearch() { }
 
   filteredAlerts() {
     return this.alerts.filter(alert => {
-
       const matchesCategory = this.selectedCategory
         ? alert.title.toLowerCase().includes(this.selectedCategory.toLowerCase())
         : true;

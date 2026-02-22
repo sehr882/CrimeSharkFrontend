@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
-import { Input } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AuthService } from  '@app/services/auth.service';  // check relative path
 
 @Component({
   selector: 'app-signup',
@@ -16,13 +16,14 @@ export class SignupComponent {
   password = '';
   confirmPassword = '';
 
-  @Input() redirectFrom: string | null = null;
+  // signup.component.ts
+ @Input() redirectFrom: string | null = null;
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: AuthService
   ) { }
-
 
   ngOnInit() {
     this.username = '';
@@ -30,38 +31,35 @@ export class SignupComponent {
     this.confirmPassword = '';
   }
 
-
   signup() {
     if (this.password !== this.confirmPassword) {
       alert('Passwords do not match');
       return;
     }
 
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-
-    const exists = users.find((u: any) => u.username === this.username);
-    if (exists) {
-      alert('Username already exists');
-      return;
-    }
-
-    users.push({
-      username: this.username,
+    const data = {
+      name: this.username,
+      email: '',
       password: this.password
+    };
+
+    this.authService.register(data).subscribe({
+      next: res => {
+        alert(res.message || 'Signup successful!');
+        this.resetForm();
+
+        // temporary redirect logic
+        if (this.redirectFrom) {
+          this.router.navigate([this.redirectFrom]);
+        } else {
+          this.router.navigate(['/citizen']);
+        }
+      },
+      error: err => {
+        alert(err.error?.message || 'Signup failed');
+        console.error(err);
+      }
     });
-
-    localStorage.setItem('users', JSON.stringify(users));
-
-    alert('Signup successful!');
-    this.resetForm();
-    const redirect = localStorage.getItem('postLoginRedirect');
-
-    if (redirect) {
-      localStorage.removeItem('postLoginRedirect');
-      this.router.navigate([redirect]);
-    } else {
-      this.router.navigate(['/citizen']);
-    }
   }
 
   resetForm() {
