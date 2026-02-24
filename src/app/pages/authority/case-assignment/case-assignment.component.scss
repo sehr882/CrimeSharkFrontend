@@ -1,0 +1,113 @@
+.case-page {
+    padding: 30px;
+    color: #ffffff;
+}
+
+.page-header h2 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 600;
+    color: black;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.page-header p {
+    opacity: 0.7;
+    margin-bottom: 25px;
+    color: black;
+    font-size: 18px;
+}
+
+.case-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.case-card {
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    transition: 0.3s ease;
+}
+
+.case-card:hover {
+    transform: translateY(-5px);
+}
+
+.case-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.status {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.pending {
+    background: #facc15;
+    color: #000;
+}
+
+.urgent {
+    background: #ef4444;
+}
+
+.assign-section {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+select {
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+}
+
+.assign-btn {
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    background: #38bdf8;
+    color: #000;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.assign-btn:hover {
+    background: #0ea5e9;
+    color: #fff;
+}
+
+.success-message {
+    margin-top: 10px;
+    padding: 10px;
+    background: #22c55e;
+    color: #000;
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,58 @@
+<app-back-button></app-back-button>
+<div class="case-page">
+
+    <div class="page-header">
+        <h2>Case Assignment Panel</h2>
+        <p>Assign cases to available officers</p>
+    </div>
+
+    <div class="case-grid">
+
+        <div class="case-card" *ngFor="let caseItem of cases">
+
+            <div class="case-top">
+                <h3>Case #{{ caseItem.id }}</h3>
+                <span class="status" [ngClass]="{
+            'pending': caseItem.status === 'Pending',
+            'urgent': caseItem.status === 'Urgent'
+          }">
+                    {{ caseItem.status }}
+                </span>
+            </div>
+
+            <p><strong>Type:</strong> {{ caseItem.type }}</p>
+            <p><strong>Location:</strong> {{ caseItem.location }}</p>
+            <p><strong>Date:</strong> {{ caseItem.date }}</p>
+
+            <div class="assign-section">
+
+                <ng-container *ngIf="!caseItem.isAssigned; else assignedMessage">
+
+                    <label>Assign To:</label>
+
+                    <select [(ngModel)]="caseItem.assignedOfficer">
+                        <option value="">Select Officer</option>
+                        <option *ngFor="let officer of officers" [value]="officer">
+                            {{ officer }}
+                        </option>
+                    </select>
+
+                    <button class="assign-btn" (click)="assignCase(caseItem)">
+                        Assign
+                    </button>
+
+                </ng-container>
+
+                <ng-template #assignedMessage>
+                    <div class="success-message">
+                        ✅ The case is assigned to {{ caseItem.assignedOfficer }}
+                    </div>
+                </ng-template>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

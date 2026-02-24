@@ -1,157 +1,150 @@
-.portal-container {
-  position: relative;
-  display: flex;
-  height: 100vh;
-  background: white;
-  /* deep dark blue-black */
-  overflow: hidden;
-  font-family: 'Poppins', sans-serif;
-  color: #e5e5e5;
-}
-
-/* =======================
-   MAIN CONTENT
-========================== */
+/* MAIN CONTENT AREA */
 .content {
-  flex: 1;
-  padding: 30px;
-  overflow-y: auto;
+  padding: 40px;
+  min-height: 100vh;
+  background: #f8fafc;
+  font-family: 'Poppins', sans-serif;
 }
 
-.content h1 {
-  font-weight: 700;
-  color: black;
+.welcome-banner {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  padding: 25px 30px;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border-radius: 16px;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  margin-bottom: 30px;
 }
 
-.sub-text {
-  color: black;
-  margin-bottom: 25px;
+.welcome-left {
+  flex-shrink: 0;
 }
 
-/* =======================
-   STAT CARDS – GLASS CRIME MODE
-========================== */
+.officer-img {
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid #38bdf8;
+}
+
+.welcome-right h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.welcome-right p {
+  margin: 5px 0;
+  font-size: 17px;
+  opacity: 0.9;
+}
+
+.tagline {
+  font-size: 15px;
+  opacity: 0.7;
+  letter-spacing: 0.5px;
+}
+
+/* ================= STATS GRID ================= */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
-  margin-bottom: 35px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
 }
 
-.card {
+.stat-card {
   padding: 25px;
-  border-radius: 15px;
-  background: rgba(22, 27, 34, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-  color: #e5e5e5;
+  border-radius: 14px;
+  background: white;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: 0.3s ease;
 }
 
-.card.red {
-  border-left: 7px solid #ff4d4d;
+.stat-card:hover {
+  transform: translateY(-5px);
 }
 
-.card.yellow {
-  border-left: 7px solid #facc15;
-}
-
-.card.green {
-  border-left: 7px solid #4ade80;
-}
-
-.card h3 {
-  font-size: 20px;
-  color: #e5e7eb;
-  font-family: 'Times New Roman', Times, serif;
+.stat-card h3 {
+  font-size: 16px;
+  color: #64748b;
 }
 
 .value {
-  font-size: 40px;
+  font-size: 36px;
   font-weight: 700;
-  margin-top: 10px;
-  color: #fff;
+  margin-top: 8px;
 }
 
-/* =======================
-   CHARTS – DARK BOXES
-========================== */
-.charts-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 25px;
-  margin-bottom: 35px;
+/* Accent Borders */
+.stat-card.total {
+  border-left: 6px solid #ef4444;
 }
 
-.chart-box {
-  background: #11161d;
-  padding: 25px;
-  border-radius: 15px;
-  border: 1px solid #1f2937;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+.stat-card.pending {
+  border-left: 6px solid #f59e0b;
 }
 
-.chart-box h2 {
-  color: #e5e5e5;
-  margin-bottom: 15px;
+.stat-card.resolved {
+  border-left: 6px solid #10b981;
 }
 
-/* =======================
-   HEATMAP PLACEHOLDER
-========================== */
-.heatmap-section h2 {
-  color: black;
-}
-
-.heatmap-section p {
-  color: black;
-}
-
-.map-placeholder {
-  background: #0f1620;
-  padding: 40px;
-  border-radius: 15px;
-  border: 1px solid #1f2937;
-  text-align: center;
-  color: white;
-  font-size: 18px;
-  margin-bottom: 35px;
-}
-
-/* =======================
-   RECENT REPORTS TABLE
-========================== */
+/* ================= TABLE ================= */
 .table-container {
-  background: #11161d;
-  padding: 20px;
-  border-radius: 15px;
-  border: 1px solid #1f2937;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
 .table-container h2 {
-  color: #e5e5e5;
+  margin-bottom: 20px;
+  color: #0f172a;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  color: #e5e5e5;
 }
 
 th {
   text-align: left;
-  font-weight: 600;
-  background: #1e2630;
-  color: #cbd5e1;
+  padding: 12px;
+  font-size: 14px;
+  background: #f1f5f9;
+  color: #475569;
 }
 
-th,
 td {
   padding: 12px;
-  border-bottom: 1px solid #2a2f36;
+  border-bottom: 1px solid #e2e8f0;
+  color: #334155;
 }
 
 tr:hover {
-  background: #1a2029;
+  background: #f9fafb;
+}
+
+/* STATUS BADGES */
+.status-badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+}
+
+.status-badge.pending {
+  background: #f59e0b;
+}
+
+.status-badge.resolved {
+  background: #10b981;
+}
+
+.status-badge.under-review {
+  background: #3b82f6;
 }

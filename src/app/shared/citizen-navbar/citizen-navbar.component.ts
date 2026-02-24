@@ -21,6 +21,27 @@ export class CitizenNavbarComponent {
     return false;
   }
 
+  get loggedInUsername(): string | null {
+    if (typeof window !== 'undefined') {
+      const user = localStorage.getItem('user');
+      if (user) {
+        const parsedUser = JSON.parse(user);
+        return parsedUser.username;
+      }
+    }
+    return null;
+  }
+
+  goTomyreports() {
+    if (typeof window !== 'undefined') {
+      const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      if (loggedIn) {
+        this.router.navigate(['/citizen/my-reports']);
+      } else {
+        this.router.navigate(['/citizen/auth']);
+      }
+    }
+  }
   goToReport() {
     if (typeof window !== 'undefined') {
       const loggedIn = localStorage.getItem('isLoggedIn') === 'true';

@@ -41,6 +41,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/citizen/report-crime/report-crime.component')
             .then(m => m.ReportCrimeComponent)
+      },
+
+      {
+        path: 'my-reports',
+        loadComponent: () =>
+          import('./pages/citizen/my-reports/my-reports.component')
+            .then(m => m.MyReportsComponent)
       }
     ]
   },
@@ -77,6 +84,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/authority/reports/report-details/report-details.component')
             .then(m => m.ReportDetailsComponent)
+      },
+      {
+        path: 'case-assignment',
+        loadComponent: () =>
+          import('./pages/authority/case-assignment/case-assignment.component')
+            .then(m => m.CaseAssignmentComponent)
       }
 
 

@@ -1,88 +1,66 @@
 <app-back-button></app-back-button>
-<div class="portal-container">
+<main class="content">
 
-
-  <!-- MAIN CONTENT -->
-  <main class="content">
-    <h1>Welcome, Officer</h1>
-    <p class="sub-text">City-wide crime analytics dashboard.</p>
-
-    <!-- STAT CARDS -->
-    <div class="stats-grid">
-      <div class="card red">
-        <h3>Total Crime Reports</h3>
-        <p class="value">{{ totalReports }}</p>
-      </div>
-
-      <div class="card yellow">
-        <h3>Pending Cases</h3>
-        <p class="value">{{ pendingReports }}</p>
-      </div>
-
-      <div class="card green">
-        <h3>Resolved Cases</h3>
-        <p class="value">{{ resolvedReports }}</p>
-      </div>
+  <div class="welcome-banner">
+    <div class="welcome-left">
+      <img src="assets/cs-officer.png" alt="Officer" class="officer-img" />
     </div>
 
-    <!-- CHARTS SECTION -->
-    <div class="charts-grid">
+    <div class="welcome-right">
+      <h1>Welcome, Officer</h1>
+      <p>CrimeShark Authority Control Panel</p>
+      <span class="tagline">Stay alert. Serve with integrity.</span>
+    </div>
+  </div>
 
-      <div class="chart-box">
-        <h2>Crime Trend (Last 6 Months)</h2>
-        <canvas baseChart [data]="lineChartData" [labels]="lineChartLabels" [type]="'line'">
-        </canvas>
-      </div>
+  <!-- ================= STATS GRID ================= -->
+  <div class="stats-grid">
 
-      <div class="chart-box">
-        <h2>Crime Categories Distribution</h2>
-        <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [type]="'pie'">
-        </canvas>
-      </div>
-
-      <div class="chart-box">
-        <h2>Pending vs Resolved</h2>
-        <canvas baseChart [data]="barChartData" [labels]="barChartLabels" [type]="'bar'">
-        </canvas>
-      </div>
-
+    <div class="stat-card total">
+      <h3>Total Reports</h3>
+      <p class="value">{{ totalReports }}</p>
     </div>
 
-    <!-- LIVE HEATMAP SECTION -->
-    <div class="heatmap-section">
-      <h2>Live Crime Heatmap</h2>
-      <p>This map will show real-time crime density. (API integration pending)</p>
-
-      <!-- Placeholder map UI -->
-      <div class="map-placeholder">
-        <p>🔍 Crime Heatmap Loading...</p>
-      </div>
+    <div class="stat-card pending">
+      <h3>Pending Cases</h3>
+      <p class="value">{{ pendingReports }}</p>
     </div>
 
-    <!-- RECENT REPORTS -->
-    <div class="table-container">
-      <h2>Recent Crime Reports</h2>
-
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Type</th>
-            <th>Location</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr *ngFor="let report of recentReports">
-            <td>{{ report.id }}</td>
-            <td>{{ report.type }}</td>
-            <td>{{ report.location }}</td>
-            <td>{{ report.status }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="stat-card resolved">
+      <h3>Resolved Cases</h3>
+      <p class="value">{{ resolvedReports }}</p>
     </div>
 
-  </main>
-</div>
+  </div>
+
+  <!-- ================= RECENT REPORTS TABLE ================= -->
+  <div class="table-container">
+    <h2>Recently Reported Crimes</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Type</th>
+          <th>Location</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let report of recentReports">
+          <td>{{ report.id }}</td>
+          <td>{{ report.type }}</td>
+          <td>{{ report.location }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="report.status.toLowerCase().replace(' ','-')">
+              {{ report.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+  </div>
+
+</main>

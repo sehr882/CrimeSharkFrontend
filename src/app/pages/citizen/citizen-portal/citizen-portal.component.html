@@ -26,21 +26,7 @@
         <div id="mini-map" class="mini-map"></div>
       </div>
 
-      <div class="trending">
-        <h3>Trending</h3>
 
-        <div class="trend-card" *ngFor="let t of trending">
-          <div class="trend-icon">
-            <span class="material-icons-outlined">warning_amber</span>
-          </div>
-          <div>
-            <div class="trend-title">{{ t.title }}</div>
-            <div class="trend-time">{{ t.when }}</div>
-          </div>
-        </div>
-
-        <button class="see-details">See Details</button>
-      </div>
     </aside>
 
     <!-- ALERTS -->
@@ -70,10 +56,7 @@
               <span class="material-icons-outlined">location_on</span>
               {{ a.location }}
             </div>
-            <div>
-              <span class="material-icons-outlined">visibility</span>
-              {{ a.viewers }} people nearby viewed this alert
-            </div>
+
           </div>
         </div>
 

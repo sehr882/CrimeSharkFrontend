@@ -1,45 +1,50 @@
 <div class="auth-container">
   <div class="auth-card">
+
     <div class="auth-header">
-      <h2>Authority Login</h2>
+      <h2>Authority Portal</h2>
       <p class="warning">Authorized Personnel Only</p>
     </div>
 
-    <form>
-      <!-- CNIC FIELD -->
+    <!-- SIGNUP FORM -->
+    <form *ngIf="isSignup">
       <label>CNIC</label>
-      <input 
-        type="text"
-        [(ngModel)]="cnic"
-        name="cnic"
-        placeholder="Enter your CNIC (e.g. 35202-1234567-8)"
-        autocomplete="off"
-        autocorrect="off" 
-      >
+      <input type="text" [(ngModel)]="signupCnic" name="signupCnic">
 
-      <!-- PASSWORD -->
       <label>Password</label>
-      <input 
-        type="password"
-        [(ngModel)]="password"
-        name="password"
-        placeholder="Enter password"
-        autocomplete="new-password"
-      >
+      <input type="password" [(ngModel)]="signupPassword" name="signupPassword">
 
-      <!-- ACCESS CODE -->
       <label>Authority Access Code</label>
-      <input 
-        type="text"
-        [(ngModel)]="accessCode"
-        name="accessCode"
-        placeholder="Enter secret authority code"
-      >
+      <input type="text" [(ngModel)]="signupAccessCode" name="signupAccessCode">
+
+      <button type="button" (click)="signup()">Sign Up</button>
+
+      <p class="switch-text">
+        Already registered?
+        <span (click)="toggleForm(false)">Login</span>
+      </p>
+    </form>
+
+    <!-- LOGIN FORM -->
+    <form *ngIf="!isSignup">
+      <label>CNIC</label>
+      <input type="text" [(ngModel)]="cnic" name="cnic">
+
+      <label>Password</label>
+      <input type="password" [(ngModel)]="password" name="password">
+
+      <label>Authority Access Code</label>
+      <input type="text" [(ngModel)]="accessCode" name="accessCode">
 
       <button type="button" (click)="login()">Login</button>
 
-      <p class="danger-text"> 🛑 Unauthorized access is strictly prohibited. </p>
+      <p class="switch-text">
+        New authority?
+        <span (click)="toggleForm(true)">Sign Up</span>
+      </p>
     </form>
+
+    <p class="danger-text">🛑 Unauthorized access is strictly prohibited.</p>
+
   </div>
 </div>
-
