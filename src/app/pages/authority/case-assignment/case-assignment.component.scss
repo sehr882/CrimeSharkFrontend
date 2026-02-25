@@ -59,55 +59,16 @@
     background: #ef4444;
 }
 
-.assign-section {
+.assigned-section {
     margin-top: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-select {
-    padding: 8px;
-    border-radius: 8px;
-    border: none;
-    outline: none;
-}
-
-.assign-btn {
-    padding: 8px;
-    border: none;
-    border-radius: 8px;
-    background: #38bdf8;
-    color: #000;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.assign-btn:hover {
-    background: #0ea5e9;
-    color: #fff;
-}
-
-.success-message {
-    margin-top: 10px;
     padding: 10px;
-    background: #22c55e;
-    color: #000;
-    border-radius: 8px;
-    font-weight: 600;
-    text-align: center;
-    animation: fadeIn 0.4s ease-in-out;
+    background: #0f172a;
+    border-radius: 10px;
+    font-size: 14px;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(5px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.officer-name {
+    font-weight: 600;
+    color: #38bdf8;
+    margin-left: 5px;
 }

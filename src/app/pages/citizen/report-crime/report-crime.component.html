@@ -4,6 +4,12 @@
   <div class="form-container">
 
     <h2 class="page-title">Report a Crime</h2>
+    <!-- Warning Notice -->
+    <div class="warning-box">
+      ⚠️ Please ensure that all information provided is accurate and truthful.
+      Submitting false reports, misleading information, or prank complaints
+      may result in strict legal action.
+    </div>
 
     <div class="form-box">
 
@@ -32,14 +38,38 @@
           <option *ngFor="let crime of crimeOptions; let i = index" [value]="crime">
             {{ i + 1 }}. {{ crime }}
           </option>
+          <option value="Other">Other</option>
         </select>
       </div>
 
       <!-- Area of Crime -->
       <div class="form-field">
         <label class="field-label">Area of Crime</label>
-        <input type="text" name="crimeArea" [(ngModel)]="crimeArea" class="field-input"
-          placeholder="Exact Place, City..." />
+
+        <input type="text" name="crimeArea" [(ngModel)]="crimeArea" (input)="searchLocation()" class="field-input"
+          placeholder="Exact Place, City..." autocomplete="off" />
+
+        <!-- Location Suggestions -->
+        <div class="location-suggestions" *ngIf="locationSuggestions.length > 0">
+          <div class="suggestion-item" *ngFor="let place of locationSuggestions" (click)="selectLocation(place)">
+            {{ place.name }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Date of Crime -->
+      <div class="form-field">
+        <label class="field-label">Date of Crime</label>
+
+        <div class="date-row">
+          <input type="number" min="1" max="31" [(ngModel)]="crimeDay" placeholder="Day"
+            class="field-input date-input" />
+
+          <input type="number" min="1" max="12" [(ngModel)]="crimeMonth" placeholder="Month"
+            class="field-input date-input" />
+
+          <input type="number" [(ngModel)]="crimeYear" placeholder="Year" class="field-input date-input" />
+        </div>
       </div>
 
       <!-- Description -->

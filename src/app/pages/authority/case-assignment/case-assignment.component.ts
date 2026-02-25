@@ -19,8 +19,7 @@ export class CaseAssignmentComponent {
             location: 'Zone 3',
             date: '23 Feb 2026',
             status: 'Pending',
-            assignedOfficer: '',
-            isAssigned: false
+            assignedTo: 'Officer Ahmed Khan'
         },
         {
             id: 'CS-202',
@@ -28,8 +27,7 @@ export class CaseAssignmentComponent {
             location: 'Zone 1',
             date: '22 Feb 2026',
             status: 'Urgent',
-            assignedOfficer: '',
-            isAssigned: false
+            assignedTo: 'Officer Sarah Malik'
         },
         {
             id: 'CS-203',
@@ -37,22 +35,8 @@ export class CaseAssignmentComponent {
             location: 'Zone 5',
             date: '21 Feb 2026',
             status: 'Pending',
-            assignedOfficer: '',
-            isAssigned: false
+            assignedTo: 'Officer Usman Ali'
         }
     ];
-
-    officers = [
-        'Officer 1',
-        'Officer 2',
-        'Officer 3',
-        'Officer 4'
-    ];
-
-    assignCase(caseItem: any) {
-        if (caseItem.assignedOfficer) {
-            caseItem.isAssigned = true;
-        }
-    }
 
 }
