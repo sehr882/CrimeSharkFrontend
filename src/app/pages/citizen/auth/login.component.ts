@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from  '@app/services/auth.service'; // ⬅ inject AuthService
+import { AuthService } from '@app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -35,20 +35,25 @@ export class LoginComponent {
     };
 
     this.authService.login(data).subscribe({
-      next: res => {
-        // Store user login data
+      next: (res: any) => {
+
         if (typeof window !== 'undefined') {
+
+          // STORE JWT TOKEN (IMPORTANT)
+          localStorage.setItem('token', res.token);
+
+          // Optional user info
           localStorage.setItem('user', JSON.stringify({
             username: this.username,
             loginTime: new Date().toISOString()
           }));
+
           localStorage.setItem('isLoggedIn', 'true');
         }
 
         alert('Login successful!');
         this.resetForm();
 
-        // redirect logic
         if (this.redirectFrom) {
           this.router.navigate([this.redirectFrom]);
         } else {
