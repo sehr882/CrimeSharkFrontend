@@ -25,12 +25,12 @@ export class ReportCrimeComponent implements OnInit {
   description = '';
   uploadedFile?: File | null = null;
 
-  // ✅ Date Fields
+  // Date Fields
   crimeDay: number | null = null;
   crimeMonth: number | null = null;
   crimeYear: number | null = null;
 
-  // ✅ Map + Suggestions
+  // Map + Suggestions
   locationSuggestions: any[] = [];
 
   submitted = false;
@@ -125,7 +125,7 @@ export class ReportCrimeComponent implements OnInit {
 
   submitReport() {
 
-    // ✅ Required Validations
+    //  Required Validations
     if (!this.crimeType) {
       alert('Choose crime type');
       return;
@@ -146,7 +146,7 @@ export class ReportCrimeComponent implements OnInit {
       return;
     }
 
-    // ✅ Basic Date Validation
+    // Basic Date Validation
     if (this.crimeDay < 1 || this.crimeDay > 31) {
       alert('Invalid day');
       return;
