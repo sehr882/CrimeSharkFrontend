@@ -167,7 +167,7 @@ export class ReportCrimeComponent implements OnInit {
       description: this.description,
       area: this.crimeArea,
       type: this.crimeType,
-      date: `${this.crimeYear}-${this.crimeMonth}-${this.crimeDay}`
+      dateOfCrime:`${this.crimeYear}-${this.crimeMonth.toString().padStart(2, '0')}-${this.crimeDay.toString().padStart(2, '0')}`
     };
 
     this.crimeService.reportCrime(crimeData, this.uploadedFile).subscribe({

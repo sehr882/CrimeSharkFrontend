@@ -18,6 +18,7 @@ export class CrimeService {
     formData.append('crimeType', data.type);
     formData.append('crimeTitle', data.title);
     formData.append('location', data.area);
+     formData.append('dateOfCrime', data.dateOfCrime);
     formData.append('description', data.description);
     if (file) formData.append('evidence', file);
     return this.http.post(`${this.baseUrl}/report`, formData);
