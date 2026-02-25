@@ -1,0 +1,50 @@
+<app-back-button></app-back-button>
+<div class="officer-container">
+
+    <!-- SUPER ADMIN -->
+    <div *ngIf="role === 'super_admin'">
+
+        <h2 class="page-title">Officer Management</h2>
+
+        <div class="officer-grid">
+            <div class="officer-card" *ngFor="let officer of officers">
+
+                <h3>{{ officer.name }}</h3>
+                <p><strong>Rank:</strong> {{ officer.rank }}</p>
+                <p><strong>Station:</strong> {{ officer.station }}</p>
+                <p>
+                    <strong>Status:</strong>
+                    <span [ngClass]="officer.status === 'Active' ? 'active' : 'suspended'">
+                        {{ officer.status }}
+                    </span>
+                </p>
+
+                <div class="actions">
+                    <button>Edit</button>
+                    <button class="danger">Suspend</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- NORMAL OFFICER -->
+    <div *ngIf="role === 'officer'">
+
+        <h2 class="page-title">My Profile</h2>
+
+        <div class="profile-card">
+            <h3>{{ currentUser.name }}</h3>
+            <p><strong>Rank:</strong> Inspector</p>
+            <p><strong>Station:</strong> Rawalpindi Sector A</p>
+            <p><strong>Status:</strong> Active</p>
+
+            <div class="profile-actions">
+                <button>Update Profile</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>

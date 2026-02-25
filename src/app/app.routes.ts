@@ -90,8 +90,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/authority/case-assignment/case-assignment.component')
             .then(m => m.CaseAssignmentComponent)
+      },
+      {
+        path: 'officers',
+        loadComponent: () =>
+          import('./pages/authority/authority-officer/authority-officer.component')
+            .then(m => m.AuthorityOfficerComponent)
       }
-
 
     ]
   }

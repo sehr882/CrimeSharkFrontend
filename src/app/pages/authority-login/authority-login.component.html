@@ -6,27 +6,7 @@
       <p class="warning">Authorized Personnel Only</p>
     </div>
 
-    <!-- SIGNUP FORM -->
-    <form *ngIf="isSignup">
-      <label>CNIC</label>
-      <input type="text" [(ngModel)]="signupCnic" name="signupCnic">
-
-      <label>Password</label>
-      <input type="password" [(ngModel)]="signupPassword" name="signupPassword">
-
-      <label>Authority Access Code</label>
-      <input type="text" [(ngModel)]="signupAccessCode" name="signupAccessCode">
-
-      <button type="button" (click)="signup()">Sign Up</button>
-
-      <p class="switch-text">
-        Already registered?
-        <span (click)="toggleForm(false)">Login</span>
-      </p>
-    </form>
-
-    <!-- LOGIN FORM -->
-    <form *ngIf="!isSignup">
+    <form>
       <label>CNIC</label>
       <input type="text" [(ngModel)]="cnic" name="cnic">
 
@@ -37,14 +17,11 @@
       <input type="text" [(ngModel)]="accessCode" name="accessCode">
 
       <button type="button" (click)="login()">Login</button>
-
-      <p class="switch-text">
-        New authority?
-        <span (click)="toggleForm(true)">Sign Up</span>
-      </p>
     </form>
 
-    <p class="danger-text">🛑 Unauthorized access is strictly prohibited.</p>
+    <p class="danger-text">
+      🛑 Unauthorized access is strictly prohibited.
+    </p>
 
   </div>
 </div>
