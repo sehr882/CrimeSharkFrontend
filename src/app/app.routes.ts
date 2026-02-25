@@ -80,7 +80,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'authority/reports/:id',
+        path: 'reports/:id',
         loadComponent: () =>
           import('./pages/authority/reports/report-details/report-details.component')
             .then(m => m.ReportDetailsComponent)

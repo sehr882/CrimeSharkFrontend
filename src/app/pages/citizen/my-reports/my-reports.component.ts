@@ -1,43 +1,46 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
+import { CrimeService } from '@app/services/crime.service';
 
 @Component({
-    selector: 'app-my-reports',
-    standalone: true,
-    imports: [CommonModule, RouterModule, BackButtonComponent],
-    templateUrl: './my-reports.component.html',
-    styleUrl: './my-reports.component.scss'
+  selector: 'app-my-reports',
+  standalone: true,
+  imports: [CommonModule, RouterModule, BackButtonComponent],
+  templateUrl: './my-reports.component.html',
+  styleUrls: ['./my-reports.component.scss']
 })
 export class MyReportsComponent implements OnInit {
 
-    reports: any[] = [];
+  reports: any[] = [];
+  loading = true;
 
-    ngOnInit(): void {
-        this.loadReports();
-    }
+  constructor(private crimeService: CrimeService) {}
 
-    loadReports() {
-        // Dummy data (simulate logged-in user's reports)
-        this.reports = [
-            {
-                id: 1,
-                crimeType: 'Robbery',
-                location: 'Saddar, Rawalpindi',
-                description: 'Mobile snatching incident near market area.',
-                status: 'Pending',
-                createdAt: new Date()
-            },
-            {
-                id: 2,
-                crimeType: 'Harassment',
-                location: 'Commercial Market',
-                description: 'Suspicious individual following people at night.',
-                status: 'Resolved',
-                createdAt: new Date()
-            }
-        ];
+  ngOnInit(): void {
+
+    // ✅ Only run in browser
+    if (typeof window !== 'undefined') {
+      this.loadReports();
     }
+  }
+
+  loadReports() {
+
+    console.log('Calling API...');
+
+    this.crimeService.getMyCrimes().subscribe({
+      next: (res: any[]) => {
+        console.log('Response:', res);
+        this.reports = res;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching reports:', err);
+        this.loading = false;
+      }
+    });
+  }
 
 }

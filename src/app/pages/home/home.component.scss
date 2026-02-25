@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 $bg: #0f1724;
 $panel: #11202b;
 $accent: #d14a45;
@@ -81,7 +83,7 @@ $muted: #9aa6b2;
   }
 
   .citizen-btn {
-    background: linear-gradient(180deg, lighten($accent, 10%), $accent);
+    background: linear-gradient(180deg, color.adjust($accent, $lightness: 10%), $accent);
     color: #fff;
     box-shadow: 0 6px 20px rgba($accent, 0.4);
   }
