@@ -1,9 +1,10 @@
 <app-back-button></app-back-button>
+
 <div class="case-page">
 
     <div class="page-header">
-        <h2>Case Assignment Panel</h2>
-        <p>Assign cases to available officers</p>
+        <h2>{{ pageTitle }}</h2>
+        <p>{{ pageSubtitle }}</p>
     </div>
 
     <div class="case-grid">
@@ -13,9 +14,9 @@
             <div class="case-top">
                 <h3>Case #{{ caseItem.id }}</h3>
                 <span class="status" [ngClass]="{
-            'pending': caseItem.status === 'Pending',
-            'urgent': caseItem.status === 'Urgent'
-          }">
+          'pending': caseItem.status === 'Pending',
+          'urgent': caseItem.status === 'Urgent'
+        }">
                     {{ caseItem.status }}
                 </span>
             </div>
@@ -24,7 +25,29 @@
             <p><strong>Location:</strong> {{ caseItem.location }}</p>
             <p><strong>Date:</strong> {{ caseItem.date }}</p>
 
-            <div class="assigned-section">
+            <!-- 🔥 SUPER ADMIN VIEW -->
+            <div *ngIf="role === 'super_admin'" class="assigned-section">
+
+                <label>Assign To:</label>
+
+                <select #officerSelect>
+                    <option *ngFor="let officer of officers" [value]="officer">
+                        {{ officer }}
+                    </option>
+                </select>
+
+                <button (click)="assignCase(caseItem, officerSelect.value)">
+                    Assign
+                </button>
+
+                <p class="assigned-info">
+                    👮 Currently Assigned: <span>{{ caseItem.assignedTo }}</span>
+                </p>
+
+            </div>
+
+            <!-- 🔵 OFFICER VIEW -->
+            <div *ngIf="role === 'officer'" class="assigned-section">
                 👮 Assigned To:
                 <span class="officer-name">
                     {{ caseItem.assignedTo }}

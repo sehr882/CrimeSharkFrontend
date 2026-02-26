@@ -16,7 +16,8 @@
     </a>
 
     <a routerLink="/authority/case-assignment" routerLinkActive="active">
-      <span class="material-icons-outlined">assignment_ind</span>Case Assignment
+      <span class="material-icons-outlined">assignment_ind</span>
+      {{ isSuperAdmin ? 'Case Assignment' : 'My Cases' }}
     </a>
 
     <!-- 🔥 ROLE BASED MENU -->
