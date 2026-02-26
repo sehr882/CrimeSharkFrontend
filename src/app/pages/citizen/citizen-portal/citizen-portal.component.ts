@@ -31,6 +31,11 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
     private crimeService: CrimeService, // ✅ inject service
     private cdr: ChangeDetectorRef
   ) { }
+  visibleCount = 4;
+
+  goToLiveMap() {
+    this.router.navigate(['/citizen/live-map']);
+  }
 
   ngOnInit() {
     // Fetch crimes early
@@ -51,7 +56,7 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
   search = '';
   selectedCategory = '';
 
-  categories = ['Robbery', 'Burglary', 'Cybercrime', 'Missing Person', 'Assault'];
+  categories = ['Moving', 'Static'];
 
   alerts: Alert[] = []; // will be filled from backend
   loading = true;
@@ -61,8 +66,8 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
   ];
 
   // Leaflet variables
-  private L: any;        
-  private miniMap: any;  
+  private L: any;
+  private miniMap: any;
 
   async ngAfterViewInit() {
     if (typeof window === 'undefined') return;
@@ -142,10 +147,15 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
   onSearch() { }
 
   filteredAlerts() {
-    return this.alerts.filter(alert => {
-      const matchesCategory = this.selectedCategory
-        ? alert.title.toLowerCase().includes(this.selectedCategory.toLowerCase())
-        : true;
+    let filtered = this.alerts.filter(alert => {
+      let matchesCategory = true;
+
+      if (this.selectedCategory === 'Moving') {
+        matchesCategory = alert.type?.toLowerCase() === 'moving';
+      }
+      else if (this.selectedCategory === 'Static') {
+        matchesCategory = alert.type?.toLowerCase() === 'static';
+      }
 
       const matchesSearch = this.search
         ? alert.title.toLowerCase().includes(this.search.toLowerCase())
@@ -153,5 +163,10 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
 
       return matchesCategory && matchesSearch;
     });
+
+    return filtered.slice(0, this.visibleCount);
+  }
+  showMore() {
+    this.visibleCount += 4;
   }
 }

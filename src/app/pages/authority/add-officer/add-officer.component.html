@@ -1,0 +1,90 @@
+<app-back-button></app-back-button>
+
+<div class="form-container">
+    <div class="form-card">
+
+        <h2>Add Officer</h2>
+
+        <!-- MESSAGE -->
+        <div *ngIf="message" [ngClass]="messageType === 'success' ? 'success-msg' : 'error-msg'">
+            {{ message }}
+        </div>
+
+        <form [formGroup]="officerForm" (ngSubmit)="onSubmit()">
+
+            <div class="form-grid">
+
+                <div>
+                    <label>CNIC</label>
+                    <input type="text" formControlName="cnic" placeholder="12345-6789023-5">
+                </div>
+
+                <div>
+                    <label>Name</label>
+                    <input type="text" formControlName="name">
+                </div>
+
+                <div>
+                    <label>Email</label>
+                    <input type="email" formControlName="email">
+                </div>
+
+                <div>
+                    <label>Phone</label>
+                    <input type="text" formControlName="phone" placeholder="03XXXXXXXXX">
+                </div>
+
+                <div>
+                    <label>Rank</label>
+                    <select formControlName="rank">
+                        <option value="">Select Rank</option>
+                        <option *ngFor="let rank of ranks" [value]="rank">{{rank}}</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Station</label>
+                    <select formControlName="station">
+                        <option value="">Select Station</option>
+                        <option *ngFor="let station of stations" [value]="station">{{station}}</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Role</label>
+                    <select formControlName="role">
+                        <option value="">Select Role</option>
+                        <option *ngFor="let role of roles" [value]="role">{{role}}</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Password</label>
+                    <input type="password" formControlName="password">
+                </div>
+
+                <div>
+                    <label>Access Code</label>
+                    <input type="text" formControlName="accessCode">
+                </div>
+
+                <div>
+                    <label>Status</label>
+                    <select formControlName="status">
+                        <option value="">Select Status</option>
+                        <option *ngFor="let status of statuses" [value]="status">{{status}}</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Created By</label>
+                    <input type="text" formControlName="createdBy" readonly>
+                </div>
+
+            </div>
+
+            <button type="submit" class="submit-btn">Add Officer</button>
+
+        </form>
+    </div>
+</div>

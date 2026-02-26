@@ -1,18 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'app-authority-officer',
     standalone: true,
-    imports: [CommonModule, BackButtonComponent],
+    imports: [CommonModule, BackButtonComponent, RouterModule], // ✅ ADD THIS
     templateUrl: './authority-officer.component.html',
     styleUrls: ['./authority-officer.component.scss']
 })
 export class AuthorityOfficerComponent implements OnInit {
 
     role = '';
-    currentUser: any;
+    currentUser: any = {};
 
     officers = [
         {
@@ -35,9 +36,18 @@ export class AuthorityOfficerComponent implements OnInit {
         }
     ];
 
-    ngOnInit(): void {
-        this.currentUser = JSON.parse(localStorage.getItem('authorityUser') || '{}');
-        this.role = this.currentUser.role;
-    }
+    constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
+    ngOnInit(): void {
+
+        if (isPlatformBrowser(this.platformId)) {
+
+            const storedUser = localStorage.getItem('authorityUser');
+
+            if (storedUser) {
+                this.currentUser = JSON.parse(storedUser);
+                this.role = this.currentUser.role;
+            }
+        }
+    }
 }

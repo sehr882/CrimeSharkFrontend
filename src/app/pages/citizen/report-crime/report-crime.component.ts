@@ -17,7 +17,7 @@ export class ReportCrimeComponent implements OnInit {
   constructor(
     private crimeService: CrimeService,
     private router: Router
-  ) {}
+  ) { }
 
   crimeType: string = '';
   selectedCrime = '';
@@ -37,15 +37,15 @@ export class ReportCrimeComponent implements OnInit {
   isLoggedIn = false;
 
   staticCrimes: string[] = [
-    "Burglary", "Robbery (static)", "Arson", "Vandalism",
+    "Burglary", "Robbery", "Arson", "Vandalism",
     "Trespassing", "Shoplifting", "Embezzlement", "Forgery",
     "Counterfeiting", "Extortion"
   ];
 
   movingCrimes: string[] = [
     "Pickpocketing", "Snatching", "Mugging", "Vehicle theft",
-    "Street racing", "Hit-and-run", "Reckless driving",
-    "Speeding", "DUI (Driving Under Influence)", "Robbery (moving)"
+    "Street racing", "Hit-and-Run", "Reckless driving",
+    "Speeding", "DUI (Driving Under Influence)", "Robbery"
   ];
 
   crimeOptions: string[] = [];
@@ -170,8 +170,8 @@ export class ReportCrimeComponent implements OnInit {
         dateOfCrime: `${this.crimeYear}-${this.crimeMonth
           .toString()
           .padStart(2, '0')}-${this.crimeDay
-          .toString()
-          .padStart(2, '0')}`
+            .toString()
+            .padStart(2, '0')}`
       };
 
       this.crimeService.reportCrime(crimeData, this.uploadedFile).subscribe({

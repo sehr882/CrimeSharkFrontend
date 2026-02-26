@@ -103,3 +103,25 @@
         }
     }
 }
+
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.add-btn {
+    background-color: #0a3d62;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 19px;
+}
+
+.add-btn:hover {
+    background-color: #082c45;
+}

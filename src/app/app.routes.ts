@@ -96,7 +96,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/authority/authority-officer/authority-officer.component')
             .then(m => m.AuthorityOfficerComponent)
-      }
+      },
+      {
+        path: 'add-officer',
+        loadComponent: () =>
+          import('./pages/authority/add-officer/add-officer.component')
+            .then(m => m.AddOfficerComponent)
+      },
 
     ]
   }

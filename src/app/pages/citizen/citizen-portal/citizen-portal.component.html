@@ -1,16 +1,24 @@
 <app-back-button></app-back-button>
+
 <div class="portal-wrap">
 
-  <!-- SEARCH -->
-  <div class="dashboard-search">
-    <input [(ngModel)]="search" placeholder="Search crimes (e.g. burglary, robbery...)" (keyup.enter)="onSearch()" />
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-text">
+      <h1>CrimeShark Safety Grid</h1>
+      <p>Real-time crime reports and community awareness</p>
+    </div>
 
-    <button (click)="onSearch()">
-      <span class="material-icons-outlined">search</span>
-    </button>
-  </div>
+    <div class="hero-search">
+      <input [(ngModel)]="search" placeholder="Search crimes..." (keyup.enter)="onSearch()" />
 
-  <!-- CATEGORIES -->
+      <button (click)="onSearch()">
+        <span class="material-icons-outlined">search</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- CATEGORY FILTER -->
   <section class="categories">
     <div class="category-pill" *ngFor="let c of categories" [class.active]="selectedCategory === c"
       (click)="setCategory(c)">
@@ -18,59 +26,74 @@
     </div>
   </section>
 
+  <!-- MAIN GRID -->
   <main class="main-grid">
 
-    <!-- MAP + TRENDING -->
+    <!-- LEFT SIDE -->
     <aside class="left-col">
       <div class="map-card">
-        <div id="mini-map" class="mini-map"></div>
-      </div>
+        <div class="map-header">
+          <span>Crime Hotzones</span>
 
-
-    </aside>
-
-    <!-- ALERTS -->
-    <section class="right-col">
-      <div class="feed-title">Live Alerts</div>
-
-      <article class="alert-card" *ngFor="let a of filteredAlerts()">
-
-        <div class="alert-icon">
-          <span class="material-icons-outlined">
-            {{
-            a.title.includes('Robbery') ? 'gpp_bad' :
-            a.title.includes('Burglary') ? 'home' :
-            a.title.includes('Cyber') ? 'computer' :
-            a.title.includes('Assault') ? 'report_problem' :
-            'notifications'
-            }}
-          </span>
+          <!-- ✅ NEW VIEW FULL MAP BUTTON -->
+          <button class="view-map-btn" (click)="goToLiveMap()">
+            View Full Map
+          </button>
         </div>
 
-        <div>
-          <h4>{{ a.title }}</h4>
+        <div id="mini-map" class="mini-map"></div>
+      </div>
+    </aside>
+
+    <!-- RIGHT SIDE -->
+    <section class="right-col">
+
+      <div class="feed-title">Live Alerts</div>
+
+      <article class="alert-card" *ngFor="let a of filteredAlerts()" [ngClass]="a.type">
+
+        <!-- ✅ MATERIAL ICONS BASED ON CRIME TYPE -->
+        <div class="alert-icon" [ngClass]="a.type">
+
+          <!-- Moving -->
+          <span *ngIf="a.type === 'moving'" class="material-icons-outlined">
+            siren
+          </span>
+
+          <!-- Static -->
+          <span *ngIf="a.type === 'static'" class="material-icons-outlined">
+            report
+          </span>
+
+          <!-- Theft -->
+          <span *ngIf="a.type === 'theft'" class="material-icons-outlined">
+            gpp_bad
+          </span>
+
+          <!-- Default -->
+          <span *ngIf="!a.type" class="material-icons-outlined">
+            warning
+          </span>
+
+        </div>
+
+        <div class="alert-content">
+          <div class="alert-header">
+            <h4>{{ a.title }}</h4>
+          </div>
+
           <div class="alert-sub">{{ a.subtitle }}</div>
 
           <div class="alert-meta">
-            <div>
-              <span class="material-icons-outlined">location_on</span>
-              {{ a.location }}
-            </div>
-
+            <span class="material-icons-outlined">location_on</span>
+            {{ a.location }}
           </div>
         </div>
 
       </article>
 
-      <div class="news-block">
-        <div class="news-item">
-          <span class="material-icons-outlined">warning</span>
-          3 thefts reported near Liberty Market
-        </div>
-        <div class="news-item">
-          <span class="material-icons-outlined">campaign</span>
-          Police increased patrolling
-        </div>
+      <div class="show-more" *ngIf="visibleCount < alerts.length">
+        <button (click)="showMore()">Show More</button>
       </div>
 
     </section>

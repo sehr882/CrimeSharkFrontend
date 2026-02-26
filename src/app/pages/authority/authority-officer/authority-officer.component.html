@@ -4,7 +4,14 @@
     <!-- SUPER ADMIN -->
     <div *ngIf="role === 'super_admin'">
 
-        <h2 class="page-title">Officer Management</h2>
+        <div class="header-row">
+            <h2 class="page-title">Officer Management</h2>
+
+            <!-- 🔥 ADD OFFICER BUTTON -->
+            <button class="add-btn" routerLink="/authority/add-officer">
+                + Add Officer
+            </button>
+        </div>
 
         <div class="officer-grid">
             <div class="officer-card" *ngFor="let officer of officers">
