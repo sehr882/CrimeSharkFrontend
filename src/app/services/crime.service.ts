@@ -1,4 +1,3 @@
-// crime.service.ts
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
@@ -28,11 +27,17 @@ export class CrimeService {
     }
 
     const formData = new FormData();
-    formData.append('crimeType', data.type);
-    formData.append('crimeTitle', data.title);
-    formData.append('location', data.area);
-    formData.append('dateOfCrime', data.dateOfCrime);
+
+    // 🔥 MATCH BACKEND DTO EXACTLY
+    formData.append('crimeType', data.crimeType);
+    formData.append('crimeTitle', data.crimeTitle);
+    formData.append('location', data.location);
     formData.append('description', data.description);
+    formData.append('dateOfCrime', data.dateOfCrime);
+
+    // 🔥 VERY IMPORTANT (heatmap dependency)
+    formData.append('latitude', data.latitude);
+    formData.append('longitude', data.longitude);
 
     if (file) {
       formData.append('evidence', file);
@@ -41,7 +46,7 @@ export class CrimeService {
     return this.http.post(`${this.baseUrl}/report`, formData, { headers });
   }
 
-  // ✅ Get logged-in user's crimes (SSR safe)
+  // ✅ Get logged-in user's crimes
   getMyCrimes(): Observable<any[]> {
 
     let headers = new HttpHeaders();

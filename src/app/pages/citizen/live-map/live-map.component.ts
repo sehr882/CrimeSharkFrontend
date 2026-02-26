@@ -13,31 +13,32 @@ import { BackButtonComponent } from '@app/shared/back-button/back-button.compone
 export class LiveMapComponent implements AfterViewInit {
 
   private map: any;
-  private L: any;              // 👈 Leaflet namespace
+  private L: any;
   searchQuery = '';
   private searchMarker: any;
 
   async ngAfterViewInit(): Promise<void> {
 
-    // ✅ SSR / Vite safety guard
-    if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined') return;
 
-    // ✅ Dynamically load Leaflet
-    const leaflet = await import('leaflet');
-    this.L = leaflet;
+  const leaflet = await import('leaflet');
+  this.L = leaflet;
 
-    // -----------------------------
-    // MAP SETUP (UNCHANGED)
-    // -----------------------------
-    this.map = this.L.map('map').setView([33.6844, 73.0479], 12);
+  // 👇 make Leaflet global for heat plugin
+  (window as any).L = this.L;
 
-    this.L.tileLayer(
-      'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-      { maxZoom: 19 }
-    ).addTo(this.map);
+  // 👇 now load heat plugin
+  await import('leaflet.heat');
 
-    this.addHotzones();
-  }
+  this.map = this.L.map('map').setView([30.3753, 69.3451], 6);
+
+  this.L.tileLayer(
+    'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+    { maxZoom: 19 }
+  ).addTo(this.map);
+
+  await this.addHotzones();
+}
 
   // ----------------------------------
   // 🔍 SEARCH LOCATION
@@ -88,39 +89,46 @@ export class LiveMapComponent implements AfterViewInit {
   }
 
   // ----------------------------------
-  // 🔥 HOTZONES (UNCHANGED)
+  // 🔥 DYNAMIC HOTZONES (HEATMAP)
   // ----------------------------------
-  addHotzones() {
+  async addHotzones() {
+    try {
+      const response = await fetch('http://localhost:3000/crime/hotspots');
+      const data = await response.json();
+      console.log('HOTSPOTS DATA:', data);
 
-    const hotzones = [
-      { lat: 33.6938, lng: 73.0652, radius: 500, label: 'High Crime — F-8 Markaz' },
-      { lat: 33.6844, lng: 73.0479, radius: 450, label: 'Theft Reports — Blue Area' },
-      { lat: 33.6995, lng: 73.0363, radius: 400, label: 'Snatching — G-9' },
-      { lat: 33.6725, lng: 73.0572, radius: 350, label: 'Vehicle Theft — I-8' },
+      if (!data || data.length === 0) {
+        console.log('No hotspot data found');
+        return;
+      }
 
-      { lat: 33.5951, lng: 73.0479, radius: 550, label: 'Street Crime — Saddar' },
-      { lat: 33.6212, lng: 73.0718, radius: 450, label: 'Robbery — Raja Bazaar' },
-      { lat: 33.6439, lng: 73.0686, radius: 400, label: 'Burglary — Chandni Chowk' },
+      const heatPoints = data
+        .filter((point: any) => point.latitude && point.longitude)
+        .map((point: any) => [
+          point.latitude,
+          point.longitude,
+          0.8 // intensity
+        ]);
 
-      { lat: 31.5204, lng: 74.3587, radius: 500, label: 'Robbery — Gulberg' },
-      { lat: 31.4800, lng: 74.3239, radius: 400, label: 'Burglary — Model Town' },
+      if (heatPoints.length === 0) {
+        console.log('No valid coordinates found');
+        return;
+      }
+    (this.L as any).heatLayer(heatPoints, {
+   radius: 35,
+   blur: 30,
+   maxZoom: 17,
+   gradient: {
+    0.2: '#ffcccc',
+    0.4: '#ff6666',
+    0.6: '#ff1a1a',
+    0.8: '#cc0000',
+    1.0: '#800000'
+  }
+  }).addTo(this.map);
 
-      { lat: 24.8607, lng: 67.0011, radius: 550, label: 'Street Crime — Saddar' },
-      { lat: 24.8138, lng: 67.0304, radius: 450, label: 'Snatching — Clifton' }
-    ];
-
-    hotzones.forEach(zone => {
-      this.L.circle([zone.lat, zone.lng], {
-        color: '#ff4d4d',
-        fillColor: '#ff4d4d',
-        fillOpacity: 0.35,
-        radius: zone.radius
-      })
-        .addTo(this.map)
-        .bindPopup(`<strong>${zone.label}</strong>`);
-    });
+    } catch (error) {
+      console.error('Failed to load hotspots:', error);
+    }
   }
 }
-
-
-

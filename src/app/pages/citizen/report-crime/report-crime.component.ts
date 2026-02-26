@@ -17,7 +17,7 @@ export class ReportCrimeComponent implements OnInit {
   constructor(
     private crimeService: CrimeService,
     private router: Router
-  ) { }
+  ) {}
 
   crimeType: string = '';
   selectedCrime = '';
@@ -30,7 +30,6 @@ export class ReportCrimeComponent implements OnInit {
   crimeMonth: number | null = null;
   crimeYear: number | null = null;
 
-  // Map + Suggestions
   locationSuggestions: any[] = [];
 
   submitted = false;
@@ -52,7 +51,6 @@ export class ReportCrimeComponent implements OnInit {
   crimeOptions: string[] = [];
 
   ngOnInit() {
-
     if (typeof window !== 'undefined') {
       this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
       if (!this.isLoggedIn) {
@@ -63,8 +61,6 @@ export class ReportCrimeComponent implements OnInit {
     }
 
     this.updateCrimeOptions();
-
-
   }
 
   updateCrimeOptions(): void {
@@ -80,41 +76,29 @@ export class ReportCrimeComponent implements OnInit {
   }
 
   searchLocation() {
-
     if (!this.crimeArea || this.crimeArea.length < 3) {
       this.locationSuggestions = [];
       return;
     }
 
-    // Pakistan restricted search
     fetch(`https://nominatim.openstreetmap.org/search?format=json&countrycodes=pk&q=${this.crimeArea}`)
       .then(res => res.json())
       .then(data => {
-
         this.locationSuggestions = data.slice(0, 5).map((place: any) => {
-
-          // Clean name formatting
           const parts = place.display_name.split(',');
-
           return {
             name: `${parts[0]}, ${parts[1] || ''}`.trim(),
             fullName: place.display_name
           };
         });
-
       })
       .catch(() => {
         this.locationSuggestions = [];
       });
   }
 
-
   selectLocation(place: any) {
-
-    // Put clean name inside input
     this.crimeArea = place.name;
-
-    // Clear suggestions
     this.locationSuggestions = [];
   }
 
@@ -123,9 +107,8 @@ export class ReportCrimeComponent implements OnInit {
     this.uploadedFile = input.files?.[0] || null;
   }
 
-  submitReport() {
+  async submitReport() {
 
-    //  Required Validations
     if (!this.crimeType) {
       alert('Choose crime type');
       return;
@@ -146,7 +129,6 @@ export class ReportCrimeComponent implements OnInit {
       return;
     }
 
-    // Basic Date Validation
     if (this.crimeDay < 1 || this.crimeDay > 31) {
       alert('Invalid day');
       return;
@@ -162,25 +144,52 @@ export class ReportCrimeComponent implements OnInit {
       return;
     }
 
-    const crimeData = {
-      title: this.selectedCrime,
-      description: this.description,
-      area: this.crimeArea,
-      type: this.crimeType,
-      dateOfCrime:`${this.crimeYear}-${this.crimeMonth.toString().padStart(2, '0')}-${this.crimeDay.toString().padStart(2, '0')}`
-    };
+    try {
+      // Convert location text → lat/lon
+      const geoResponse = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&countrycodes=pk&q=${encodeURIComponent(this.crimeArea)}`
+      );
 
-    this.crimeService.reportCrime(crimeData, this.uploadedFile).subscribe({
-      next: res => {
-        alert(res.message || 'Crime reported successfully!');
-        this.resetForm();
-        this.router.navigate(['/citizen']);
-      },
-      error: err => {
-        alert(err.error?.message || 'Failed to report crime');
-        console.error(err);
+      const geoData: any[] = await geoResponse.json();
+
+      if (!geoData || geoData.length === 0) {
+        alert('Could not determine coordinates for this location.');
+        return;
       }
-    });
+
+      const latitude = parseFloat(geoData[0].lat);
+      const longitude = parseFloat(geoData[0].lon);
+
+      const crimeData = {
+        crimeType: this.crimeType,
+        crimeTitle: this.selectedCrime,
+        location: this.crimeArea,
+        description: this.description,
+        latitude: latitude,
+        longitude: longitude,
+        dateOfCrime: `${this.crimeYear}-${this.crimeMonth
+          .toString()
+          .padStart(2, '0')}-${this.crimeDay
+          .toString()
+          .padStart(2, '0')}`
+      };
+
+      this.crimeService.reportCrime(crimeData, this.uploadedFile).subscribe({
+        next: (res: any) => {
+          alert(res?.message || 'Crime reported successfully!');
+          this.resetForm();
+          this.router.navigate(['/citizen']);
+        },
+        error: (err) => {
+          alert(err?.error?.message || 'Failed to report crime');
+          console.error(err);
+        }
+      });
+
+    } catch (error) {
+      console.error(error);
+      alert('Failed to fetch location coordinates.');
+    }
   }
 
   resetForm() {
