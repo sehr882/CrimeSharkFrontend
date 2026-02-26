@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-authority-navbar',
@@ -13,10 +14,11 @@ export class AuthorityNavbarComponent implements OnInit {
   userName = '';
   userRole = '';
   isSuperAdmin = false;
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
   ngOnInit(): void {
 
-    if (typeof window !== 'undefined' && window.localStorage) {
+    if (isPlatformBrowser(this.platformId)) {
 
       const user = JSON.parse(localStorage.getItem('authority_user') || '{}');
 

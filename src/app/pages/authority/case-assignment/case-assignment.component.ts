@@ -52,10 +52,10 @@ export class CaseAssignmentComponent implements OnInit {
 
     ngOnInit(): void {
 
-        this.currentUser = JSON.parse(localStorage.getItem('authorityUser') || '{}');
+        this.currentUser = JSON.parse(localStorage.getItem('authority_user') || '{}');
         this.role = this.currentUser.role;
 
-        if (this.role === 'super_admin') {
+        if (this.role === 'ADMIN') {
             this.pageTitle = 'Case Assignment';
             this.pageSubtitle = 'Assign cases to available officers';
         } else {

@@ -2,15 +2,13 @@
 <div class="officer-container">
 
     <!-- SUPER ADMIN -->
-    <div *ngIf="role === 'super_admin'">
+    <div *ngIf="role === 'ADMIN'">
 
         <div class="header-row">
             <h2 class="page-title">Officer Management</h2>
 
             <!-- 🔥 ADD OFFICER BUTTON -->
-            <button class="add-btn" routerLink="/authority/add-officer">
-                + Add Officer
-            </button>
+            <button type="button" class="add-btn" routerLink="/authority/add-officer">+ Add Officer</button>
         </div>
 
         <div class="officer-grid">

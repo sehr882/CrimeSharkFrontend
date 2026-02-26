@@ -38,12 +38,12 @@ export class AddOfficerComponent implements OnInit {
     ngOnInit(): void {
 
         if (isPlatformBrowser(this.platformId)) {
-            const storedUser = localStorage.getItem('authorityUser');
+            const storedUser = localStorage.getItem('authority_user');
             if (storedUser) {
                 this.currentUser = JSON.parse(storedUser);
             }
 
-            if (!this.currentUser || this.currentUser.role !== 'super_admin') {
+            if (!this.currentUser || this.currentUser.role !== 'ADMIN') {
                 this.router.navigate(['/authority']);
                 return;
             }
