@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthorityAuthService } from '../../services/authority-auth.service';
 
 @Component({
   selector: 'app-authority-login',
@@ -12,46 +13,42 @@ import { Router } from '@angular/router';
 })
 export class AuthorityLoginComponent {
 
-  cnic = '';
-  password = '';
-  accessCode = '';
+  cnic: string = '';
+  password: string = '';
+  accessCode: string = '';
+  errorMessage: string = '';
 
-  // Temporary Secret (later backend will handle this)
-  private readonly AUTH_SECRET = 'CS-AUTH-2025';
-
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private authorityAuthService: AuthorityAuthService
+  ) {}
 
   login() {
 
+    console.log('Login button clicked');
     if (!this.cnic || !this.password || !this.accessCode) {
-      alert('All fields are required.');
+      this.errorMessage = 'All fields are required.';
       return;
     }
 
-    if (this.accessCode !== this.AUTH_SECRET) {
-      alert('Invalid Authority Access Code.');
-      return;
-    }
+    const loginData = {
+      cnic: this.cnic,
+      password: this.password,
+      accessCode: this.accessCode
+    };
 
-    // 🔥 Temporary Dummy Logic (until backend is ready)
+    this.authorityAuthService.login(loginData).subscribe({
+      next: (response:any) => {
 
-    let user;
+        const user = response.authority;
 
-    if (this.cnic === '1111') {
-      user = {
-        name: 'Ali Khan',
-        role: 'super_admin'
-      };
-    } else {
-      user = {
-        name: 'Ahmed Raza',
-        role: 'officer'
-      };
-    }
-
-    // Store in localStorage
-    localStorage.setItem('authorityUser', JSON.stringify(user));
-
-    this.router.navigate(['/authority']);
+        if (user.role === 'ADMIN') {
+          this.router.navigate(['/authority']);
+        } 
+      },
+      error: (error:any) => {
+        this.errorMessage = error?.error?.message || 'Login failed';
+      }
+    });
   }
 }
