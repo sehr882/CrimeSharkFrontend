@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -21,7 +21,7 @@ export class ReportDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private crimeService: CrimeService,
-    private ngZone: NgZone
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -31,12 +31,13 @@ export class ReportDetailsComponent implements OnInit {
       if (id) {
         this.crimeService.getCrimeById(id).subscribe({
           next: (data) => {
-            this.ngZone.run(() => {
-              this.report = data;
-            });
+            this.report = data;
+            this.selectedStatus = data?.status || 'PENDING';
+            this.cdr.detectChanges();
           },
           error: (err) => {
             console.error('API error:', err);
+            this.cdr.detectChanges();
           }
         });
       }

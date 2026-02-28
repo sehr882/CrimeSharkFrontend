@@ -10,7 +10,8 @@ export class CrimeService {
   constructor(private http: HttpClient) {}
 
   // ✅ Get all crimes
- getAllCrimes() {
+ getAllCrimes(): Observable<any> {
+  console.log('CrimeService: Calling API:', `${this.baseUrl}?t=${Date.now()}`);
   return this.http.get<any[]>(`${this.baseUrl}?t=${Date.now()}`);
 }
 getCrimeById(id: string) {
