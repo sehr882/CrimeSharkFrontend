@@ -1,4 +1,5 @@
 <app-back-button></app-back-button>
+
 <div class="reports-page">
 
   <div class="page-header">
@@ -8,18 +9,24 @@
 
   <!-- Filters -->
   <div class="filters">
-    <input type="text" placeholder="Search by crime or location" [(ngModel)]="search" />
+    <input 
+      type="text" 
+      placeholder="Search by crime or location" 
+      [(ngModel)]="search" 
+    />
 
     <select [(ngModel)]="statusFilter">
       <option value="">All Status</option>
-      <option value="Pending">Pending</option>
-      <option value="In Review">In Review</option>
-      <option value="Closed">Closed</option>
+      <option value="PENDING">Pending</option>
+      <option value="IN_REVIEW">In Review</option>
+      <option value="CLOSED">Closed</option>
     </select>
   </div>
 
   <!-- Reports Table -->
   <div class="reports-table">
+
+    <!-- Header -->
     <div class="table-head">
       <span>Case ID</span>
       <span>Crime Type</span>
@@ -29,21 +36,35 @@
       <span>Action</span>
     </div>
 
+    <!-- Rows -->
     <div class="table-row" *ngFor="let r of filteredReports()">
-      <span>#{{ r.id }}</span>
-      <span>{{ r.crimeType }}</span>
-      <span>{{ r.location }}</span>
-      <span>{{ r.date }}</span>
 
-      <span class="status" [class]="r.status.toLowerCase()">
+      <span>#{{ r._id }}</span>
+
+      <span>{{ r.crimeType }}</span>
+
+      <span>{{ r.location }}</span>
+
+      <span>{{ r.dateOfCrime | date:'yyyy-MM-dd' }}</span>
+
+      <span 
+        class="status"
+        [class.pending]="r.status === 'PENDING'"
+        [class.in-review]="r.status === 'IN_REVIEW'"
+        [class.closed]="r.status === 'CLOSED'">
         {{ r.status }}
       </span>
 
-      <button class="view-btn" [routerLink]="['/authority/reports', r.id]">
-        View
-      </button>
+      <span>
+        <button 
+          class="view-btn"
+          (click)="viewReport(r._id)">
+          View
+        </button>
+      </span>
 
     </div>
+
   </div>
 
 </div>

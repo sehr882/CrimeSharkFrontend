@@ -13,6 +13,9 @@ export class CrimeService {
  getAllCrimes() {
   return this.http.get<any[]>(`${this.baseUrl}?t=${Date.now()}`);
 }
+getCrimeById(id: string) {
+  return this.http.get<any>(`http://localhost:3000/crime/${id}`);
+}
 
   // ✅ Report crime (protected, SSR safe)
   reportCrime(data: any, file?: File | null): Observable<any> {
@@ -75,5 +78,4 @@ export class CrimeService {
       })
     );
   }
-
 }

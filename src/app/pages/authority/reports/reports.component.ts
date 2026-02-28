@@ -1,17 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
-
-
-interface Report {
-  id: number;
-  crimeType: string;
-  location: string;
-  date: string;
-  status: 'Pending' | 'In Review' | 'Closed';
-}
+import { CrimeService } from 'src/app/services/crime.service';
 
 @Component({
   selector: 'app-authority-reports',
@@ -20,34 +12,46 @@ interface Report {
   templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.scss']
 })
-export class ReportsComponent {
-  testClick(id: any) {
-    console.log('Clicked ID:', id);
-  }
-
+export class ReportsComponent implements OnInit {
 
   search = '';
   statusFilter = '';
+  reports: any[] = [];
 
-  reports: Report[] = [
-    { id: 101, crimeType: 'Robbery', location: 'Model Town, Lahore', date: '2026-01-10', status: 'Pending' },
-    { id: 102, crimeType: 'Burglary', location: 'Gulberg, Lahore', date: '2026-01-11', status: 'In Review' },
-    { id: 103, crimeType: 'Cyber Crime', location: 'Islamabad', date: '2026-01-12', status: 'Closed' },
-    { id: 104, crimeType: 'Assault', location: 'Karachi', date: '2026-01-13', status: 'Pending' }
-  ];
+  constructor(
+    private crimeService: CrimeService,
+    private router: Router
+  ) {}
 
+  ngOnInit(): void {
+     console.log('REPORT LIST COMPONENT LOADED');
+    this.loadReports();
+  }
+
+loadReports() {
+  this.crimeService.getAllCrimes().subscribe(data => {
+    this.reports = [...data]; // force new reference
+  });
+}
   filteredReports() {
     return this.reports.filter(r => {
+
       const matchesSearch =
         this.search
-          ? r.crimeType.toLowerCase().includes(this.search.toLowerCase()) ||
-          r.location.toLowerCase().includes(this.search.toLowerCase())
+          ? r.crimeType?.toLowerCase().includes(this.search.toLowerCase()) ||
+            r.location?.toLowerCase().includes(this.search.toLowerCase())
           : true;
 
       const matchesStatus =
-        this.statusFilter ? r.status === this.statusFilter : true;
+        this.statusFilter
+          ? r.status === this.statusFilter
+          : true;
 
       return matchesSearch && matchesStatus;
     });
+  }
+
+  viewReport(id: string) {
+    this.router.navigate(['/authority/reports', id]);
   }
 }
