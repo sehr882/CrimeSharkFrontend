@@ -9,24 +9,33 @@
 
   <!-- Filters -->
   <div class="filters">
-    <input 
-      type="text" 
-      placeholder="Search by crime or location" 
-      [(ngModel)]="search" 
+
+    <input
+      type="text"
+      placeholder="Search by crime or location"
+      [(ngModel)]="search"
+      (ngModelChange)="onSearchChange()"
     />
 
-    <select [(ngModel)]="statusFilter">
+    <select
+      [(ngModel)]="statusFilter"
+      (ngModelChange)="onStatusChange()"
+    >
       <option value="">All Status</option>
       <option value="PENDING">Pending</option>
       <option value="IN_REVIEW">In Review</option>
       <option value="CLOSED">Closed</option>
     </select>
+
   </div>
 
-  <!-- Reports Table -->
-  <div class="reports-table">
+  
 
-    <!-- Header -->
+  <!-- Table -->
+  <div
+    class="reports-table"
+  >
+
     <div class="table-head">
       <span>Case ID</span>
       <span>Crime Type</span>
@@ -36,29 +45,38 @@
       <span>Action</span>
     </div>
 
-    <!-- Rows -->
-    <div class="table-row" *ngFor="let r of filteredReports()">
+    <div
+      class="table-row"
+      *ngFor="
+        let report of filteredReportsList;
+        trackBy: trackByReportId
+      "
+    >
 
-      <span>#{{ r._id }}</span>
+      <span>#{{ report._id }}</span>
 
-      <span>{{ r.crimeType }}</span>
+      <span>{{ report.crimeType }}</span>
 
-      <span>{{ r.location }}</span>
+      <span>{{ report.location }}</span>
 
-      <span>{{ r.dateOfCrime | date:'yyyy-MM-dd' }}</span>
+      <span>
+        {{ report.dateOfCrime | date:'yyyy-MM-dd' }}
+      </span>
 
-      <span 
+      <span
         class="status"
-        [class.pending]="r.status === 'PENDING'"
-        [class.in-review]="r.status === 'IN_REVIEW'"
-        [class.closed]="r.status === 'CLOSED'">
-        {{ r.status }}
+        [class.pending]="report.status === 'PENDING'"
+        [class.in-review]="report.status === 'IN_REVIEW'"
+        [class.closed]="report.status === 'CLOSED'"
+      >
+        {{ report.status }}
       </span>
 
       <span>
-        <button 
+        <button
           class="view-btn"
-          (click)="viewReport(r._id)">
+          (click)="viewReport(report._id)"
+        >
           View
         </button>
       </span>

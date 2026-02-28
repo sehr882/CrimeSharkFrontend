@@ -116,9 +116,9 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
   fetchCrimes() {
     this.loading = true;
     this.crimeService.getAllCrimes().subscribe({
-      next: (data) => {
+      next: (data: any) => {
         // Map backend data to Alert interface
-        this.alerts = data.map(crime => ({
+        this.alerts = data.map((crime: any) => ({
           id: crime._id,
           title: crime.crimeTitle,
           subtitle: crime.crimeType + ' - Reported',
