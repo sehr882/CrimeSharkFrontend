@@ -60,39 +60,52 @@ export const routes: Routes = [
         .then(m => m.AuthorityLoginComponent)
   },
   {
-  path: 'authority',
-  component: AuthorityLayoutComponent,
-  children: [
+    path: 'authority',
+    component: AuthorityLayoutComponent,
+    children: [
 
-    {
-      path: '',
-      loadComponent: () =>
-        import('./pages/authority/authority-portal/authority-portal.component')
-          .then(m => m.AuthorityPortalComponent)
-    },
+      {
+        path: '',
+        loadComponent: () =>
+          import('./pages/authority/authority-portal/authority-portal.component')
+            .then(m => m.AuthorityPortalComponent)
+      },
 
-    {
-      path: 'reports',
-      pathMatch: 'full',
-      loadComponent: () =>
-        import('./pages/authority/reports/reports.component')
-          .then(m => m.ReportsComponent)
-    },
+      {
+        path: 'reports',
+        pathMatch: 'full',
+        loadComponent: () =>
+          import('./pages/authority/reports/reports.component')
+            .then(m => m.ReportsComponent)
+      },
 
-    {
-      path: 'reports/:id',
-      loadComponent: () =>
-        import('./pages/authority/reports/report-details/report-details.component')
-          .then(m => m.ReportDetailsComponent)
-    },
+      {
+        path: 'reports/:id',
+        loadComponent: () =>
+          import('./pages/authority/reports/report-details/report-details.component')
+            .then(m => m.ReportDetailsComponent)
+      },
 
-    {
-      path: 'case-assignment',
-      loadComponent: () =>
-        import('./pages/authority/case-assignment/case-assignment.component')
-          .then(m => m.CaseAssignmentComponent)
-    }
+      {
+        path: 'case-assignment',
+        loadComponent: () =>
+          import('./pages/authority/case-assignment/case-assignment.component')
+            .then(m => m.CaseAssignmentComponent)
+      },
 
-  ]
-}
+      {
+        path: 'officers',
+        loadComponent: () =>
+          import('./pages/authority/authority-officer/authority-officer.component')
+            .then(m => m.AuthorityOfficerComponent)
+      },
+      {
+        path: 'add-officer',
+        loadComponent: () =>
+          import('./pages/authority/add-officer/add-officer.component')
+            .then(m => m.AddOfficerComponent)
+      }
+
+    ]
+  }
 ];
