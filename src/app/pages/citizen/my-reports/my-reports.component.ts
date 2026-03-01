@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
 import { CrimeService } from '@app/services/crime.service';
 
@@ -11,28 +12,34 @@ import { CrimeService } from '@app/services/crime.service';
   templateUrl: './my-reports.component.html',
   styleUrls: ['./my-reports.component.scss']
 })
-export class MyReportsComponent implements OnInit {
+export class MyReportsComponent implements OnInit, OnDestroy {
 
   reports: any[] = [];
   loading = true;
 
+  private destroy$ = new Subject<void>();
+
   constructor(private crimeService: CrimeService) {}
 
   ngOnInit(): void {
-
-    // ✅ Only run in browser
     if (typeof window !== 'undefined') {
       this.loadReports();
+
+      // Re-fetch if status was updated elsewhere in the same session
+      this.crimeService.statusUpdated$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => this.loadReports());
     }
   }
 
-  loadReports() {
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
-    console.log('Calling API...');
-
+  loadReports(): void {
     this.crimeService.getMyCrimes().subscribe({
       next: (res: any[]) => {
-        console.log('Response:', res);
         this.reports = res;
         this.loading = false;
       },
@@ -42,5 +49,4 @@ export class MyReportsComponent implements OnInit {
       }
     });
   }
-
 }

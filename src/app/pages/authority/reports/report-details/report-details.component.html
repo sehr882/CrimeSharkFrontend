@@ -4,7 +4,7 @@
 
   <div class="header">
     <h2>Report Details</h2>
-    <span class="badge">
+    <span class="badge" [class]="report.status?.toLowerCase()">
       {{ report.status }}
     </span>
   </div>
@@ -21,6 +21,11 @@
     <div class="row">
       <label>Crime Type</label>
       <span>{{ report.crimeType }}</span>
+    </div>
+
+    <div class="row">
+      <label>Crime Title</label>
+      <span>{{ report.crimeTitle }}</span>
     </div>
 
     <div class="row">
@@ -52,22 +57,28 @@
 
   <!-- Authority Action -->
   <section class="card">
-    <h3>Authority Action</h3>
+    <h3>Update Status</h3>
 
-    <select [(ngModel)]="selectedStatus">
-      <option value="PENDING">Pending</option>
-      <option value="IN_REVIEW">In Review</option>
-      <option value="CLOSED">Closed</option>
-    </select>
+    <div class="status-update-row">
+      <select [(ngModel)]="selectedStatus" [disabled]="updating">
+        <option value="PENDING">Pending</option>
+        <option value="IN_PROGRESS">In Progress</option>
+        <option value="RESOLVED">Resolved</option>
+        <option value="REJECTED">Rejected</option>
+      </select>
 
-    <textarea 
-      placeholder="Add remarks..."
-      [(ngModel)]="remarks">
-    </textarea>
+      <button class="save" (click)="updateStatus()" [disabled]="updating">
+        {{ updating ? 'Updating...' : 'Update Status' }}
+      </button>
+    </div>
 
-    <button class="save">
-      Update Report
-    </button>
+    <p class="success-msg" *ngIf="updateSuccess">
+      Status updated successfully.
+    </p>
+
+    <p class="error-msg" *ngIf="updateError">
+      {{ updateError }}
+    </p>
   </section>
 
 </div>

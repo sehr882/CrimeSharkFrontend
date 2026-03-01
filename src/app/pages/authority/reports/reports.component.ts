@@ -1,7 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { Subject, takeUntil } from 'rxjs';
 import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
 import { CrimeService } from 'src/app/services/crime.service';
 
@@ -12,7 +13,7 @@ import { CrimeService } from 'src/app/services/crime.service';
   templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.scss']
 })
-export class ReportsComponent implements OnInit {
+export class ReportsComponent implements OnInit, OnDestroy {
 
   search = '';
   statusFilter = '';
@@ -23,6 +24,8 @@ export class ReportsComponent implements OnInit {
   loading = false;
   error: string | null = null;
 
+  private destroy$ = new Subject<void>();
+
   constructor(
     private crimeService: CrimeService,
     private router: Router,
@@ -30,16 +33,25 @@ export class ReportsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadReports();
 
-    console.log('REPORT LIST COMPONENT LOADED');
+    // Refresh list whenever a status is updated from the detail page
+    this.crimeService.statusUpdated$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.loadReports());
+  }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  loadReports(): void {
     this.loading = true;
     this.error = null;
 
     this.crimeService.getAllCrimes().subscribe({
-
       next: (data: any) => {
-
         const rows = Array.isArray(data)
           ? data
           : Array.isArray(data?.data)
@@ -50,7 +62,7 @@ export class ReportsComponent implements OnInit {
           ? data.reports
           : [];
 
-        const mappedReports = rows.map((item: any) => ({
+        this.reports = rows.map((item: any) => ({
           ...item,
           crimeTitle: item?.crimeTitle ?? item?.title ?? item?.crimeType ?? 'Untitled',
           dateOfCrime: item?.dateOfCrime ?? item?.createdAt ?? null,
@@ -59,67 +71,37 @@ export class ReportsComponent implements OnInit {
           status: item?.status ?? ''
         }));
 
-        // IMPORTANT: assign new references
-        this.reports = [...mappedReports];
-
         this.updateFilteredReports();
-
         this.loading = false;
-
-        console.log('Reports loaded:', this.filteredReportsList.length);
-        
-        // Force change detection
         this.cdr.detectChanges();
-
       },
-
       error: (err: any) => {
-
-        console.error('API Error:', err);
-
-        this.error =
-          err?.error?.message ||
-          err?.message ||
-          'Failed to load reports';
-
+        this.error = err?.error?.message || err?.message || 'Failed to load reports';
         this.reports = [];
         this.filteredReportsList = [];
-
         this.loading = false;
-        
-        // Force change detection
         this.cdr.detectChanges();
       }
-
     });
-
   }
 
   updateFilteredReports(): void {
-
     const q = this.search?.toLowerCase() || '';
 
     const filtered = this.reports.filter(r => {
-
       const crimeType = String(r?.crimeType || '').toLowerCase();
       const location = String(r?.location || '').toLowerCase();
 
       const matchesSearch =
-        !q ||
-        crimeType.includes(q) ||
-        location.includes(q);
+        !q || crimeType.includes(q) || location.includes(q);
 
       const matchesStatus =
-        !this.statusFilter ||
-        r.status === this.statusFilter;
+        !this.statusFilter || r.status === this.statusFilter;
 
       return matchesSearch && matchesStatus;
-
     });
 
-    // CRITICAL: new reference to trigger Angular rendering
     this.filteredReportsList = [...filtered];
-
   }
 
   onSearchChange(): void {
@@ -134,9 +116,7 @@ export class ReportsComponent implements OnInit {
     this.router.navigate(['/authority/reports', id]);
   }
 
-
-  trackByReportId(index: number, report: any): string {
+  trackByReportId(_index: number, report: any): string {
     return report._id;
   }
-
 }

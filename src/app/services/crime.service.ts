@@ -1,11 +1,15 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { map, Observable, ReplaySubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class CrimeService {
 
   private baseUrl = 'http://localhost:3000/crime';
+
+  // ReplaySubject(1) stores the last emission so components that mount
+  // AFTER the update still receive the signal and re-fetch from backend.
+  statusUpdated$ = new ReplaySubject<string>(1);
 
   constructor(private http: HttpClient) {}
 
@@ -48,6 +52,24 @@ getCrimeById(id: string) {
     }
 
     return this.http.post(`${this.baseUrl}/report`, formData, { headers });
+  }
+
+  // ✅ Update report status (authority only)
+  updateReportStatus(id: string, status: string): Observable<any> {
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('authority_token');
+      if (token) {
+        headers = headers.set('Authorization', `Bearer ${token}`);
+      }
+    }
+
+    return this.http.patch<any>(
+      `${this.baseUrl}/${id}/status`,
+      { status },
+      { headers }
+    );
   }
 
   // ✅ Get logged-in user's crimes

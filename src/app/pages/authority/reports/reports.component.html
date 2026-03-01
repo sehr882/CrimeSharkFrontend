@@ -23,8 +23,9 @@
     >
       <option value="">All Status</option>
       <option value="PENDING">Pending</option>
-      <option value="IN_REVIEW">In Review</option>
-      <option value="CLOSED">Closed</option>
+      <option value="IN_PROGRESS">In Progress</option>
+      <option value="RESOLVED">Resolved</option>
+      <option value="REJECTED">Rejected</option>
     </select>
 
   </div>
@@ -66,8 +67,9 @@
       <span
         class="status"
         [class.pending]="report.status === 'PENDING'"
-        [class.in-review]="report.status === 'IN_REVIEW'"
-        [class.closed]="report.status === 'CLOSED'"
+        [class.in-progress]="report.status === 'IN_PROGRESS'"
+        [class.resolved]="report.status === 'RESOLVED'"
+        [class.rejected]="report.status === 'REJECTED'"
       >
         {{ report.status }}
       </span>

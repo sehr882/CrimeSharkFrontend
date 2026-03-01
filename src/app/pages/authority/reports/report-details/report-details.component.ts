@@ -16,7 +16,10 @@ export class ReportDetailsComponent implements OnInit {
 
   report: any;
   selectedStatus = '';
-  remarks = '';
+
+  updating = false;
+  updateSuccess = false;
+  updateError = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -40,6 +43,32 @@ export class ReportDetailsComponent implements OnInit {
             this.cdr.detectChanges();
           }
         });
+      }
+    });
+  }
+
+  updateStatus(): void {
+    if (!this.report?._id || !this.selectedStatus) return;
+
+    this.updating = true;
+    this.updateSuccess = false;
+    this.updateError = '';
+
+    this.crimeService.updateReportStatus(this.report._id, this.selectedStatus).subscribe({
+      next: (res) => {
+        // Reflect the backend-confirmed status on the page
+        this.report = { ...this.report, status: res?.status ?? this.selectedStatus };
+        this.updating = false;
+        this.updateSuccess = true;
+
+        // Signal all subscribed components to refresh
+        this.crimeService.statusUpdated$.next(this.report._id);
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.updateError = err?.error?.message || 'Failed to update status. Please try again.';
+        this.updating = false;
+        this.cdr.detectChanges();
       }
     });
   }
