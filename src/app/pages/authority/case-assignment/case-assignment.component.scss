@@ -57,8 +57,43 @@
     color: #000;
 }
 
-.urgent {
+.in-progress {
+    background: #3b82f6;
+    color: #fff;
+}
+
+.resolved {
+    background: #22c55e;
+    color: #fff;
+}
+
+.rejected {
     background: #ef4444;
+    color: #fff;
+}
+
+.state-msg {
+    padding: 20px 30px;
+    color: #94a3b8;
+    font-size: 15px;
+}
+
+.error-msg {
+    margin: 10px 0;
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: #7f1d1d;
+    color: #fca5a5;
+    font-size: 14px;
+}
+
+.success-msg {
+    margin: 10px 0;
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: #14532d;
+    color: #86efac;
+    font-size: 14px;
 }
 
 .assigned-section {

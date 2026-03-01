@@ -72,6 +72,24 @@ getCrimeById(id: string) {
     );
   }
 
+  // ✅ Assign officer to a crime (authority only)
+  assignOfficer(crimeId: string, officerId: string): Observable<any> {
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('authority_token');
+      if (token) {
+        headers = headers.set('Authorization', `Bearer ${token}`);
+      }
+    }
+
+    return this.http.patch<any>(
+      `${this.baseUrl}/${crimeId}/assign`,
+      { officerId },
+      { headers }
+    );
+  }
+
   // ✅ Get logged-in user's crimes
   getMyCrimes(): Observable<any[]> {
 

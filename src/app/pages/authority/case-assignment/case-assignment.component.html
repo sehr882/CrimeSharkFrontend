@@ -2,60 +2,72 @@
 
 <div class="case-page">
 
-    <div class="page-header">
-        <h2>{{ pageTitle }}</h2>
-        <p>{{ pageSubtitle }}</p>
+  <div class="page-header">
+    <h2>{{ pageTitle }}</h2>
+    <p>{{ pageSubtitle }}</p>
+  </div>
+
+  <div *ngIf="loading" class="state-msg">Loading cases...</div>
+  <div *ngIf="error" class="error-msg">{{ error }}</div>
+  <div *ngIf="successMessage" class="success-msg">{{ successMessage }}</div>
+
+  <div *ngIf="!loading && crimes.length === 0 && !error" class="state-msg">
+    No cases found.
+  </div>
+
+  <div class="case-grid" *ngIf="!loading && crimes.length > 0">
+
+    <div class="case-card" *ngFor="let crime of crimes; trackBy: trackByCrimeId">
+
+      <div class="case-top">
+        <h3>{{ crime.crimeTitle }}</h3>
+        <span
+          class="status"
+          [class.pending]="crime.status === 'PENDING'"
+          [class.in-progress]="crime.status === 'IN_PROGRESS'"
+          [class.resolved]="crime.status === 'RESOLVED'"
+          [class.rejected]="crime.status === 'REJECTED'"
+        >
+          {{ crime.status }}
+        </span>
+      </div>
+
+      <p><strong>Location:</strong> {{ crime.location }}</p>
+      <p><strong>Date:</strong> {{ crime.dateOfCrime | date:'yyyy-MM-dd' }}</p>
+
+      <!-- ADMIN: assign officer dropdown -->
+      <div *ngIf="role === 'ADMIN'" class="assigned-section">
+
+        <label>Assign To:</label>
+
+        <select [(ngModel)]="selectedOfficerMap[crime._id]">
+          <option value="" disabled>Select officer</option>
+          <option *ngFor="let officer of officers" [value]="officer._id">
+            {{ officer.name ?? officer.officerName }}
+          </option>
+        </select>
+
+        <button
+          (click)="assignOfficer(crime)"
+          [disabled]="!selectedOfficerMap[crime._id] || assigningId === crime._id"
+        >
+          {{ assigningId === crime._id ? 'Assigning...' : 'Assign' }}
+        </button>
+
+        <p class="assigned-info">
+          Currently Assigned: <span>{{ getAssignedOfficerName(crime) }}</span>
+        </p>
+
+      </div>
+
+      <!-- OFFICER: read-only assigned officer -->
+      <div *ngIf="role !== 'ADMIN'" class="assigned-section">
+        Assigned To:
+        <span class="officer-name">{{ getAssignedOfficerName(crime) }}</span>
+      </div>
+
     </div>
 
-    <div class="case-grid">
-
-        <div class="case-card" *ngFor="let caseItem of cases">
-
-            <div class="case-top">
-                <h3>Case #{{ caseItem.id }}</h3>
-                <span class="status" [ngClass]="{
-          'pending': caseItem.status === 'Pending',
-          'urgent': caseItem.status === 'Urgent'
-        }">
-                    {{ caseItem.status }}
-                </span>
-            </div>
-
-            <p><strong>Type:</strong> {{ caseItem.type }}</p>
-            <p><strong>Location:</strong> {{ caseItem.location }}</p>
-            <p><strong>Date:</strong> {{ caseItem.date }}</p>
-
-            <!-- 🔥 SUPER ADMIN VIEW -->
-            <div *ngIf="role === 'ADMIN'" class="assigned-section">
-
-                <label>Assign To:</label>
-
-                <select #officerSelect>
-                    <option *ngFor="let officer of officers" [value]="officer">
-                        {{ officer }}
-                    </option>
-                </select>
-
-                <button (click)="assignCase(caseItem, officerSelect.value)">
-                    Assign
-                </button>
-
-                <p class="assigned-info">
-                    👮 Currently Assigned: <span>{{ caseItem.assignedTo }}</span>
-                </p>
-
-            </div>
-
-            <!-- 🔵 OFFICER VIEW -->
-            <div *ngIf="role === 'officer'" class="assigned-section">
-                👮 Assigned To:
-                <span class="officer-name">
-                    {{ caseItem.assignedTo }}
-                </span>
-            </div>
-
-        </div>
-
-    </div>
+  </div>
 
 </div>
