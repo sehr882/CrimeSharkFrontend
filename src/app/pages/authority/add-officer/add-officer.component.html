@@ -3,7 +3,7 @@
 <div class="form-container">
     <div class="form-card">
 
-        <h2>Add Officer</h2>
+        <h2>{{ isEditMode ? 'Update Officer' : 'Add Officer' }}</h2>
 
         <!-- MESSAGE -->
         <div *ngIf="message" [ngClass]="messageType === 'success' ? 'success-msg' : 'error-msg'">
@@ -61,11 +61,13 @@
                 <div>
                     <label>Password</label>
                     <input type="password" formControlName="password">
+                    <small *ngIf="isEditMode" style="color:gray;">Leave blank to keep unchanged</small>
                 </div>
 
                 <div>
                     <label>Access Code</label>
                     <input type="text" formControlName="accessCode">
+                    <small *ngIf="isEditMode" style="color:gray;">Leave blank to keep unchanged</small>
                 </div>
 
                 <div>
@@ -83,7 +85,7 @@
 
             </div>
 
-            <button type="submit" class="submit-btn">Add Officer</button>
+            <button type="submit" class="submit-btn">{{ isEditMode ? 'Update Officer' : 'Add Officer' }}</button>
 
         </form>
     </div>

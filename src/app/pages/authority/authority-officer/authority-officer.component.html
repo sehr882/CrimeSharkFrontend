@@ -1,55 +1,76 @@
 <app-back-button></app-back-button>
+
+<!-- DEBUG: remove after confirming correct file renders -->
+<h1 style="color:red;font-size:12px;">TEST AUTHORITY OFFICER v2</h1>
+
 <div class="officer-container">
 
-    <!-- SUPER ADMIN -->
-    <div *ngIf="role === 'ADMIN'">
+  <!-- SUPER ADMIN -->
+  <div *ngIf="role === 'ADMIN'">
 
-        <div class="header-row">
-            <h2 class="page-title">Officer Management</h2>
+    <div class="header-row">
+      <h2 class="page-title">Officer Management</h2>
 
-            <!-- 🔥 ADD OFFICER BUTTON -->
-            <button type="button" class="add-btn" routerLink="/authority/add-officer">+ Add Officer</button>
+      <button type="button"
+              class="add-btn"
+              routerLink="/authority/add-officer">
+        + Add Officer
+      </button>
+    </div>
+
+    <!-- ✅ If no officers exist -->
+    <div *ngIf="officers.length === 0" class="empty-state">
+      <p>No officers added yet.</p>
+    </div>
+
+    <!-- ✅ Officer Cards -->
+    <div class="officer-grid" *ngIf="officers.length > 0">
+
+      <div class="officer-card" *ngFor="let officer of officers">
+
+        <h3>{{ officer.name }}</h3>
+
+        <p><strong>Rank:</strong> {{ officer.rank }}</p>
+        <p><strong>Station:</strong> {{ officer.station }}</p>
+
+        <p>
+          <strong>Status:</strong>
+          <span
+            [ngClass]="{
+              'active': officer.status === 'Active',
+              'suspended': officer.status === 'Suspended'
+            }">
+            {{ officer.status }}
+          </span>
+        </p>
+
+        <div class="actions">
+          <button (click)="editOfficer(officer)">Edit</button>
         </div>
 
-        <div class="officer-grid">
-            <div class="officer-card" *ngFor="let officer of officers">
-
-                <h3>{{ officer.name }}</h3>
-                <p><strong>Rank:</strong> {{ officer.rank }}</p>
-                <p><strong>Station:</strong> {{ officer.station }}</p>
-                <p>
-                    <strong>Status:</strong>
-                    <span [ngClass]="officer.status === 'Active' ? 'active' : 'suspended'">
-                        {{ officer.status }}
-                    </span>
-                </p>
-
-                <div class="actions">
-                    <button>Edit</button>
-                    <button class="danger">Suspend</button>
-                </div>
-
-            </div>
-        </div>
+      </div>
 
     </div>
 
-    <!-- NORMAL OFFICER -->
-    <div *ngIf="role === 'officer'">
+  </div>
 
-        <h2 class="page-title">My Profile</h2>
 
-        <div class="profile-card">
-            <h3>{{ currentUser.name }}</h3>
-            <p><strong>Rank:</strong> Inspector</p>
-            <p><strong>Station:</strong> Rawalpindi Sector A</p>
-            <p><strong>Status:</strong> Active</p>
+  <!-- NORMAL OFFICER -->
+  <div *ngIf="role === 'OFFICER'">
 
-            <div class="profile-actions">
-                <button>Update Profile</button>
-            </div>
-        </div>
+    <h2 class="page-title">My Profile</h2>
 
+    <div class="profile-card">
+      <h3>{{ currentUser?.name }}</h3>
+      <p><strong>Rank:</strong> {{ currentUser?.rank }}</p>
+      <p><strong>Station:</strong> {{ currentUser?.station }}</p>
+      <p><strong>Status:</strong> {{ currentUser?.status }}</p>
+
+      <div class="profile-actions">
+        <button>Update Profile</button>
+      </div>
     </div>
+
+  </div>
 
 </div>

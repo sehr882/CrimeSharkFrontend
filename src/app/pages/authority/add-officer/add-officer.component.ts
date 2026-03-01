@@ -1,169 +1,158 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { OfficerService } from '../../../services/officer.service';
 import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
 
 @Component({
-    selector: 'app-add-officer',
-    standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, RouterModule, BackButtonComponent],
-    templateUrl: './add-officer.component.html',
-    styleUrls: ['./add-officer.component.scss']
+  selector: 'app-authority-add-officer',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, BackButtonComponent],
+  templateUrl: './add-officer.component.html',
+  styleUrls: ['./add-officer.component.scss']
 })
-export class AddOfficerComponent implements OnInit {
+export class AuthorityAddOfficerComponent implements OnInit, OnDestroy {
 
-    officerForm!: FormGroup;
-    currentUser: any = {};
-    message = '';
-    messageType: 'success' | 'error' | '' = '';
+  officerForm: FormGroup;
+  message = '';
+  messageType = '';
+  isEditMode = false;
+  officerId = '';
 
-    ranks = ['Inspector', 'Sub Inspector', 'ASI', 'Head Constable', 'Constable'];
-    stations = [
-        'Rawalpindi Central',
-        'Saddar Station',
-        'Airport Station',
-        'Civil Lines',
-        'Women Police Station'
-    ];
-    roles = ['admin', 'officer'];
-    statuses = ['active', 'suspended'];
+  ranks = ['SP', 'Inspector', 'Sub Inspector'];
+  stations = ['Islamabad Central', 'Rawalpindi Sector A', 'Lahore Model Town'];
+  roles = ['officer'];
+  statuses = ['Active', 'Suspended'];
 
-    constructor(
-        private fb: FormBuilder,
-        private router: Router,
-        @Inject(PLATFORM_ID) private platformId: Object
-    ) { }
+  private routeSub: Subscription | null = null;
 
-    ngOnInit(): void {
+  constructor(
+    private fb: FormBuilder,
+    private officerService: OfficerService,
+    private router: Router,
+    private route: ActivatedRoute,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    let createdBy = '';
 
-        if (isPlatformBrowser(this.platformId)) {
-            const storedUser = localStorage.getItem('authority_user');
-            if (storedUser) {
-                this.currentUser = JSON.parse(storedUser);
-            }
-
-            if (!this.currentUser || this.currentUser.role !== 'ADMIN') {
-                this.router.navigate(['/authority']);
-                return;
-            }
-        }
-
-        this.initializeForm();
+    if (isPlatformBrowser(this.platformId)) {
+      const storedUser = localStorage.getItem('authority_user');
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        createdBy = user.name;
+      }
     }
 
-    initializeForm() {
-        this.officerForm = this.fb.group({
+    this.officerForm = this.fb.group({
+      cnic: ['', Validators.required],
+      name: ['', Validators.required],
+      email: [''],
+      phone: [''],
+      rank: [''],
+      station: [''],
+      role: ['officer'],
+      password: ['', Validators.required],
+      accessCode: ['', Validators.required],
+      status: ['Active'],
+      createdBy: [createdBy]
+    });
+  }
 
-            cnic: ['', [
-                Validators.required,
-                Validators.pattern(/^\d{5}-\d{7}-\d{1}$/)
-            ]],
+  ngOnInit(): void {
+    this.routeSub = this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
 
-            name: ['', [
-                Validators.required,
-                Validators.pattern(/^[A-Za-z ]{3,}$/)
-            ]],
+      if (id) {
+        this.isEditMode = true;
+        this.officerId = id;
 
-            email: ['', [
-                Validators.required,
-                Validators.email
-            ]],
+        console.log('Edit Mode:', this.isEditMode);
+        console.log('Officer ID:', this.officerId);
 
-            phone: ['', [
-                Validators.required,
-                Validators.pattern(/^03\d{9}$/)
-            ]],
+        // password and accessCode are not required when editing
+        this.officerForm.get('password')?.clearValidators();
+        this.officerForm.get('password')?.updateValueAndValidity();
+        this.officerForm.get('accessCode')?.clearValidators();
+        this.officerForm.get('accessCode')?.updateValueAndValidity();
 
-            rank: ['', Validators.required],
-            station: ['', Validators.required],
-            role: ['', Validators.required],
-
-            password: ['', [
-                Validators.required,
-                Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/)
-            ]],
-
-            accessCode: ['', [
-                Validators.required,
-                Validators.pattern(/^\d{6}$/)
-            ]],
-
-            status: ['', Validators.required],
-
-            createdBy: [{
-                value: this.currentUser?.name || '',
-                disabled: true
-            }]
-        });
-    }
-
-    onSubmit() {
-
-        this.message = '';
-        this.messageType = '';
-
-        if (this.officerForm.invalid) {
+        this.officerService.getOfficerById(id).subscribe({
+          next: (officer: any) => {
+            this.officerForm.patchValue({
+              cnic: officer.cnic,
+              name: officer.name,
+              email: officer.email,
+              phone: officer.phone,
+              rank: officer.rank,
+              station: officer.station,
+              role: officer.role,
+              status: officer.status,
+              createdBy: officer.createdBy
+            });
+          },
+          error: (err: any) => {
+            console.error('Error fetching officer:', err);
+            this.message = 'Failed to load officer data';
             this.messageType = 'error';
-            this.message = this.getDetailedErrorMessage();
-            this.officerForm.markAllAsTouched();
-            return;
-        }
+          }
+        });
 
-        const newOfficer = this.officerForm.getRawValue();
-        console.log('Officer Created:', newOfficer);
+      } else {
+        this.isEditMode = false;
+        this.officerId = '';
+      }
+    });
+  }
 
-        this.messageType = 'success';
-        this.message = 'Officer added successfully.';
+  ngOnDestroy(): void {
+    this.routeSub?.unsubscribe();
+  }
 
-        this.officerForm.reset();
+  onSubmit(): void {
+    if (this.officerForm.invalid) {
+      this.message = 'Please fill required fields';
+      this.messageType = 'error';
+      return;
     }
 
-    getDetailedErrorMessage(): string {
+    if (this.isEditMode) {
+      const payload = { ...this.officerForm.value };
 
-        const controls = this.officerForm.controls;
+      // Strip empty password / accessCode so backend does not overwrite with blank
+      if (!payload.password) delete payload.password;
+      if (!payload.accessCode) delete payload.accessCode;
 
-        if (controls['cnic'].errors) {
-            return 'CNIC must be in format 12345-6789023-5.';
+      this.officerService.updateOfficer(this.officerId, payload).subscribe({
+        next: () => {
+          this.message = 'Officer updated successfully';
+          this.messageType = 'success';
+          setTimeout(() => {
+            this.router.navigate(['/authority/officers']);
+          }, 1000);
+        },
+        error: (err: any) => {
+          console.error(err);
+          this.message = JSON.stringify(err.error);
+          this.messageType = 'error';
         }
+      });
 
-        if (controls['name'].errors) {
-            return 'Name must contain only letters and at least 3 characters.';
+    } else {
+      this.officerService.addOfficer(this.officerForm.value).subscribe({
+        next: () => {
+          this.message = 'Officer added successfully';
+          this.messageType = 'success';
+          setTimeout(() => {
+            this.router.navigate(['/authority/officers']);
+          }, 1000);
+        },
+        error: (err: any) => {
+          console.error(err);
+          this.message = JSON.stringify(err.error);
+          this.messageType = 'error';
         }
-
-        if (controls['email'].errors) {
-            return 'Please enter a valid email address.';
-        }
-
-        if (controls['phone'].errors) {
-            return 'Phone number must be in format 03XXXXXXXXX.';
-        }
-
-        if (controls['rank'].errors) {
-            return 'Please select a rank.';
-        }
-
-        if (controls['station'].errors) {
-            return 'Please select a station.';
-        }
-
-        if (controls['role'].errors) {
-            return 'Please select a role.';
-        }
-
-        if (controls['password'].errors) {
-            return 'Password must be 8+ chars with uppercase, lowercase, number & special character.';
-        }
-
-        if (controls['accessCode'].errors) {
-            return 'Access code must be exactly 6 digits.';
-        }
-
-        if (controls['status'].errors) {
-            return 'Please select status.';
-        }
-
-        return 'Please fill all required fields correctly.';
+      });
     }
-
+  }
 }

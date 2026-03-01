@@ -103,7 +103,13 @@ export const routes: Routes = [
         path: 'add-officer',
         loadComponent: () =>
           import('./pages/authority/add-officer/add-officer.component')
-            .then(m => m.AddOfficerComponent)
+            .then(m => m.AuthorityAddOfficerComponent)
+      },
+      {
+        path: 'add-officer/:id',
+        loadComponent: () =>
+          import('./pages/authority/add-officer/add-officer.component')
+            .then(m => m.AuthorityAddOfficerComponent)
       }
 
     ]
