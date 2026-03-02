@@ -53,7 +53,7 @@
           <td>{{ report.type }}</td>
           <td>{{ report.location }}</td>
           <td>
-            <span class="status-badge" [ngClass]="report.status.toLowerCase().replace(' ','-')">
+            <span class="status-badge" [ngClass]="getStatusClass(report.status)">
               {{ report.status }}
             </span>
           </td>

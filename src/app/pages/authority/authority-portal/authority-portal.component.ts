@@ -105,4 +105,9 @@ export class AuthorityPortalComponent implements OnInit, OnDestroy {
     alert("Logged out successfully.");
     this.router.navigate(['/']);
   }
+
+  getStatusClass(status: string): string {
+    // Convert status to lowercase and replace underscores/spaces with hyphens
+    return status.toLowerCase().replace(/_/g, '-').replace(/ /g, '-');
+  }
 }
