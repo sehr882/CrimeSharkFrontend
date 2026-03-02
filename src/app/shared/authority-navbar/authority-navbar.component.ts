@@ -14,19 +14,34 @@ export class AuthorityNavbarComponent implements OnInit {
   userName = '';
   userRole = '';
   isSuperAdmin = false;
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
+
+  // Computed route paths based on role
+  homeLink = '/authority';
+  reportsLink = '/authority/reports';
+  casesLink = '/authority/case-assignment';
+  profileLink = '/authority/officers';
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnInit(): void {
-
     if (isPlatformBrowser(this.platformId)) {
-
       const user = JSON.parse(localStorage.getItem('authority_user') || '{}');
 
       this.userName = user?.name || 'Authority';
       this.userRole = user?.role || 'Officer';
-      this.isSuperAdmin = user?.role === 'ADMIN';
+      this.isSuperAdmin = (user?.role ?? '').toUpperCase() === 'ADMIN';
 
+      if (this.isSuperAdmin) {
+        this.homeLink    = '/authority';
+        this.reportsLink = '/authority/reports';
+        this.casesLink   = '/authority/case-assignment';
+        this.profileLink = '/authority/officers';
+      } else {
+        this.homeLink    = '/officer';
+        this.reportsLink = '/officer/reports';
+        this.casesLink   = '/officer/cases';
+        this.profileLink = '/officer/profile';
+      }
     }
-
   }
 }

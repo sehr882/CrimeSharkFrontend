@@ -16,8 +16,13 @@ export class AuthorityOfficerComponent implements OnInit {
   role = '';
   currentUser: any = {};
 
-  // ✅ This will now hold REAL data from backend
+  // ADMIN: list of all officers
   officers: any[] = [];
+
+  // OFFICER: own profile fetched from API
+  officerProfile: any = null;
+  profileLoading = false;
+  profileError: string | null = null;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -25,34 +30,72 @@ export class AuthorityOfficerComponent implements OnInit {
     private router: Router,
     private cdr: ChangeDetectorRef
   ) {}
-    ngOnInit(): void {
-     this.initializeUser();
-     this.loadOfficers();
-    }
 
-    initializeUser(): void {
-     if (isPlatformBrowser(this.platformId)) {
-    const storedUser = localStorage.getItem('authority_user');
+  ngOnInit(): void {
+    this.initializeUser();
 
-    if (storedUser) {
-      this.currentUser = JSON.parse(storedUser);
-      this.role = this.currentUser.role?.toUpperCase();
-      console.log('Role set to:', this.role);
+    if (this.role === 'ADMIN') {
+      this.loadOfficers();
+    } else {
+      this.loadOfficerProfile();
     }
   }
-}
 
-    // ✅ Load officers from backend
+  initializeUser(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const storedUser = localStorage.getItem('authority_user');
+      if (storedUser) {
+        this.currentUser = JSON.parse(storedUser);
+        this.role = (this.currentUser.role ?? '').toUpperCase();
+      }
+    }
+  }
 
+  /** Resolve this officer's ID from JWT sub, falling back to stored user object. */
+  private resolveOfficerId(): string {
+    const token = localStorage.getItem('authority_token') || localStorage.getItem('token') || '';
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        if (payload?.sub) return payload.sub;
+      } catch {}
+    }
+    return this.currentUser?._id ?? this.currentUser?.id ?? '';
+  }
+
+  // ADMIN only: load all officers for management view
   loadOfficers(): void {
     this.officerService.getAllOfficers().subscribe({
-      next: (data:any) => {
+      next: (data: any) => {
         this.officers = data;
         this.cdr.detectChanges();
-        console.log('Officers loaded:', data);
       },
-      error: (err:any) => {
+      error: (err: any) => {
         console.error('Error loading officers:', err);
+      }
+    });
+  }
+
+  // OFFICER only: fetch own profile from backend
+  loadOfficerProfile(): void {
+    const id = this.resolveOfficerId();
+    if (!id) {
+      this.profileError = 'Unable to determine officer ID. Please log in again.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    this.profileLoading = true;
+    this.officerService.getOfficerById(id).subscribe({
+      next: (data: any) => {
+        this.officerProfile = data;
+        this.profileLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => {
+        this.profileError = err?.error?.message || err?.message || 'Failed to load profile';
+        this.profileLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -62,7 +105,6 @@ export class AuthorityOfficerComponent implements OnInit {
   }
 
   editOfficer(officer: any) {
-    console.log('Edit clicked:', officer);
     const id = officer._id || officer.id;
     this.router.navigate(['/authority/add-officer', id]);
   }

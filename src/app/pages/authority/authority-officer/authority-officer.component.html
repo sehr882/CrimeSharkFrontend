@@ -1,11 +1,8 @@
 <app-back-button></app-back-button>
 
-<!-- DEBUG: remove after confirming correct file renders -->
-<h1 style="color:red;font-size:12px;">TEST AUTHORITY OFFICER v2</h1>
-
 <div class="officer-container">
 
-  <!-- SUPER ADMIN -->
+  <!-- ADMIN: Officer Management -->
   <div *ngIf="role === 'ADMIN'">
 
     <div class="header-row">
@@ -18,12 +15,10 @@
       </button>
     </div>
 
-    <!-- ✅ If no officers exist -->
     <div *ngIf="officers.length === 0" class="empty-state">
       <p>No officers added yet.</p>
     </div>
 
-    <!-- ✅ Officer Cards -->
     <div class="officer-grid" *ngIf="officers.length > 0">
 
       <div class="officer-card" *ngFor="let officer of officers">
@@ -55,20 +50,28 @@
   </div>
 
 
-  <!-- NORMAL OFFICER -->
-  <div *ngIf="role === 'OFFICER'">
+  <!-- OFFICER: My Profile (read-only, data from API) -->
+  <div *ngIf="role !== 'ADMIN'">
 
     <h2 class="page-title">My Profile</h2>
 
-    <div class="profile-card">
-      <h3>{{ currentUser?.name }}</h3>
-      <p><strong>Rank:</strong> {{ currentUser?.rank }}</p>
-      <p><strong>Station:</strong> {{ currentUser?.station }}</p>
-      <p><strong>Status:</strong> {{ currentUser?.status }}</p>
+    <div *ngIf="profileLoading" class="state-msg">Loading profile...</div>
+    <div *ngIf="profileError" class="error-msg">{{ profileError }}</div>
 
-      <div class="profile-actions">
-        <button>Update Profile</button>
-      </div>
+    <div class="profile-card" *ngIf="officerProfile && !profileLoading">
+      <h3>{{ officerProfile.name }}</h3>
+      <p><strong>Rank:</strong> {{ officerProfile.rank }}</p>
+      <p><strong>Station:</strong> {{ officerProfile.station }}</p>
+      <p>
+        <strong>Status:</strong>
+        <span
+          [ngClass]="{
+            'active': officerProfile.status === 'Active',
+            'suspended': officerProfile.status === 'Suspended'
+          }">
+          {{ officerProfile.status }}
+        </span>
+      </p>
     </div>
 
   </div>

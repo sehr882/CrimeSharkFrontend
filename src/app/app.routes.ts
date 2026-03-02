@@ -92,7 +92,6 @@ export const routes: Routes = [
           import('./pages/authority/case-assignment/case-assignment.component')
             .then(m => m.CaseAssignmentComponent)
       },
-
       {
         path: 'officers',
         loadComponent: () =>
@@ -113,5 +112,40 @@ export const routes: Routes = [
       }
 
     ]
-  }
+  },
+ {
+  path: 'officer',
+  component: AuthorityLayoutComponent,
+  children: [
+
+    {
+      path: '',
+      loadComponent: () =>
+        import('./pages/authority/authority-portal/authority-portal.component')
+          .then(m => m.AuthorityPortalComponent)
+    },
+
+    {
+      path: 'reports',
+      loadComponent: () =>
+        import('./pages/authority/reports/reports.component')
+          .then(m => m.ReportsComponent)
+    },
+
+    {
+      path: 'profile',
+      loadComponent: () =>
+        import('./pages/authority/authority-officer/authority-officer.component')
+          .then(m => m.AuthorityOfficerComponent)
+    },
+
+    {
+      path: 'cases',
+      loadComponent: () =>
+        import('./pages/authority/case-assignment/case-assignment.component')
+          .then(m => m.CaseAssignmentComponent)
+    }
+
+  ]
+}
 ];

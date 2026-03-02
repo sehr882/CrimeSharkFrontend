@@ -36,19 +36,27 @@ export class AuthorityLoginComponent {
       password: this.password,
       accessCode: this.accessCode
     };
+this.authorityAuthService.login(loginData).subscribe({
+  next: (response: any) => {
 
-    this.authorityAuthService.login(loginData).subscribe({
-      next: (response:any) => {
+    localStorage.setItem('token', response.access_token);
 
-        const user = response.authority;
+    // Decode role from token
+    const payload = JSON.parse(atob(response.access_token.split('.')[1]));
+    const role = payload.role;
 
-        if (user.role === 'ADMIN') {
-          this.router.navigate(['/authority']);
-        } 
-      },
-      error: (error:any) => {
-        this.errorMessage = error?.error?.message || 'Login failed';
-      }
-    });
+    if (role === 'ADMIN') {
+      localStorage.setItem('authority_user', JSON.stringify(response.authority));
+      this.router.navigate(['/authority']);
+    } 
+    else if (role === 'officer') {
+      localStorage.setItem('authority_user', JSON.stringify(response.officer));
+      this.router.navigate(['/officer']);
+    }
+  },
+  error: (error: any) => {
+    this.errorMessage = error?.error?.message || 'Login failed';
+  }
+});
   }
 }

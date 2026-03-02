@@ -7,21 +7,20 @@
 
   <nav class="menu">
 
-    <a routerLink="/authority" routerLinkActive="active">
+    <a [routerLink]="homeLink" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
       <span class="material-icons-outlined">dashboard</span>Home
     </a>
 
-    <a routerLink="/authority/reports" routerLinkActive="active">
+    <a [routerLink]="reportsLink" routerLinkActive="active">
       <span class="material-icons-outlined">report</span>Reports Management
     </a>
 
-    <a routerLink="/authority/case-assignment" routerLinkActive="active">
+    <a [routerLink]="casesLink" routerLinkActive="active">
       <span class="material-icons-outlined">assignment_ind</span>
       {{ isSuperAdmin ? 'Case Assignment' : 'My Cases' }}
     </a>
 
-    <!-- 🔥 ROLE BASED MENU -->
-    <a routerLink="/authority/officers" routerLinkActive="active">
+    <a [routerLink]="profileLink" routerLinkActive="active">
       <span class="material-icons-outlined">groups</span>
       {{ isSuperAdmin ? 'Officer Management' : 'My Profile' }}
     </a>

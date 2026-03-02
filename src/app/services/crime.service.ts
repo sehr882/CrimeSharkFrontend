@@ -119,4 +119,7 @@ getCrimeById(id: string) {
       })
     );
   }
+  getCrimesByOfficer(officerId: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/officer/${officerId}`);
+  }
 }

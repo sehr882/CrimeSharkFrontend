@@ -17,13 +17,13 @@ export class CaseAssignmentComponent implements OnInit, OnDestroy {
 
   role = '';
   currentUser: any;
+  officerId = '';
   pageTitle = '';
   pageSubtitle = '';
 
   crimes: any[] = [];
   officers: any[] = [];
 
-  // Tracks the selected officer ID per crime card: { crimeId -> officerId }
   selectedOfficerMap: { [crimeId: string]: string } = {};
 
   loading = false;
@@ -42,16 +42,15 @@ export class CaseAssignmentComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
       this.currentUser = JSON.parse(localStorage.getItem('authority_user') || '{}');
-      this.role = this.currentUser?.role ?? '';
+      this.role = (this.currentUser?.role ?? '').toUpperCase();
+
+      if (this.role !== 'ADMIN') {
+        this.officerId = this.resolveOfficerId();
+      }
     }
 
-    if (this.role === 'ADMIN') {
-      this.pageTitle = 'Case Assignment';
-      this.pageSubtitle = 'Assign cases to available officers';
-    } else {
-      this.pageTitle = 'My Cases';
-      this.pageSubtitle = 'Cases assigned to you';
-    }
+    this.pageTitle   = this.role === 'ADMIN' ? 'Case Assignment' : 'My Cases';
+    this.pageSubtitle = this.role === 'ADMIN' ? 'Assign cases to available officers' : 'Cases assigned to you';
 
     this.loadData();
   }
@@ -61,61 +60,38 @@ export class CaseAssignmentComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  /** Resolve officer ID from JWT sub, falling back to stored user object. */
+  private resolveOfficerId(): string {
+    const token = localStorage.getItem('authority_token') || localStorage.getItem('token') || '';
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        if (payload?.sub) return payload.sub;
+      } catch {}
+    }
+    return this.currentUser?._id ?? this.currentUser?.id ?? '';
+  }
+
   loadData(): void {
     this.loading = true;
     this.error = null;
 
-    forkJoin({
-      crimes: this.crimeService.getAllCrimes(),
-      officers: this.officerService.getAllOfficers()
-    })
+    if (this.role === 'ADMIN') {
+      // ADMIN: fetch all crimes + officers list for assignment
+      forkJoin({
+        crimes: this.crimeService.getAllCrimes(),
+        officers: this.officerService.getAllOfficers()
+      })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: ({ crimes, officers }) => {
-          // Normalize crimes response
-          const rows: any[] = Array.isArray(crimes)
-            ? crimes
-            : Array.isArray(crimes?.data) ? crimes.data
-            : Array.isArray(crimes?.crimes) ? crimes.crimes
-            : Array.isArray(crimes?.reports) ? crimes.reports
-            : [];
-
-          // Normalize officers response (cast to any first to avoid type-narrowing to never)
           const rawOfficers: any = officers;
           this.officers = Array.isArray(rawOfficers)
             ? rawOfficers
-            : Array.isArray(rawOfficers?.data) ? rawOfficers.data
-            : [];
+            : Array.isArray(rawOfficers?.data) ? rawOfficers.data : [];
 
-          let allCrimes = rows.map((c: any) => ({
-            ...c,
-            crimeTitle: c?.crimeTitle ?? c?.title ?? c?.crimeType ?? 'Untitled',
-            dateOfCrime: c?.dateOfCrime ?? c?.createdAt ?? null,
-            location: c?.location ?? '',
-            status: c?.status ?? 'PENDING',
-            assignedOfficer: c?.assignedOfficer ?? null
-          }));
-
-          // Officers see only their own assigned crimes
-          if (this.role !== 'ADMIN') {
-            const myId = this.currentUser?._id;
-            allCrimes = allCrimes.filter(c => {
-              const ao = c.assignedOfficer;
-              if (!ao) return false;
-              return (typeof ao === 'object' ? ao._id : ao) === myId;
-            });
-          }
-
-          this.crimes = allCrimes;
-
-          // Pre-populate dropdown selections with existing assignments
-          this.crimes.forEach(c => {
-            const ao = c.assignedOfficer;
-            if (ao) {
-              this.selectedOfficerMap[c._id] = typeof ao === 'object' ? ao._id : ao;
-            }
-          });
-
+          this.crimes = this.normalizeCrimes(crimes);
+          this.preselectOfficers();
           this.loading = false;
           this.cdr.detectChanges();
         },
@@ -125,6 +101,58 @@ export class CaseAssignmentComponent implements OnInit, OnDestroy {
           this.cdr.detectChanges();
         }
       });
+
+    } else {
+      // OFFICER: fetch only cases assigned to this officer via dedicated endpoint
+      if (!this.officerId) {
+        this.error = 'Unable to determine officer ID. Please log in again.';
+        this.loading = false;
+        this.cdr.detectChanges();
+        return;
+      }
+
+      this.crimeService.getCrimesByOfficer(this.officerId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (res: any) => {
+            this.crimes = this.normalizeCrimes(res);
+            this.loading = false;
+            this.cdr.detectChanges();
+          },
+          error: (err: any) => {
+            this.error = err?.error?.message || err?.message || 'Failed to load cases';
+            this.loading = false;
+            this.cdr.detectChanges();
+          }
+        });
+    }
+  }
+
+  private normalizeCrimes(raw: any): any[] {
+    const rows: any[] = Array.isArray(raw)
+      ? raw
+      : Array.isArray(raw?.data)    ? raw.data
+      : Array.isArray(raw?.crimes)  ? raw.crimes
+      : Array.isArray(raw?.reports) ? raw.reports
+      : [];
+
+    return rows.map((c: any) => ({
+      ...c,
+      crimeTitle:     c?.crimeTitle ?? c?.title ?? c?.crimeType ?? 'Untitled',
+      dateOfCrime:    c?.dateOfCrime ?? c?.createdAt ?? null,
+      location:       c?.location ?? '',
+      status:         c?.status ?? 'PENDING',
+      assignedOfficer: c?.assignedOfficer ?? null
+    }));
+  }
+
+  private preselectOfficers(): void {
+    this.crimes.forEach(c => {
+      const ao = c.assignedOfficer;
+      if (ao) {
+        this.selectedOfficerMap[c._id] = typeof ao === 'object' ? ao._id : ao;
+      }
+    });
   }
 
   assignOfficer(crime: any): void {
@@ -139,12 +167,13 @@ export class CaseAssignmentComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          // Update the card in-place so the UI reflects immediately
           const officer = this.officers.find(o => o._id === officerId);
           crime.assignedOfficer = officer ?? { _id: officerId };
+
           this.assigningId = null;
           this.successMessage = 'Officer assigned successfully';
           this.cdr.detectChanges();
+
           setTimeout(() => {
             this.successMessage = null;
             this.cdr.detectChanges();
@@ -161,10 +190,11 @@ export class CaseAssignmentComponent implements OnInit, OnDestroy {
   getAssignedOfficerName(crime: any): string {
     const ao = crime?.assignedOfficer;
     if (!ao) return 'Unassigned';
+
     if (typeof ao === 'object') {
       return ao.name ?? ao.officerName ?? 'Unknown';
     }
-    // ao is just an ID string — look it up in the officers list
+
     const found = this.officers.find(o => o._id === ao);
     return found?.name ?? found?.officerName ?? 'Unknown';
   }
