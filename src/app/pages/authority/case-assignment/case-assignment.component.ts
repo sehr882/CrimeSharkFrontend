@@ -37,7 +37,7 @@ export class CaseAssignmentComponent implements OnInit, OnDestroy {
     private crimeService: CrimeService,
     private officerService: OfficerService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
@@ -49,7 +49,7 @@ export class CaseAssignmentComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.pageTitle   = this.role === 'ADMIN' ? 'Case Assignment' : 'My Cases';
+    this.pageTitle = this.role === 'ADMIN' ? 'Case Assignment' : 'My Cases';
     this.pageSubtitle = this.role === 'ADMIN' ? 'Assign cases to available officers' : 'Cases assigned to you';
 
     this.loadData();
@@ -60,14 +60,13 @@ export class CaseAssignmentComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  /** Resolve officer ID from JWT sub, falling back to stored user object. */
   private resolveOfficerId(): string {
     const token = localStorage.getItem('authority_token') || localStorage.getItem('token') || '';
     if (token) {
       try {
         const payload = JSON.parse(atob(token.split('.')[1]));
         if (payload?.sub) return payload.sub;
-      } catch {}
+      } catch { }
     }
     return this.currentUser?._id ?? this.currentUser?.id ?? '';
   }
@@ -77,33 +76,32 @@ export class CaseAssignmentComponent implements OnInit, OnDestroy {
     this.error = null;
 
     if (this.role === 'ADMIN') {
-      // ADMIN: fetch all crimes + officers list for assignment
       forkJoin({
         crimes: this.crimeService.getAllCrimes(),
         officers: this.officerService.getAllOfficers()
       })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: ({ crimes, officers }) => {
-          const rawOfficers: any = officers;
-          this.officers = Array.isArray(rawOfficers)
-            ? rawOfficers
-            : Array.isArray(rawOfficers?.data) ? rawOfficers.data : [];
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: ({ crimes, officers }) => {
+            const rawOfficers: any = officers;
+            this.officers = Array.isArray(rawOfficers)
+              ? rawOfficers
+              : Array.isArray(rawOfficers?.data) ? rawOfficers.data : [];
 
-          this.crimes = this.normalizeCrimes(crimes);
-          this.preselectOfficers();
-          this.loading = false;
-          this.cdr.detectChanges();
-        },
-        error: (err: any) => {
-          this.error = err?.error?.message || err?.message || 'Failed to load data';
-          this.loading = false;
-          this.cdr.detectChanges();
-        }
-      });
+            this.crimes = this.normalizeCrimes(crimes);
+            this.preselectOfficers();
+            this.loading = false;
+            this.cdr.detectChanges();
+          },
+          error: (err: any) => {
+            this.error = err?.error?.message || err?.message || 'Failed to load data';
+            this.loading = false;
+            this.cdr.detectChanges();
+          }
+        });
 
     } else {
-      // OFFICER: fetch only cases assigned to this officer via dedicated endpoint
+
       if (!this.officerId) {
         this.error = 'Unable to determine officer ID. Please log in again.';
         this.loading = false;
@@ -131,17 +129,17 @@ export class CaseAssignmentComponent implements OnInit, OnDestroy {
   private normalizeCrimes(raw: any): any[] {
     const rows: any[] = Array.isArray(raw)
       ? raw
-      : Array.isArray(raw?.data)    ? raw.data
-      : Array.isArray(raw?.crimes)  ? raw.crimes
-      : Array.isArray(raw?.reports) ? raw.reports
-      : [];
+      : Array.isArray(raw?.data) ? raw.data
+        : Array.isArray(raw?.crimes) ? raw.crimes
+          : Array.isArray(raw?.reports) ? raw.reports
+            : [];
 
     return rows.map((c: any) => ({
       ...c,
-      crimeTitle:     c?.crimeTitle ?? c?.title ?? c?.crimeType ?? 'Untitled',
-      dateOfCrime:    c?.dateOfCrime ?? c?.createdAt ?? null,
-      location:       c?.location ?? '',
-      status:         c?.status ?? 'PENDING',
+      crimeTitle: c?.crimeTitle ?? c?.title ?? c?.crimeType ?? 'Untitled',
+      dateOfCrime: c?.dateOfCrime ?? c?.createdAt ?? null,
+      location: c?.location ?? '',
+      status: c?.status ?? 'PENDING',
       assignedOfficer: c?.assignedOfficer ?? null
     }));
   }

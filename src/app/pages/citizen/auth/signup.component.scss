@@ -1,63 +1,58 @@
 .info-text {
-  color: #ff6b6b;
-  font-size: 17px;
-  font-weight: 600;
-  margin-bottom: 25px;
-  text-align: center;
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 20px;
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 22px;
+}
 
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
 
-    label {
-      margin-bottom: 5px;
-      font-weight: 600;
-      color: #e6eef8; // ✅ change this
-      font-size: 16px;
-    }
+label {
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #333;
+  font-size: 15px;
+}
 
-    input {
-      padding: 15px;
-      font-size: 16px;
-      border: 1px solid #2a3f55;
-      border-radius: 12px;
-      outline: none;
-      background: linear-gradient(180deg, #13283d, #0f2236);
-      color: #ffffff;
-      transition: all 0.3s ease;
+input {
+  padding: 12px 14px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  background-color: #fff;
+  transition: all 0.2s ease;
+}
 
-      &::placeholder {
-        color: #8fa9c2;
-      }
+input:focus {
+  border-color: #1c3d5a;
+  box-shadow: 0 0 0 2px rgba(28, 61, 90, 0.1);
+}
 
-      &:focus {
-        border-color: #4caf50;
-        box-shadow: 0 0 10px rgba(76, 175, 80, 0.35);
-      }
-    }
-  }
+.btn-signup {
+  margin-top: 10px;
+  padding: 12px;
+  background-color: #1c3d5a;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
 
-  .btn-signup {
-    padding: 16px;
-    background: linear-gradient(90deg, #28a745, #3ddc84);
-    color: white;
-    font-size: 18px;
-    font-weight: 700;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(40, 167, 69, 0.35);
-    }
-  }
+.btn-signup:hover {
+  background-color: #163047;
 }

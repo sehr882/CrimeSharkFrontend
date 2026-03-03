@@ -4,7 +4,6 @@
   <div class="form-container">
 
     <h2 class="page-title">Report a Crime</h2>
-    <!-- Warning Notice -->
     <div class="warning-box">
       ⚠️ Please ensure that all information provided is accurate and truthful.
       Submitting false reports, misleading information, or prank complaints
@@ -13,19 +12,16 @@
 
     <div class="form-box">
 
-      <!-- Crime Type -->
       <div class="form-field">
         <label class="field-label">Crime Type</label>
 
         <select name="crimeType" [(ngModel)]="crimeType" (ngModelChange)="updateCrimeOptions()" class="field-input">
-          <!-- disabled placeholder (not selectable) -->
           <option value="" disabled [selected]="!crimeType">-- Choose type --</option>
           <option value="static">Static</option>
           <option value="moving">Moving</option>
         </select>
       </div>
 
-      <!-- Crime -->
       <div class="form-field">
         <label class="field-label">Crime</label>
 
@@ -42,14 +38,12 @@
         </select>
       </div>
 
-      <!-- Area of Crime -->
       <div class="form-field">
         <label class="field-label">Area of Crime</label>
 
         <input type="text" name="crimeArea" [(ngModel)]="crimeArea" (input)="searchLocation()" class="field-input"
           placeholder="Exact Place, City..." autocomplete="off" />
 
-        <!-- Location Suggestions -->
         <div class="location-suggestions" *ngIf="locationSuggestions.length > 0">
           <div class="suggestion-item" *ngFor="let place of locationSuggestions" (click)="selectLocation(place)">
             {{ place.name }}
@@ -57,7 +51,6 @@
         </div>
       </div>
 
-      <!-- Date of Crime -->
       <div class="form-field">
         <label class="field-label">Date of Crime</label>
 
@@ -72,20 +65,17 @@
         </div>
       </div>
 
-      <!-- Description -->
       <div class="form-field">
         <label class="field-label">Description</label>
         <textarea name="description" rows="4" [(ngModel)]="description" class="field-input textarea-input"
           placeholder="Describe what happened..."></textarea>
       </div>
 
-      <!-- Evidence Upload -->
       <div class="form-field">
         <label class="field-label">Evidence (optional)</label>
         <input type="file" (change)="onFileSelected($event)" class="file-input" />
       </div>
 
-      <!-- Submit Button -->
       <button class="submit-btn" (click)="submitReport()">Submit Report</button>
 
     </div>

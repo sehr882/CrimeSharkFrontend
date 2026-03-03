@@ -25,7 +25,6 @@ export class ReportCrimeComponent implements OnInit {
   description = '';
   uploadedFile?: File | null = null;
 
-  // Date Fields
   crimeDay: number | null = null;
   crimeMonth: number | null = null;
   crimeYear: number | null = null;
@@ -145,7 +144,6 @@ export class ReportCrimeComponent implements OnInit {
     }
 
     try {
-      // Convert location text → lat/lon
       const geoResponse = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&countrycodes=pk&q=${encodeURIComponent(this.crimeArea)}`
       );

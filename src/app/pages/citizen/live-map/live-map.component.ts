@@ -19,30 +19,27 @@ export class LiveMapComponent implements AfterViewInit {
 
   async ngAfterViewInit(): Promise<void> {
 
-  if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') return;
 
-  const leaflet = await import('leaflet');
-  this.L = leaflet;
+    const leaflet = await import('leaflet');
+    this.L = leaflet;
 
-  // 👇 make Leaflet global for heat plugin
-  (window as any).L = this.L;
 
-  // 👇 now load heat plugin
-  await import('leaflet.heat');
+    (window as any).L = this.L;
 
-  this.map = this.L.map('map').setView([30.3753, 69.3451], 6);
+    await import('leaflet.heat');
 
-  this.L.tileLayer(
-    'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-    { maxZoom: 19 }
-  ).addTo(this.map);
+    this.map = this.L.map('map').setView([30.3753, 69.3451], 6);
 
-  await this.addHotzones();
-}
+    this.L.tileLayer(
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      { maxZoom: 19 }
+    ).addTo(this.map);
 
-  // ----------------------------------
-  // 🔍 SEARCH LOCATION
-  // ----------------------------------
+    await this.addHotzones();
+  }
+
+
   async searchLocation() {
     if (!this.searchQuery.trim()) return;
 
@@ -88,9 +85,7 @@ export class LiveMapComponent implements AfterViewInit {
     }
   }
 
-  // ----------------------------------
-  // 🔥 DYNAMIC HOTZONES (HEATMAP)
-  // ----------------------------------
+
   async addHotzones() {
     try {
       const response = await fetch('http://localhost:3000/crime/hotspots');
@@ -114,18 +109,18 @@ export class LiveMapComponent implements AfterViewInit {
         console.log('No valid coordinates found');
         return;
       }
-    (this.L as any).heatLayer(heatPoints, {
-   radius: 35,
-   blur: 30,
-   maxZoom: 17,
-   gradient: {
-    0.2: '#ffcccc',
-    0.4: '#ff6666',
-    0.6: '#ff1a1a',
-    0.8: '#cc0000',
-    1.0: '#800000'
-  }
-  }).addTo(this.map);
+      (this.L as any).heatLayer(heatPoints, {
+        radius: 40,
+        blur: 35,
+        maxZoom: 17,
+        gradient: {
+          0.2: '#ffeda0',
+          0.4: '#feb24c',
+          0.6: '#fd8d3c',
+          0.8: '#f03b20',
+          1.0: '#bd0026'
+        }
+      }).addTo(this.map);
 
     } catch (error) {
       console.error('Failed to load hotspots:', error);

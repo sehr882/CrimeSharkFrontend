@@ -71,7 +71,6 @@ export class AuthorityAddOfficerComponent implements OnInit, OnDestroy {
         console.log('Edit Mode:', this.isEditMode);
         console.log('Officer ID:', this.officerId);
 
-        // password and accessCode are not required when editing
         this.officerForm.get('password')?.clearValidators();
         this.officerForm.get('password')?.updateValueAndValidity();
         this.officerForm.get('accessCode')?.clearValidators();
@@ -119,7 +118,6 @@ export class AuthorityAddOfficerComponent implements OnInit, OnDestroy {
     if (this.isEditMode) {
       const payload = { ...this.officerForm.value };
 
-      // Strip empty password / accessCode so backend does not overwrite with blank
       if (!payload.password) delete payload.password;
       if (!payload.accessCode) delete payload.accessCode;
 

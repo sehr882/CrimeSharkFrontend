@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AuthService } from  '@app/services/auth.service';  // check relative path
+import { AuthService } from '@app/services/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -16,8 +16,7 @@ export class SignupComponent {
   password = '';
   confirmPassword = '';
 
-  // signup.component.ts
- @Input() redirectFrom: string | null = null;
+  @Input() redirectFrom: string | null = null;
 
   constructor(
     private router: Router,
@@ -47,7 +46,7 @@ export class SignupComponent {
         alert(res.message || 'Signup successful!');
         this.resetForm();
 
-        // temporary redirect logic
+
         if (this.redirectFrom) {
           this.router.navigate([this.redirectFrom]);
         } else {

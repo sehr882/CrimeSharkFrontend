@@ -5,7 +5,6 @@
 
         <h2>{{ isEditMode ? 'Update Officer' : 'Add Officer' }}</h2>
 
-        <!-- MESSAGE -->
         <div *ngIf="message" [ngClass]="messageType === 'success' ? 'success-msg' : 'error-msg'">
             {{ message }}
         </div>

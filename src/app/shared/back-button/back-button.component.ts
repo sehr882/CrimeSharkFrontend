@@ -16,33 +16,35 @@ export class BackButtonComponent {
   goBack() {
     const currentUrl = this.router.url;
 
-    // Authority portal logic
     if (currentUrl.startsWith('/authority')) {
 
-      // If already on dashboard → go to landing
       if (currentUrl === '/authority') {
         this.router.navigate(['/']);
       }
-      // Any inner authority page → go to authority dashboard
       else {
         this.router.navigate(['/authority']);
       }
     }
+    else if (currentUrl.startsWith('/officer')) {
 
-    // Citizen portal logic
+      if (currentUrl === '/officer') {
+        this.router.navigate(['/']);
+      } else {
+        this.router.navigate(['/officer']);
+      }
+    }
+
     else if (currentUrl.startsWith('/citizen')) {
 
-      // If already on dashboard → go to landing
       if (currentUrl === '/citizen') {
         this.router.navigate(['/']);
       }
-      // Any inner citizen page → go to citizen dashboard
       else {
         this.router.navigate(['/citizen']);
       }
     }
 
-    // Fallback → landing
+
     else {
       this.router.navigate(['/']);
     }

@@ -1,5 +1,5 @@
-<div class="auth-container">
-  <div class="auth-card">
+<div class="authority-page">
+  <div class="authority-card">
 
     <div class="auth-header">
       <h2>Authority Portal</h2>
@@ -7,16 +7,26 @@
     </div>
 
     <form>
-      <label>CNIC</label>
-      <input type="text" [(ngModel)]="cnic" name="cnic">
 
-      <label>Password</label>
-      <input type="password" [(ngModel)]="password" name="password">
+      <div class="form-group">
+        <label>CNIC</label>
+        <input type="text" [(ngModel)]="cnic" name="cnic" placeholder="Enter CNIC (e.g., 12345-6789012-3)">
+      </div>
 
-      <label>Authority Access Code</label>
-      <input type="text" [(ngModel)]="accessCode" name="accessCode">
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" [(ngModel)]="password" name="password" placeholder="Enter your password">
+      </div>
 
-      <button type="button" (click)="login()">Login</button>
+      <div class="form-group">
+        <label>Authority Access Code</label>
+        <input type="text" [(ngModel)]="accessCode" name="accessCode" placeholder="Enter authority access code">
+      </div>
+
+      <button type="button" (click)="login()" class="btn-login">
+        Login
+      </button>
+
     </form>
 
     <p class="danger-text">

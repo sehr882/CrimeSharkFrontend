@@ -14,11 +14,10 @@ $muted: #9aa6b2;
   flex-direction: column;
 }
 
-/* TOP BAR */
 .top-bar {
   padding: 18px;
   background: #05080f;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .logo-area {
@@ -40,20 +39,19 @@ $muted: #9aa6b2;
   font-family: 'Times New Roman', Times, serif;
 }
 
-/* HERO */
 .hero-section {
-  padding: 110px 20px 50px;
+  padding: 110px 200px 200px;
   text-align: center;
   background:
-    linear-gradient(rgba(10,15,25,0.75), rgba(10,15,25,0.85)),
+    linear-gradient(rgba(10, 15, 25, 0.75), rgba(10, 15, 25, 0.85)),
     url('/assets/cs-background.jpg') center / cover no-repeat;
 }
 
 
 .title {
-  font-size: 46px;
+  font-size: 50px;
   font-weight: 900;
-  margin-bottom: 20px;
+  margin-bottom: 60px;
 
   span {
     color: $accent;
@@ -74,10 +72,10 @@ $muted: #9aa6b2;
   align-items: center;
 
   .btn {
-    width: 260px;
+    width: 290px;
     padding: 14px;
     border-radius: 14px;
-    font-size: 20px;
+    font-size: 24px;
     border: none;
     cursor: pointer;
   }
@@ -90,12 +88,12 @@ $muted: #9aa6b2;
 
   .authority-btn {
     background: transparent;
-    border: 1px solid rgba(255,255,255,0.25);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     color: #fff;
   }
 }
 
-/* CRIME IMAGES */
+
 .crime-showcase {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -122,22 +120,22 @@ $muted: #9aa6b2;
   bottom: 0;
   width: 100%;
   padding: 14px;
-  background: linear-gradient(180deg, transparent, rgba(0,0,0,0.85));
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.85));
   font-size: 18px;
   font-weight: 600;
   text-align: center;
 }
 
-/* FOOTER */
+
 .footer {
-  padding: 14px;
+  padding: 12px;
   text-align: center;
   font-size: 13px;
   color: $muted;
   background: #05080f;
 }
 
-/* RESPONSIVE */
+
 @media (max-width: 900px) {
   .crime-showcase {
     grid-template-columns: repeat(2, 1fr);
@@ -149,5 +147,3 @@ $muted: #9aa6b2;
     grid-template-columns: 1fr;
   }
 }
-
-

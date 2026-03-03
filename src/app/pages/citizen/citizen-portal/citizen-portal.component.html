@@ -2,7 +2,7 @@
 
 <div class="portal-wrap">
 
-  <!-- HERO SECTION -->
+
   <section class="hero">
     <div class="hero-text">
       <h1>CrimeShark Safety Grid</h1>
@@ -18,7 +18,7 @@
     </div>
   </section>
 
-  <!-- CATEGORY FILTER -->
+
   <section class="categories">
     <div class="category-pill" *ngFor="let c of categories" [class.active]="selectedCategory === c"
       (click)="setCategory(c)">
@@ -26,16 +26,16 @@
     </div>
   </section>
 
-  <!-- MAIN GRID -->
+
   <main class="main-grid">
 
-    <!-- LEFT SIDE -->
+
     <aside class="left-col">
       <div class="map-card">
         <div class="map-header">
           <span>Crime Hotzones</span>
 
-          <!-- ✅ NEW VIEW FULL MAP BUTTON -->
+
           <button class="view-map-btn" (click)="goToLiveMap()">
             View Full Map
           </button>
@@ -52,25 +52,25 @@
 
       <article class="alert-card" *ngFor="let a of filteredAlerts()" [ngClass]="a.type">
 
-        <!-- ✅ MATERIAL ICONS BASED ON CRIME TYPE -->
+
         <div class="alert-icon" [ngClass]="a.type">
 
-          <!-- Moving -->
-          <span *ngIf="a.type === 'moving'" class="material-icons-outlined">
-            siren
+
+          <span *ngIf="a.type?.toLowerCase() === 'moving'" class="material-icons-outlined">
+            warning
           </span>
 
-          <!-- Static -->
+
           <span *ngIf="a.type === 'static'" class="material-icons-outlined">
             report
           </span>
 
-          <!-- Theft -->
+
           <span *ngIf="a.type === 'theft'" class="material-icons-outlined">
-            gpp_bad
+            security
           </span>
 
-          <!-- Default -->
+
           <span *ngIf="!a.type" class="material-icons-outlined">
             warning
           </span>

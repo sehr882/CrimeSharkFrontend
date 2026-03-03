@@ -28,7 +28,7 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
 
   constructor(
     private router: Router,
-    private crimeService: CrimeService, // ✅ inject service
+    private crimeService: CrimeService,
     private cdr: ChangeDetectorRef
   ) { }
   visibleCount = 4;
@@ -38,7 +38,6 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    // Fetch crimes early
     this.fetchCrimes();
   }
 
@@ -58,12 +57,8 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
 
   categories = ['Moving', 'Static'];
 
-  alerts: Alert[] = []; // will be filled from backend
+  alerts: Alert[] = [];
   loading = true;
-
-  trending = [
-    { title: 'Scam Alert', when: '3 hours ago' },
-  ];
 
   // Leaflet variables
   private L: any;
@@ -110,14 +105,10 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // ---------------------------------------------------
-  // Fetch crimes from backend
-  // ---------------------------------------------------
   fetchCrimes() {
     this.loading = true;
     this.crimeService.getAllCrimes().subscribe({
       next: (data: any) => {
-        // Map backend data to Alert interface
         this.alerts = data.map((crime: any) => ({
           id: crime._id,
           title: crime.crimeTitle,
@@ -127,10 +118,10 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
           viewers: Math.floor(Math.random() * 200) + 50, // optional demo
           icon: crime.crimeType === 'theft' ? '🚨' : '🏠',
           description: crime.description,
-          type: crime.crimeType
+          type: crime.crimeType?.toLowerCase().trim()
         }));
         this.loading = false;
-        this.cdr.markForCheck(); // Ensure change detection
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Failed to fetch crimes', err);

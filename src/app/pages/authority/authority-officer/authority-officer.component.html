@@ -2,15 +2,12 @@
 
 <div class="officer-container">
 
-  <!-- ADMIN: Officer Management -->
   <div *ngIf="role === 'ADMIN'">
 
     <div class="header-row">
       <h2 class="page-title">Officer Management</h2>
 
-      <button type="button"
-              class="add-btn"
-              routerLink="/authority/add-officer">
+      <button type="button" class="add-btn" routerLink="/authority/add-officer">
         + Add Officer
       </button>
     </div>
@@ -30,8 +27,7 @@
 
         <p>
           <strong>Status:</strong>
-          <span
-            [ngClass]="{
+          <span [ngClass]="{
               'active': officer.status === 'Active',
               'suspended': officer.status === 'Suspended'
             }">
@@ -50,7 +46,6 @@
   </div>
 
 
-  <!-- OFFICER: My Profile (read-only, data from API) -->
   <div *ngIf="role !== 'ADMIN'">
 
     <h2 class="page-title">My Profile</h2>
@@ -64,8 +59,7 @@
       <p><strong>Station:</strong> {{ officerProfile.station }}</p>
       <p>
         <strong>Status:</strong>
-        <span
-          [ngClass]="{
+        <span [ngClass]="{
             'active': officerProfile.status === 'Active',
             'suspended': officerProfile.status === 'Suspended'
           }">

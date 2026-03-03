@@ -68,21 +68,15 @@
 
 .logout {
   margin-top: auto;
-  padding: 12px;
-  border-radius: 10px;
-  background: #dc2626;
-  border: none;
-  font-size: 20px;
-  color: white;
-  cursor: pointer;
-
-  span {
-    font-size: 24px;
-  }
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 30px;
 }
 
 .user-info {
-  margin-top: auto;
   display: flex;
   align-items: center;
   gap: 12px;

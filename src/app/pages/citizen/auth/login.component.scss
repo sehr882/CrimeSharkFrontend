@@ -1,56 +1,49 @@
 form {
   display: flex;
   flex-direction: column;
-  gap: 30px;
-  /* more breathing space */
+  gap: 22px;
+}
 
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
 
-    label {
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: #e6eef8;
-      font-size: 16px;
-    }
+label {
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #333;
+  font-size: 15px;
+}
 
-    input {
-      padding: 16px;
-      font-size: 17px;
-      border: 1px solid #2a3f55;
-      border-radius: 12px;
-      outline: none;
-      background: linear-gradient(180deg, #13283d, #0f2236);
-      color: #ffffff;
-      transition: all 0.3s ease;
+input {
+  padding: 12px 14px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  background-color: #fff;
+  transition: all 0.2s ease;
+}
 
-      &::placeholder {
-        color: #8fa9c2;
-      }
+input:focus {
+  border-color: #1c3d5a;
+  box-shadow: 0 0 0 2px rgba(28, 61, 90, 0.1);
+}
 
-      &:focus {
-        border-color: #3ea6ff;
-        box-shadow: 0 0 10px rgba(62, 166, 255, 0.4);
-      }
-    }
-  }
+.btn-login {
+  margin-top: 10px;
+  padding: 12px;
+  background-color: #1c3d5a; // same as Add Officer button
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
 
-  .btn-login {
-    padding: 16px;
-    background: linear-gradient(90deg, #1f6feb, #3ea6ff);
-    color: white;
-    font-size: 19px;
-    font-weight: 700;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(31, 111, 235, 0.4);
-    }
-  }
+.btn-login:hover {
+  background-color: #163047;
 }

@@ -12,17 +12,19 @@
 ========================= */
 .map-search {
   position: absolute;
-  top: 20px;
+  top: 25px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
   display: flex;
   gap: 10px;
-  background: rgba(13, 17, 23, 0.95);
-  padding: 12px 15px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-  backdrop-filter: blur(10px);
+  background: rgba(10, 15, 25, 0.95);
+  padding: 14px 18px;
+  border-radius: 14px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 0, 0, 0.15);
+  width: 450px;
 }
 
 .map-search input {
@@ -82,8 +84,36 @@
 .leaflet-control-zoom a:hover {
   background: #21262d !important;
 }
+
 .emoji-marker {
   font-size: 28px;
 }
 
+#map {
+  height: 100%;
+  width: 100%;
+}
 
+.leaflet-control-zoom {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.leaflet-control-zoom a {
+  background: #0d1117 !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: #1f2937 !important;
+}
+
+.map-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 0, 0, 0.05), transparent 70%);
+  pointer-events: none;
+}

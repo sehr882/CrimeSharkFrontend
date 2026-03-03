@@ -16,10 +16,8 @@ export class AuthorityOfficerComponent implements OnInit {
   role = '';
   currentUser: any = {};
 
-  // ADMIN: list of all officers
   officers: any[] = [];
 
-  // OFFICER: own profile fetched from API
   officerProfile: any = null;
   profileLoading = false;
   profileError: string | null = null;
@@ -29,7 +27,7 @@ export class AuthorityOfficerComponent implements OnInit {
     private officerService: OfficerService,
     private router: Router,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initializeUser();
@@ -51,19 +49,17 @@ export class AuthorityOfficerComponent implements OnInit {
     }
   }
 
-  /** Resolve this officer's ID from JWT sub, falling back to stored user object. */
   private resolveOfficerId(): string {
     const token = localStorage.getItem('authority_token') || localStorage.getItem('token') || '';
     if (token) {
       try {
         const payload = JSON.parse(atob(token.split('.')[1]));
         if (payload?.sub) return payload.sub;
-      } catch {}
+      } catch { }
     }
     return this.currentUser?._id ?? this.currentUser?.id ?? '';
   }
 
-  // ADMIN only: load all officers for management view
   loadOfficers(): void {
     this.officerService.getAllOfficers().subscribe({
       next: (data: any) => {
@@ -76,7 +72,6 @@ export class AuthorityOfficerComponent implements OnInit {
     });
   }
 
-  // OFFICER only: fetch own profile from backend
   loadOfficerProfile(): void {
     const id = this.resolveOfficerId();
     if (!id) {
