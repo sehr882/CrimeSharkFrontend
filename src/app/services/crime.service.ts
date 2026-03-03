@@ -43,7 +43,9 @@ export class CrimeService {
 
     formData.append('latitude', data.latitude);
     formData.append('longitude', data.longitude);
-
+    if (data.victimPhone) {
+  formData.append('victimPhone', data.victimPhone);
+    }
     if (file) {
       formData.append('evidence', file);
     }
