@@ -36,7 +36,7 @@
             Select crime...
           </option>
 
-          <option *ngFor="let crime of crimeOptions" [value]="crime">
+          <option *ngFor="let crime of crimeOptions" [value]="crime.en">
             {{ crime.en }} ({{ crime.ur }})
           </option>
           <option value="Other">Other</option>
