@@ -24,7 +24,7 @@ export class AuthorityNavbarComponent implements OnInit {
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private router: Router) { }
 
   logout() {
-    this.router.navigate(['/authority-login']);
+    this.router.navigate(['/authority/login']);
   }
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {

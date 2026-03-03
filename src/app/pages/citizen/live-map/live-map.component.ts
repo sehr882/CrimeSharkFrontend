@@ -24,22 +24,39 @@ export class LiveMapComponent implements AfterViewInit {
     const leaflet = await import('leaflet');
     this.L = leaflet;
 
-
+    // Make Leaflet global for heat plugin
     (window as any).L = this.L;
 
+    // Load heat plugin
     await import('leaflet.heat');
 
-    this.map = this.L.map('map').setView([30.3753, 69.3451], 6);
+    // 🇵🇰 Pakistan-focused professional setup
+    this.map = this.L.map('map', {
+      center: [30.3753, 69.3451],
+      zoom: 7,
+      minZoom: 7,
+      maxZoom: 18,
+      worldCopyJump: false,
+      maxBounds: this.L.latLngBounds(
+        [23.3, 60.5],   // Southwest Pakistan
+        [37.6, 77.8]    // Northeast Pakistan
+      ),
+      maxBoundsViscosity: 1.0
+    });
 
+    // Standard OpenStreetMap tiles (lively like your mini-map)
     this.L.tileLayer(
       'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       { maxZoom: 19 }
     ).addTo(this.map);
 
+    // 🔥 Load dynamic backend hotspots
     await this.addHotzones();
   }
 
-
+  // ----------------------------------
+  // 🔍 SEARCH LOCATION
+  // ----------------------------------
   async searchLocation() {
     if (!this.searchQuery.trim()) return;
 
@@ -61,7 +78,8 @@ export class LiveMapComponent implements AfterViewInit {
       const lat = parseFloat(results[0].lat);
       const lon = parseFloat(results[0].lon);
 
-      this.map.flyTo([lat, lon], 13);
+      // Fly but stay within Pakistan bounds
+      this.map.flyTo([lat, lon], 12);
 
       if (this.searchMarker) {
         this.map.removeLayer(this.searchMarker);
@@ -85,12 +103,13 @@ export class LiveMapComponent implements AfterViewInit {
     }
   }
 
-
+  // ----------------------------------
+  // 🔥 DYNAMIC HOTZONES (HEATMAP)
+  // ----------------------------------
   async addHotzones() {
     try {
       const response = await fetch('http://localhost:3000/crime/hotspots');
       const data = await response.json();
-      console.log('HOTSPOTS DATA:', data);
 
       if (!data || data.length === 0) {
         console.log('No hotspot data found');
@@ -102,13 +121,14 @@ export class LiveMapComponent implements AfterViewInit {
         .map((point: any) => [
           point.latitude,
           point.longitude,
-          0.8 // intensity
+          0.8
         ]);
 
       if (heatPoints.length === 0) {
         console.log('No valid coordinates found');
         return;
       }
+
       (this.L as any).heatLayer(heatPoints, {
         radius: 40,
         blur: 35,

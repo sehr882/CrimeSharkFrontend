@@ -13,17 +13,22 @@
     <div class="form-box">
 
       <div class="form-field">
-        <label class="field-label">Crime Type</label>
+        <label class="field-label"
+          title="Static crimes happen at fixed locations like homes or shops. Moving crimes involve vehicles or public movement.">
+          Crime Type ⓘ
+        </label>
 
         <select name="crimeType" [(ngModel)]="crimeType" (ngModelChange)="updateCrimeOptions()" class="field-input">
           <option value="" disabled [selected]="!crimeType">-- Choose type --</option>
-          <option value="static">Static</option>
-          <option value="moving">Moving</option>
+          <option value="static">Static (جرائمِ ساکن)</option>
+          <option value="moving">Moving (جرائمِ متحرک)</option>
         </select>
       </div>
 
       <div class="form-field">
-        <label class="field-label">Crime</label>
+        <label class="field-label" title="Select the crime that best describes the incident.">
+          Crime ⓘ
+        </label>
 
         <select name="selectedCrime" [(ngModel)]="selectedCrime" [disabled]="crimeOptions.length === 0"
           class="field-input">
@@ -31,8 +36,8 @@
             Select crime...
           </option>
 
-          <option *ngFor="let crime of crimeOptions; let i = index" [value]="crime">
-            {{ i + 1 }}. {{ crime }}
+          <option *ngFor="let crime of crimeOptions" [value]="crime">
+            {{ crime.en }} ({{ crime.ur }})
           </option>
           <option value="Other">Other</option>
         </select>
@@ -63,6 +68,18 @@
 
           <input type="number" [(ngModel)]="crimeYear" placeholder="Year" class="field-input date-input" />
         </div>
+      </div>
+      <div class="form-field victim-check">
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="isVictim" name="isVictim" />
+          I am the victim reporting this crime
+        </label>
+      </div>
+
+      <div class="form-field" *ngIf="isVictim">
+        <label class="field-label">Victim Phone Number</label>
+        <input type="text" [(ngModel)]="victimPhone" name="victimPhone" class="field-input"
+          placeholder="Enter your phone number" />
       </div>
 
       <div class="form-field">

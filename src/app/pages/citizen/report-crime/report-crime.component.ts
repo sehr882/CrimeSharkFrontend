@@ -18,6 +18,8 @@ export class ReportCrimeComponent implements OnInit {
     private crimeService: CrimeService,
     private router: Router
   ) { }
+  isVictim: boolean = false;
+  victimPhone: string = '';
 
   crimeType: string = '';
   selectedCrime = '';
@@ -35,19 +37,37 @@ export class ReportCrimeComponent implements OnInit {
   showSuccess = false;
   isLoggedIn = false;
 
-  staticCrimes: string[] = [
-    "Burglary", "Robbery", "Arson", "Vandalism",
-    "Trespassing", "Shoplifting", "Embezzlement", "Forgery",
-    "Counterfeiting", "Extortion"
+  staticCrimes = [
+    { en: 'Burglary', ur: 'گھر میں چوری' },
+    { en: 'Robbery', ur: 'ڈکیتی' },
+    { en: 'Arson', ur: 'آتش زنی' },
+    { en: 'Vandalism', ur: 'توڑ پھوڑ' },
+    { en: 'Trespassing', ur: 'تجاوز' },
+    { en: 'Shoplifting', ur: 'دکان میں چوری' },
+    { en: 'Embezzlement', ur: 'خیانت' },
+    { en: 'Forgery', ur: 'جعل سازی' },
+    { en: 'Counterfeiting', ur: 'جعلی سازی' },
+    { en: 'Extortion', ur: 'بھتہ خوری' },
+    { en: 'Harassment', ur: 'ہراساں کرنا' },
+    { en: 'Violence', ur: 'تشدد' }
   ];
 
-  movingCrimes: string[] = [
-    "Pickpocketing", "Snatching", "Mugging", "Vehicle theft",
-    "Street racing", "Hit-and-Run", "Reckless driving",
-    "Speeding", "DUI (Driving Under Influence)", "Robbery"
+  movingCrimes = [
+    { en: 'Pickpocketing', ur: 'جیب تراشی' },
+    { en: 'Snatching', ur: 'چھینا جھپٹی' },
+    { en: 'Mugging', ur: 'غنڈہ گردی' },
+    { en: 'Vehicle Theft', ur: 'گاڑی چوری' },
+    { en: 'Street Racing', ur: 'سڑک پر دوڑ' },
+    { en: 'Hit-and-Run', ur: 'ٹکر مار کر فرار' },
+    { en: 'Reckless Driving', ur: 'بے پرواہ ڈرائیونگ' },
+    { en: 'Speeding', ur: 'تیز رفتاری' },
+    { en: 'DUI (Driving Under Influence)', ur: 'نشے میں ڈرائیونگ' },
+    { en: 'Robbery', ur: 'ڈکیتی' },
+    { en: 'Street Harassment', ur: 'سڑک پر ہراساں کرنا' },
+    { en: 'Mobile Snatching', ur: 'موبائل چھیننا' }
   ];
 
-  crimeOptions: string[] = [];
+  crimeOptions: { en: string; ur: string }[] = [];
 
   ngOnInit() {
     if (typeof window !== 'undefined') {
@@ -142,6 +162,15 @@ export class ReportCrimeComponent implements OnInit {
       alert('Invalid year');
       return;
     }
+    if (this.isVictim && !this.victimPhone) {
+      alert('Please provide your phone number so authorities can contact you.');
+      return;
+    }
+
+    if (this.isVictim && !/^[0-9]{10,15}$/.test(this.victimPhone)) {
+      alert('Enter a valid phone number.');
+      return;
+    }
 
     try {
       const geoResponse = await fetch(
@@ -169,7 +198,9 @@ export class ReportCrimeComponent implements OnInit {
           .toString()
           .padStart(2, '0')}-${this.crimeDay
             .toString()
-            .padStart(2, '0')}`
+            .padStart(2, '0')}`,
+        isVictim: this.isVictim,
+        victimPhone: this.isVictim ? this.victimPhone : null
       };
 
       this.crimeService.reportCrime(crimeData, this.uploadedFile).subscribe({
@@ -202,5 +233,7 @@ export class ReportCrimeComponent implements OnInit {
     this.crimeYear = null;
     this.submitted = false;
     this.showSuccess = false;
+    this.isVictim = false;
+    this.victimPhone = '';
   }
 }

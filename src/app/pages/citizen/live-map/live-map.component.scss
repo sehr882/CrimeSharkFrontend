@@ -1,15 +1,21 @@
-/* =========================
-   MAP CONTAINER
-========================= */
 .map-wrapper {
   position: relative;
-  height: 100vh;
-  width: 100%;
+  height: 90vh;
+  width: 95%;
 }
 
-/* =========================
-   SEARCH BAR
-========================= */
+.map-container {
+  width: 95%;
+  max-width: 1300px;
+  height: 680px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  padding: 15px;
+  display: flex;
+  margin-left: 60px;
+}
+
 .map-search {
   position: absolute;
   top: 25px;
@@ -116,4 +122,13 @@
   inset: 0;
   background: radial-gradient(circle at center, rgba(255, 0, 0, 0.05), transparent 70%);
   pointer-events: none;
+}
+
+.leaflet-container {
+  background: #e6e6e6;
+  /* soft neutral background */
+}
+
+.leaflet-container {
+  background: #000;
 }
