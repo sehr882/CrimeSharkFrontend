@@ -115,6 +115,10 @@ export class CrimeService {
       })
     );
   }
+  getCityStats(): Observable<{ city: string; count: number }[]> {
+    return this.http.get<{ city: string; count: number }[]>(`${this.baseUrl}/stats/city`);
+  }
+
   getAllCrimesForOfficer(officerId: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}?officerId=${officerId}&t=${Date.now()}`);
   }

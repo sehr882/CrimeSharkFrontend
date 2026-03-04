@@ -7,6 +7,33 @@
     <p>View, track, and manage reported crimes</p>
   </div>
 
+  <!-- City Stats — admin only -->
+  <div class="city-stats-section" *ngIf="isAdmin">
+    <div class="section-title">
+      <span class="material-icons-outlined">bar_chart</span>
+      Crime Reports by City
+    </div>
+
+    <div class="stats-loading" *ngIf="statsLoading">Loading city stats…</div>
+
+    <div class="city-cards" *ngIf="!statsLoading && cityStats.length > 0">
+      <div class="city-card" *ngFor="let stat of cityStats">
+        <div class="city-name">{{ stat.city }}</div>
+        <div class="bar-row">
+          <div
+            class="bar"
+            [style.width.%]="(stat.count / maxCityCount) * 100"
+          ></div>
+        </div>
+        <div class="city-count">{{ stat.count }} crime{{ stat.count !== 1 ? 's' : '' }}</div>
+      </div>
+    </div>
+
+    <div class="no-stats" *ngIf="!statsLoading && cityStats.length === 0">
+      No city data available.
+    </div>
+  </div>
+
   <!-- Filters -->
   <div class="filters">
 

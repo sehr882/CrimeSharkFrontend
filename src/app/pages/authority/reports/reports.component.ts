@@ -24,6 +24,11 @@ export class ReportsComponent implements OnInit, OnDestroy {
   loading = false;
   error: string | null = null;
 
+  isAdmin = false;
+  cityStats: { city: string; count: number }[] = [];
+  statsLoading = false;
+  maxCityCount = 0;
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -33,6 +38,10 @@ export class ReportsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.isAdmin = !this.isOfficerRole();
+    if (this.isAdmin) {
+      this.loadCityStats();
+    }
     this.loadReports();
 
     // Refresh list whenever a status is updated from the detail page
@@ -47,6 +56,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
   }
 
   private getOfficerId(): string | null {
+    if (typeof window === 'undefined') return null;
     const raw = localStorage.getItem('authority_user');
     if (!raw) return null;
     try {
@@ -56,6 +66,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
   }
 
   private isOfficerRole(): boolean {
+    if (typeof window === 'undefined') return false;
     const raw = localStorage.getItem('authority_user');
     if (!raw) return false;
     try {
@@ -103,6 +114,22 @@ export class ReportsComponent implements OnInit, OnDestroy {
         this.reports = [];
         this.filteredReportsList = [];
         this.loading = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  loadCityStats(): void {
+    this.statsLoading = true;
+    this.crimeService.getCityStats().subscribe({
+      next: (data) => {
+        this.cityStats = [...data].sort((a, b) => b.count - a.count);
+        this.maxCityCount = this.cityStats[0]?.count ?? 1;
+        this.statsLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.statsLoading = false;
         this.cdr.detectChanges();
       }
     });

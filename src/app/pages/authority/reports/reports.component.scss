@@ -22,6 +22,81 @@
   }
 }
 
+/* city stats */
+.city-stats-section {
+  margin-bottom: 28px;
+  background: white;
+  border-radius: 14px;
+  padding: 20px 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin-bottom: 18px;
+
+  .material-icons-outlined {
+    font-size: 22px;
+    color: #2563eb;
+  }
+}
+
+.stats-loading,
+.no-stats {
+  color: #94a3b8;
+  font-size: 15px;
+  padding: 8px 0;
+}
+
+.city-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.city-card {
+  display: grid;
+  grid-template-columns: 220px 1fr 110px;
+  align-items: center;
+  gap: 14px;
+}
+
+.city-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #334155;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bar-row {
+  background: #f1f5f9;
+  border-radius: 99px;
+  height: 10px;
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  background: linear-gradient(90deg, #2563eb, #60a5fa);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+  min-width: 4px;
+}
+
+.city-count {
+  font-size: 14px;
+  color: #64748b;
+  text-align: right;
+  font-weight: 500;
+}
+
 /* filters */
 .filters {
   display: flex;
