@@ -1,74 +1,62 @@
-import { Component, Input } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
   @Input() redirectFrom: string | null = null;
 
-  username = '';
-  password = '';
+  form: FormGroup;
 
   constructor(
+    private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService
-  ) { }
-
-  ngOnInit() {
-    this.username = '';
-    this.password = '';
-  }
-
-  login() {
-    const data = {
-      username: this.username,
-      password: this.password
-    };
-
-    this.authService.login(data).subscribe({
-      next: (res: any) => {
-
-        if (typeof window !== 'undefined') {
-
-          // STORE JWT TOKEN (IMPORTANT)
-          localStorage.setItem('token', res.token);
-
-          // Optional user info
-          localStorage.setItem('user', JSON.stringify({
-            username: this.username,
-            loginTime: new Date().toISOString()
-          }));
-
-          localStorage.setItem('isLoggedIn', 'true');
-        }
-
-        alert('Login successful!');
-        this.resetForm();
-
-        if (this.redirectFrom) {
-          this.router.navigate([this.redirectFrom]);
-        } else {
-          this.router.navigate(['/citizen']);
-        }
-      },
-      error: err => {
-        alert(err.error?.message || 'Login failed');
-        console.error(err);
-      }
+  ) {
+    this.form = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
-  resetForm() {
-    this.username = '';
-    this.password = '';
+  ngOnInit() { this.form.reset(); }
+
+  get f() { return this.form.controls; }
+
+  login() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    this.authService.login(this.form.value).subscribe({
+      next: (res: any) => {
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('user', JSON.stringify({
+            username: this.f['username'].value,
+            loginTime: new Date().toISOString()
+          }));
+          localStorage.setItem('isLoggedIn', 'true');
+        }
+        alert('Login successful!');
+        this.form.reset();
+        this.router.navigate([this.redirectFrom ?? '/citizen']);
+      },
+      error: err => {
+        const msg = err.error?.message;
+        alert(Array.isArray(msg) ? msg.join(', ') : msg || 'Login failed');
+      }
+    });
   }
 }

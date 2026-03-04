@@ -46,14 +46,14 @@ export class AuthorityAddOfficerComponent implements OnInit, OnDestroy {
     }
 
     this.officerForm = this.fb.group({
-      cnic: ['', Validators.required],
-      name: ['', Validators.required],
-      email: [''],
-      phone: [''],
+      cnic: ['', [Validators.required, Validators.pattern(/^\d{5}-\d{7}-\d{1}$/)]],
+      name: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s]+$/)]],
+      email: ['', Validators.email],
+      phone: ['', Validators.pattern(/^03\d{9}$/)],
       rank: [''],
       station: [''],
       role: ['officer'],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       accessCode: ['', Validators.required],
       status: ['Active'],
       createdBy: [createdBy]
@@ -110,7 +110,8 @@ export class AuthorityAddOfficerComponent implements OnInit, OnDestroy {
 
   onSubmit(): void {
     if (this.officerForm.invalid) {
-      this.message = 'Please fill required fields';
+      this.officerForm.markAllAsTouched();
+      this.message = 'Please fill required fields correctly';
       this.messageType = 'error';
       return;
     }

@@ -1,68 +1,68 @@
-import { Component, Input } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
+
+function passwordMatchValidator(group: AbstractControl): ValidationErrors | null {
+  const password = group.get('password')?.value;
+  const confirm = group.get('confirmPassword')?.value;
+  return password === confirm ? null : { passwordMismatch: true };
+}
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-export class SignupComponent {
-
-  username = '';
-  password = '';
-  confirmPassword = '';
+export class SignupComponent implements OnInit {
 
   @Input() redirectFrom: string | null = null;
 
+  form: FormGroup;
+
   constructor(
+    private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService
-  ) { }
-
-  ngOnInit() {
-    this.username = '';
-    this.password = '';
-    this.confirmPassword = '';
+  ) {
+    this.form = this.fb.group({
+      username: ['', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.pattern(/^[a-zA-Z0-9_]+$/)
+      ]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', Validators.required]
+    }, { validators: passwordMatchValidator });
   }
 
+  ngOnInit() { this.form.reset(); }
+
+  get f() { return this.form.controls; }
+
   signup() {
-    if (this.password !== this.confirmPassword) {
-      alert('Passwords do not match');
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
-    const data = {
-      username: this.username,
-      password: this.password
-    };
-
-    this.authService.register(data).subscribe({
+    this.authService.register({
+      username: this.f['username'].value,
+      password: this.f['password'].value
+    }).subscribe({
       next: res => {
         alert(res.message || 'Signup successful!');
-        this.resetForm();
-
-
-        if (this.redirectFrom) {
-          this.router.navigate([this.redirectFrom]);
-        } else {
-          this.router.navigate(['/citizen']);
-        }
+        this.form.reset();
+        this.router.navigate([this.redirectFrom ?? '/citizen']);
       },
       error: err => {
-        alert(err.error?.message || 'Signup failed');
-        console.error(err);
+        const msg = err.error?.message;
+        alert(Array.isArray(msg) ? msg.join(', ') : msg || 'Signup failed');
       }
     });
-  }
-
-  resetForm() {
-    this.username = '';
-    this.password = '';
-    this.confirmPassword = '';
   }
 }

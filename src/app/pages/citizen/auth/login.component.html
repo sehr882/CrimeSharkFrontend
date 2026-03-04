@@ -1,30 +1,18 @@
-<form (ngSubmit)="login()">
+<form [formGroup]="form" (ngSubmit)="login()">
+
   <div class="form-group">
     <label for="username">Username</label>
-    <input
-      id="username"
-      type="text"
-      [(ngModel)]="username"
-      name="username"
-      placeholder="Enter your username"
-      required
-      autocomplete="off"
-    />
+    <input id="username" type="text" formControlName="username" placeholder="Enter your username" autocomplete="off" />
+    <small class="field-error" *ngIf="f['username'].touched && f['username'].errors?.['required']">Username is required</small>
   </div>
 
   <div class="form-group">
     <label for="password">Password</label>
-    <input
-      id="password"
-      type="password"
-      [(ngModel)]="password"
-      name="password"
-      placeholder="Enter your password"
-      required
-      autocomplete="new-password"
-      autofill="off"
-    />
+    <input id="password" type="password" formControlName="password" placeholder="Enter your password" autocomplete="new-password" />
+    <small class="field-error" *ngIf="f['password'].touched && f['password'].errors?.['required']">Password is required</small>
+    <small class="field-error" *ngIf="f['password'].touched && f['password'].errors?.['minlength']">Minimum 6 characters required</small>
   </div>
 
   <button type="submit" class="btn-login">Login</button>
+
 </form>

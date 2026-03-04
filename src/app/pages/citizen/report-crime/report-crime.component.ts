@@ -37,6 +37,8 @@ export class ReportCrimeComponent implements OnInit {
   showSuccess = false;
   isLoggedIn = false;
 
+  formErrors: Record<string, string> = {};
+
   staticCrimes = [
     { en: 'Burglary', ur: 'گھر میں چوری' },
     { en: 'Robbery', ur: 'ڈکیتی' },
@@ -100,7 +102,7 @@ export class ReportCrimeComponent implements OnInit {
       return;
     }
 
-    fetch(`https://nominatim.openstreetmap.org/search?format=json&countrycodes=pk&q=${this.crimeArea}`)
+    fetch(`http://localhost:3000/location/search?q=${this.crimeArea}`)
       .then(res => res.json())
       .then(data => {
         this.locationSuggestions = data.slice(0, 5).map((place: any) => {
@@ -127,60 +129,51 @@ export class ReportCrimeComponent implements OnInit {
   }
 
   async submitReport() {
+    this.formErrors = {};
 
     if (!this.crimeType) {
-      alert('Choose crime type');
-      return;
+      this.formErrors['crimeType'] = 'Choose crime type.';
     }
 
     if (!this.selectedCrime) {
-      alert('Choose a crime');
-      return;
+      this.formErrors['selectedCrime'] = 'Choose a crime.';
     }
 
     if (!this.crimeArea) {
-      alert('Choose crime area');
-      return;
+      this.formErrors['crimeArea'] = 'Choose crime area.';
     }
 
     if (!this.crimeDay || !this.crimeMonth || !this.crimeYear) {
-      alert('Please select date (day, month, year)');
-      return;
+      this.formErrors['date'] = 'Please select date (day, month, year).';
+    } else {
+      if (this.crimeDay < 1 || this.crimeDay > 31) {
+        this.formErrors['date'] = 'Invalid day.';
+      } else if (this.crimeMonth < 1 || this.crimeMonth > 12) {
+        this.formErrors['date'] = 'Invalid month.';
+      } else if (this.crimeYear < 1900 || this.crimeYear > new Date().getFullYear()) {
+        this.formErrors['date'] = 'Invalid year.';
+      }
     }
 
-    if (this.crimeDay < 1 || this.crimeDay > 31) {
-      alert('Invalid day');
-      return;
-    }
-
-    if (this.crimeMonth < 1 || this.crimeMonth > 12) {
-      alert('Invalid month');
-      return;
-    }
-
-    if (this.crimeYear < 1900 || this.crimeYear > new Date().getFullYear()) {
-      alert('Invalid year');
-      return;
-    }
     if (this.isVictim && !this.victimPhone) {
-      alert('Please provide your phone number so authorities can contact you.');
-      return;
+      this.formErrors['victimPhone'] = 'Please provide your phone number so authorities can contact you.';
+    } else if (this.isVictim && !/^[0-9]{10,15}$/.test(this.victimPhone)) {
+      this.formErrors['victimPhone'] = 'Enter a valid phone number.';
     }
 
-    if (this.isVictim && !/^[0-9]{10,15}$/.test(this.victimPhone)) {
-      alert('Enter a valid phone number.');
+    if (Object.keys(this.formErrors).length > 0) {
       return;
     }
 
     try {
       const geoResponse = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&countrycodes=pk&q=${encodeURIComponent(this.crimeArea)}`
+        `http://localhost:3000/location/search?q=${encodeURIComponent(this.crimeArea)}`
       );
 
       const geoData: any[] = await geoResponse.json();
 
       if (!geoData || geoData.length === 0) {
-        alert('Could not determine coordinates for this location.');
+        this.formErrors['crimeArea'] = 'Could not determine coordinates for this location.';
         return;
       }
 
@@ -194,9 +187,9 @@ export class ReportCrimeComponent implements OnInit {
         description: this.description,
         latitude: latitude,
         longitude: longitude,
-        dateOfCrime: `${this.crimeYear}-${this.crimeMonth
+        dateOfCrime: `${this.crimeYear}-${this.crimeMonth!
           .toString()
-          .padStart(2, '0')}-${this.crimeDay
+          .padStart(2, '0')}-${this.crimeDay!
             .toString()
             .padStart(2, '0')}`,
         isVictim: this.isVictim,
@@ -217,7 +210,7 @@ export class ReportCrimeComponent implements OnInit {
 
     } catch (error) {
       console.error(error);
-      alert('Failed to fetch location coordinates.');
+      this.formErrors['crimeArea'] = 'Failed to fetch location coordinates.';
     }
   }
 
@@ -235,5 +228,6 @@ export class ReportCrimeComponent implements OnInit {
     this.showSuccess = false;
     this.isVictim = false;
     this.victimPhone = '';
+    this.formErrors = {};
   }
 }

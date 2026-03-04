@@ -23,6 +23,7 @@
           <option value="static">Static (جرائمِ ساکن)</option>
           <option value="moving">Moving (جرائمِ متحرک)</option>
         </select>
+        <small class="field-error" *ngIf="formErrors['crimeType']">{{ formErrors['crimeType'] }}</small>
       </div>
 
       <div class="form-field">
@@ -41,6 +42,7 @@
           </option>
           <option value="Other">Other</option>
         </select>
+        <small class="field-error" *ngIf="formErrors['selectedCrime']">{{ formErrors['selectedCrime'] }}</small>
       </div>
 
       <div class="form-field">
@@ -54,6 +56,7 @@
             {{ place.name }}
           </div>
         </div>
+        <small class="field-error" *ngIf="formErrors['crimeArea']">{{ formErrors['crimeArea'] }}</small>
       </div>
 
       <div class="form-field">
@@ -68,7 +71,9 @@
 
           <input type="number" [(ngModel)]="crimeYear" placeholder="Year" class="field-input date-input" />
         </div>
+        <small class="field-error" *ngIf="formErrors['date']">{{ formErrors['date'] }}</small>
       </div>
+
       <div class="form-field victim-check">
         <label class="checkbox-label">
           <input type="checkbox" [(ngModel)]="isVictim" name="isVictim" />
@@ -80,6 +85,7 @@
         <label class="field-label">Victim Phone Number</label>
         <input type="text" [(ngModel)]="victimPhone" name="victimPhone" class="field-input"
           placeholder="Enter your phone number" />
+        <small class="field-error" *ngIf="formErrors['victimPhone']">{{ formErrors['victimPhone'] }}</small>
       </div>
 
       <div class="form-field">
