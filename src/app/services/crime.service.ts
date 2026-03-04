@@ -115,6 +115,10 @@ export class CrimeService {
       })
     );
   }
+  getAllCrimesForOfficer(officerId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}?officerId=${officerId}&t=${Date.now()}`);
+  }
+
   getCrimesByOfficer(officerId: string): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/officer/${officerId}`);
   }

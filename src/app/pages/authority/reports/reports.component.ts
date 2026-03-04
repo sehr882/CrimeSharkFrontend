@@ -46,11 +46,34 @@ export class ReportsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  private getOfficerId(): string | null {
+    const raw = localStorage.getItem('authority_user');
+    if (!raw) return null;
+    try {
+      const u = JSON.parse(raw);
+      return u?._id ?? u?.id ?? null;
+    } catch { return null; }
+  }
+
+  private isOfficerRole(): boolean {
+    const raw = localStorage.getItem('authority_user');
+    if (!raw) return false;
+    try {
+      const u = JSON.parse(raw);
+      return (u?.role ?? '').toUpperCase() !== 'ADMIN';
+    } catch { return false; }
+  }
+
   loadReports(): void {
     this.loading = true;
     this.error = null;
 
-    this.crimeService.getAllCrimes().subscribe({
+    const officerId = this.isOfficerRole() ? this.getOfficerId() : null;
+    const request$ = officerId
+      ? this.crimeService.getAllCrimesForOfficer(officerId)
+      : this.crimeService.getAllCrimes();
+
+    request$.subscribe({
       next: (data: any) => {
         const rows = Array.isArray(data)
           ? data
