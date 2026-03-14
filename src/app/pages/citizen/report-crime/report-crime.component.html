@@ -48,15 +48,8 @@
       <div class="form-field">
         <label class="field-label">Area of Crime</label>
 
-        <input type="text" name="crimeArea" [(ngModel)]="crimeArea" (input)="searchLocation()" class="field-input"
-          placeholder="Exact Place, City..." autocomplete="off" />
-
-        <div class="location-suggestions" *ngIf="locationSuggestions.length > 0">
-          <div class="suggestion-item" *ngFor="let place of locationSuggestions" (click)="selectLocation(place)">
-            {{ place.name }}
-          </div>
-        </div>
-        <small class="field-error" *ngIf="formErrors['crimeArea']">{{ formErrors['crimeArea'] }}</small>
+        <input #crimeLocationInput type="text" name="crimeArea" [(ngModel)]="crimeArea" class="field-input"
+          placeholder="Search location..." autocomplete="off" />
       </div>
 
       <div class="form-field">

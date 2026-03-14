@@ -5,6 +5,7 @@ import { RouterModule, Router } from '@angular/router';
 import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
 import { CrimeService } from '@app/services/crime.service'; // ✅ backend service
 
+declare const google: any;
 interface Alert {
   id: string;
   title: string;
@@ -60,27 +61,24 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
   alerts: Alert[] = [];
   loading = true;
 
-  // Leaflet variables
-  private L: any;
-  private miniMap: any;
-
-  async ngAfterViewInit() {
-    if (typeof window === 'undefined') return;
-    const leaflet = await import('leaflet');
-    this.L = leaflet;
+  ngAfterViewInit() {
     this.initMiniMap();
   }
 
-  initMiniMap() {
-    this.miniMap = this.L.map('mini-map', {
-      zoomControl: false,
-      attributionControl: false
-    }).setView([33.6844, 73.0479], 12);
+  miniMap: any;
 
-    this.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
-      minZoom: 3
-    }).addTo(this.miniMap);
+  initMiniMap() {
+
+    const islamabad = { lat: 33.6844, lng: 73.0479 };
+
+    this.miniMap = new google.maps.Map(
+      document.getElementById("mini-map") as HTMLElement,
+      {
+        center: islamabad,
+        zoom: 12,
+        disableDefaultUI: true
+      }
+    );
 
     const hotzones = [
       { lat: 33.7000, lng: 73.0500, radius: 400 },
@@ -96,13 +94,23 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
     ];
 
     hotzones.forEach(z => {
-      this.L.circle([z.lat, z.lng], {
-        color: 'red',
-        fillColor: '#f03',
-        fillOpacity: 0.3,
+
+      new google.maps.Circle({
+        strokeColor: "#ff0000",
+        strokeOpacity: 0.8,
+        strokeWeight: 1,
+        fillColor: "#ff0000",
+        fillOpacity: 0.35,
+        map: this.miniMap,
+        center: {
+          lat: z.lat,
+          lng: z.lng
+        },
         radius: z.radius
-      }).addTo(this.miniMap);
+      });
+
     });
+
   }
 
   fetchCrimes() {

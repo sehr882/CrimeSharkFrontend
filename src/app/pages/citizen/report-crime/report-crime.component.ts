@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
 import { CrimeService } from '@app/services/crime.service';
+
+declare var google: any;
 
 @Component({
   selector: 'app-report-crime',
@@ -12,12 +14,15 @@ import { CrimeService } from '@app/services/crime.service';
   templateUrl: './report-crime.component.html',
   styleUrls: ['./report-crime.component.scss']
 })
-export class ReportCrimeComponent implements OnInit {
+export class ReportCrimeComponent implements OnInit, AfterViewInit {
 
   constructor(
     private crimeService: CrimeService,
     private router: Router
   ) { }
+
+  @ViewChild('crimeLocationInput') crimeLocationInput!: ElementRef;
+
   isVictim: boolean = false;
   victimPhone: string = '';
 
@@ -27,11 +32,12 @@ export class ReportCrimeComponent implements OnInit {
   description = '';
   uploadedFile?: File | null = null;
 
+  latitude: number | null = null;
+  longitude: number | null = null;
+
   crimeDay: number | null = null;
   crimeMonth: number | null = null;
   crimeYear: number | null = null;
-
-  locationSuggestions: any[] = [];
 
   submitted = false;
   showSuccess = false;
@@ -74,6 +80,7 @@ export class ReportCrimeComponent implements OnInit {
   ngOnInit() {
     if (typeof window !== 'undefined') {
       this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
       if (!this.isLoggedIn) {
         alert('You must be logged in to report a crime');
         this.router.navigate(['/citizen/auth']);
@@ -84,7 +91,37 @@ export class ReportCrimeComponent implements OnInit {
     this.updateCrimeOptions();
   }
 
+  ngAfterViewInit() {
+    this.initializeAutocomplete();
+  }
+
+  initializeAutocomplete() {
+
+    if (!this.crimeLocationInput) return;
+
+    const autocomplete = new google.maps.places.Autocomplete(
+      this.crimeLocationInput.nativeElement,
+      {
+        types: ['geocode'],
+        componentRestrictions: { country: 'pk' } // restrict to Pakistan
+      }
+    );
+
+    autocomplete.addListener('place_changed', () => {
+
+      const place = autocomplete.getPlace();
+
+      if (!place.geometry) return;
+
+      this.crimeArea = place.formatted_address;
+
+      this.latitude = place.geometry.location.lat();
+      this.longitude = place.geometry.location.lng();
+    });
+  }
+
   updateCrimeOptions(): void {
+
     this.selectedCrime = '';
 
     if (this.crimeType === 'static') {
@@ -96,39 +133,13 @@ export class ReportCrimeComponent implements OnInit {
     }
   }
 
-  searchLocation() {
-    if (!this.crimeArea || this.crimeArea.length < 3) {
-      this.locationSuggestions = [];
-      return;
-    }
-
-    fetch(`http://localhost:3000/location/search?q=${this.crimeArea}`)
-      .then(res => res.json())
-      .then(data => {
-        this.locationSuggestions = data.slice(0, 5).map((place: any) => {
-          const parts = place.display_name.split(',');
-          return {
-            name: `${parts[0]}, ${parts[1] || ''}`.trim(),
-            fullName: place.display_name
-          };
-        });
-      })
-      .catch(() => {
-        this.locationSuggestions = [];
-      });
-  }
-
-  selectLocation(place: any) {
-    this.crimeArea = place.name;
-    this.locationSuggestions = [];
-  }
-
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     this.uploadedFile = input.files?.[0] || null;
   }
 
-  async submitReport() {
+  submitReport() {
+
     this.formErrors = {};
 
     if (!this.crimeType) {
@@ -143,91 +154,79 @@ export class ReportCrimeComponent implements OnInit {
       this.formErrors['crimeArea'] = 'Choose crime area.';
     }
 
+    if (!this.latitude || !this.longitude) {
+      this.formErrors['crimeArea'] = 'Please select a location from suggestions.';
+    }
+
     if (!this.crimeDay || !this.crimeMonth || !this.crimeYear) {
       this.formErrors['date'] = 'Please select date (day, month, year).';
-    } else {
-      if (this.crimeDay < 1 || this.crimeDay > 31) {
-        this.formErrors['date'] = 'Invalid day.';
-      } else if (this.crimeMonth < 1 || this.crimeMonth > 12) {
-        this.formErrors['date'] = 'Invalid month.';
-      } else if (this.crimeYear < 1900 || this.crimeYear > new Date().getFullYear()) {
-        this.formErrors['date'] = 'Invalid year.';
-      }
     }
 
     if (this.isVictim && !this.victimPhone) {
-      this.formErrors['victimPhone'] = 'Please provide your phone number so authorities can contact you.';
-    } else if (this.isVictim && !/^[0-9]{10,15}$/.test(this.victimPhone)) {
-      this.formErrors['victimPhone'] = 'Enter a valid phone number.';
+      this.formErrors['victimPhone'] =
+        'Please provide your phone number so authorities can contact you.';
     }
 
     if (Object.keys(this.formErrors).length > 0) {
       return;
     }
 
-    try {
-      const geoResponse = await fetch(
-        `http://localhost:3000/location/search?q=${encodeURIComponent(this.crimeArea)}`
-      );
+    const crimeData = {
 
-      const geoData: any[] = await geoResponse.json();
+      crimeType: this.crimeType,
+      crimeTitle: this.selectedCrime,
+      location: this.crimeArea,
+      description: this.description,
+      latitude: this.latitude,
+      longitude: this.longitude,
 
-      if (!geoData || geoData.length === 0) {
-        this.formErrors['crimeArea'] = 'Could not determine coordinates for this location.';
-        return;
-      }
-
-      const latitude = parseFloat(geoData[0].lat);
-      const longitude = parseFloat(geoData[0].lon);
-
-      const crimeData = {
-        crimeType: this.crimeType,
-        crimeTitle: this.selectedCrime,
-        location: this.crimeArea,
-        description: this.description,
-        latitude: latitude,
-        longitude: longitude,
-        dateOfCrime: `${this.crimeYear}-${this.crimeMonth!
+      dateOfCrime: `${this.crimeYear}-${this.crimeMonth!
+        .toString()
+        .padStart(2, '0')}-${this.crimeDay!
           .toString()
-          .padStart(2, '0')}-${this.crimeDay!
-            .toString()
-            .padStart(2, '0')}`,
-        isVictim: this.isVictim,
-        victimPhone: this.isVictim ? this.victimPhone : null
-      };
+          .padStart(2, '0')}`,
 
-      this.crimeService.reportCrime(crimeData, this.uploadedFile).subscribe({
-        next: (res: any) => {
-          alert(res?.message || 'Crime reported successfully!');
-          this.resetForm();
-          this.router.navigate(['/citizen']);
-        },
-        error: (err) => {
-          alert(err?.error?.message || 'Failed to report crime');
-          console.error(err);
-        }
-      });
+      isVictim: this.isVictim,
+      victimPhone: this.isVictim ? this.victimPhone : null
+    };
 
-    } catch (error) {
-      console.error(error);
-      this.formErrors['crimeArea'] = 'Failed to fetch location coordinates.';
-    }
+    this.crimeService.reportCrime(crimeData, this.uploadedFile).subscribe({
+
+      next: (res: any) => {
+        alert(res?.message || 'Crime reported successfully!');
+        this.resetForm();
+        this.router.navigate(['/citizen']);
+      },
+
+      error: (err) => {
+        alert(err?.error?.message || 'Failed to report crime');
+        console.error(err);
+      }
+    });
   }
 
   resetForm() {
+
     this.crimeType = '';
     this.selectedCrime = '';
     this.crimeOptions = [];
     this.crimeArea = '';
     this.description = '';
     this.uploadedFile = null;
+
+    this.latitude = null;
+    this.longitude = null;
+
     this.crimeDay = null;
     this.crimeMonth = null;
     this.crimeYear = null;
+
     this.submitted = false;
     this.showSuccess = false;
+
     this.isVictim = false;
     this.victimPhone = '';
+
     this.formErrors = {};
   }
 }
