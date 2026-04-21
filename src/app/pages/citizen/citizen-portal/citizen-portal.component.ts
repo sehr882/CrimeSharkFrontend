@@ -4,7 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
 import { CrimeService } from '@app/services/crime.service'; // ✅ backend service
+<<<<<<< HEAD
 import { AiService } from '@app/services/ai.service';
+=======
+>>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
 
 declare const google: any;
 interface Alert {
@@ -31,6 +34,7 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
   constructor(
     private router: Router,
     private crimeService: CrimeService,
+<<<<<<< HEAD
     private cdr: ChangeDetectorRef,
     private aiService: AiService
   ) { }
@@ -57,6 +61,12 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
         }
       });
   }
+=======
+    private cdr: ChangeDetectorRef
+  ) { }
+  visibleCount = 4;
+
+>>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
   goToLiveMap() {
     this.router.navigate(['/citizen/live-map']);
   }

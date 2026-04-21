@@ -7,7 +7,13 @@ import { provideRouter, withRouterConfig } from '@angular/router';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(
+<<<<<<< HEAD
       routes),
+=======
+      routes,
+
+    ),
+>>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
     provideAnimations(),
 
     provideHttpClient(withInterceptorsFromDi()),
