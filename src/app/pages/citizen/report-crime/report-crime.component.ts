@@ -39,13 +39,10 @@ export class ReportCrimeComponent implements OnInit, AfterViewInit {
   crimeMonth: number | null = null;
   crimeYear: number | null = null;
 
-<<<<<<< HEAD
   // ✅ NEW TIME FORMAT
   crimeTime: string = '';   // "HH:MM"
   crimePeriod: string = ''; // AM / PM
 
-=======
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
   submitted = false;
   showSuccess = false;
   isLoggedIn = false;
@@ -64,13 +61,9 @@ export class ReportCrimeComponent implements OnInit, AfterViewInit {
     { en: 'Counterfeiting', ur: 'جعلی سازی' },
     { en: 'Extortion', ur: 'بھتہ خوری' },
     { en: 'Harassment', ur: 'ہراساں کرنا' },
-<<<<<<< HEAD
     { en: 'Violence', ur: 'تشدد' },
     { en: 'Murder', ur: 'قتل' },
     { en: 'Kidnapping', ur: 'اغوا' }
-=======
-    { en: 'Violence', ur: 'تشدد' }
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
   ];
 
   movingCrimes = [
@@ -85,13 +78,9 @@ export class ReportCrimeComponent implements OnInit, AfterViewInit {
     { en: 'DUI (Driving Under Influence)', ur: 'نشے میں ڈرائیونگ' },
     { en: 'Robbery', ur: 'ڈکیتی' },
     { en: 'Street Harassment', ur: 'سڑک پر ہراساں کرنا' },
-<<<<<<< HEAD
     { en: 'Mobile Snatching', ur: 'موبائل چھیننا' },
     { en: 'Murder', ur: 'قتل' },
     { en: 'Kidnapping', ur: 'اغوا' }
-=======
-    { en: 'Mobile Snatching', ur: 'موبائل چھیننا' }
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
   ];
 
   crimeOptions: { en: string; ur: string }[] = [];
@@ -115,49 +104,27 @@ export class ReportCrimeComponent implements OnInit, AfterViewInit {
   }
 
   initializeAutocomplete() {
-<<<<<<< HEAD
-=======
-
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
     if (!this.crimeLocationInput) return;
 
     const autocomplete = new google.maps.places.Autocomplete(
       this.crimeLocationInput.nativeElement,
       {
         types: ['geocode'],
-<<<<<<< HEAD
         componentRestrictions: { country: 'pk' }
-=======
-        componentRestrictions: { country: 'pk' } // restrict to Pakistan
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
       }
     );
 
     autocomplete.addListener('place_changed', () => {
-<<<<<<< HEAD
       const place = autocomplete.getPlace();
       if (!place.geometry) return;
 
       this.crimeArea = place.formatted_address;
-=======
-
-      const place = autocomplete.getPlace();
-
-      if (!place.geometry) return;
-
-      this.crimeArea = place.formatted_address;
-
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
       this.latitude = place.geometry.location.lat();
       this.longitude = place.geometry.location.lng();
     });
   }
 
   updateCrimeOptions(): void {
-<<<<<<< HEAD
-=======
-
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
     this.selectedCrime = '';
 
     if (this.crimeType === 'static') {
@@ -168,7 +135,6 @@ export class ReportCrimeComponent implements OnInit, AfterViewInit {
       this.crimeOptions = [];
     }
   }
-<<<<<<< HEAD
   validateTime() {
     const regex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
 
@@ -180,8 +146,6 @@ export class ReportCrimeComponent implements OnInit, AfterViewInit {
       delete this.formErrors['time'];
     }
   }
-=======
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -192,7 +156,6 @@ export class ReportCrimeComponent implements OnInit, AfterViewInit {
 
     this.formErrors = {};
 
-<<<<<<< HEAD
     if (!this.crimeType) this.formErrors['crimeType'] = 'Choose crime type.';
     if (!this.selectedCrime) this.formErrors['selectedCrime'] = 'Choose a crime.';
     if (!this.crimeArea) this.formErrors['crimeArea'] = 'Choose crime area.';
@@ -206,26 +169,6 @@ export class ReportCrimeComponent implements OnInit, AfterViewInit {
       this.formErrors['time'] = 'Please enter time and select AM/PM.';
     } else if (!timeRegex.test(this.crimeTime)) {
       this.formErrors['time'] = 'Enter valid time in HH:MM format.';
-=======
-    if (!this.crimeType) {
-      this.formErrors['crimeType'] = 'Choose crime type.';
-    }
-
-    if (!this.selectedCrime) {
-      this.formErrors['selectedCrime'] = 'Choose a crime.';
-    }
-
-    if (!this.crimeArea) {
-      this.formErrors['crimeArea'] = 'Choose crime area.';
-    }
-
-    if (!this.latitude || !this.longitude) {
-      this.formErrors['crimeArea'] = 'Please select a location from suggestions.';
-    }
-
-    if (!this.crimeDay || !this.crimeMonth || !this.crimeYear) {
-      this.formErrors['date'] = 'Please select date (day, month, year).';
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
     }
 
     if (this.isVictim && !this.victimPhone) {
@@ -233,7 +176,6 @@ export class ReportCrimeComponent implements OnInit, AfterViewInit {
         'Please provide your phone number so authorities can contact you.';
     }
 
-<<<<<<< HEAD
     if (Object.keys(this.formErrors).length > 0) return;
 
     // ✅ CONVERT TO 24-HOUR FORMAT
@@ -247,14 +189,6 @@ export class ReportCrimeComponent implements OnInit, AfterViewInit {
       .padStart(2, '0')}`;
 
     const crimeData = {
-=======
-    if (Object.keys(this.formErrors).length > 0) {
-      return;
-    }
-
-    const crimeData = {
-
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
       crimeType: this.crimeType,
       crimeTitle: this.selectedCrime,
       location: this.crimeArea,
@@ -268,30 +202,19 @@ export class ReportCrimeComponent implements OnInit, AfterViewInit {
           .toString()
           .padStart(2, '0')}`,
 
-<<<<<<< HEAD
       // ✅ CLEAN 24H TIME
       timeOfCrime: formattedTime,
 
-=======
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
       isVictim: this.isVictim,
       victimPhone: this.isVictim ? this.victimPhone : null
     };
 
     this.crimeService.reportCrime(crimeData, this.uploadedFile).subscribe({
-<<<<<<< HEAD
-=======
-
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
       next: (res: any) => {
         alert(res?.message || 'Crime reported successfully!');
         this.resetForm();
         this.router.navigate(['/citizen']);
       },
-<<<<<<< HEAD
-=======
-
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
       error: (err) => {
         alert(err?.error?.message || 'Failed to report crime');
         console.error(err);
@@ -300,10 +223,6 @@ export class ReportCrimeComponent implements OnInit, AfterViewInit {
   }
 
   resetForm() {
-<<<<<<< HEAD
-=======
-
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
     this.crimeType = '';
     this.selectedCrime = '';
     this.crimeOptions = [];
@@ -318,12 +237,9 @@ export class ReportCrimeComponent implements OnInit, AfterViewInit {
     this.crimeMonth = null;
     this.crimeYear = null;
 
-<<<<<<< HEAD
     this.crimeTime = '';
     this.crimePeriod = '';
 
-=======
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
     this.submitted = false;
     this.showSuccess = false;
 

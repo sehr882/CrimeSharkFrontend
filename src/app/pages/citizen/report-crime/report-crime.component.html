@@ -12,10 +12,7 @@
 
     <div class="form-box">
 
-<<<<<<< HEAD
       <!-- CRIME TYPE -->
-=======
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
       <div class="form-field">
         <label class="field-label"
           title="Static crimes happen at fixed locations like homes or shops. Moving crimes involve vehicles or public movement.">
@@ -30,7 +27,6 @@
         <small class="field-error" *ngIf="formErrors['crimeType']">{{ formErrors['crimeType'] }}</small>
       </div>
 
-<<<<<<< HEAD
       <!-- CRIME -->
       <div class="form-field">
         <label class="field-label">Crime ⓘ</label>
@@ -38,18 +34,6 @@
         <select name="selectedCrime" [(ngModel)]="selectedCrime" [disabled]="crimeOptions.length === 0"
           class="field-input">
           <option *ngIf="crimeOptions.length === 0" value="" disabled>Select crime...</option>
-=======
-      <div class="form-field">
-        <label class="field-label" title="Select the crime that best describes the incident.">
-          Crime ⓘ
-        </label>
-
-        <select name="selectedCrime" [(ngModel)]="selectedCrime" [disabled]="crimeOptions.length === 0"
-          class="field-input">
-          <option *ngIf="crimeOptions.length === 0" value="" disabled>
-            Select crime...
-          </option>
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
 
           <option *ngFor="let crime of crimeOptions" [value]="crime.en">
             {{ crime.en }} ({{ crime.ur }})
@@ -59,23 +43,14 @@
         <small class="field-error" *ngIf="formErrors['selectedCrime']">{{ formErrors['selectedCrime'] }}</small>
       </div>
 
-<<<<<<< HEAD
       <!-- LOCATION -->
       <div class="form-field">
         <label class="field-label">Area of Crime</label>
-=======
-      <div class="form-field">
-        <label class="field-label">Area of Crime</label>
-
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
         <input #crimeLocationInput type="text" name="crimeArea" [(ngModel)]="crimeArea" class="field-input"
           placeholder="Search location..." autocomplete="off" />
       </div>
 
-<<<<<<< HEAD
       <!-- DATE -->
-=======
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
       <div class="form-field">
         <label class="field-label">Date of Crime</label>
 
@@ -88,7 +63,6 @@
 
           <input type="number" [(ngModel)]="crimeYear" placeholder="Year" class="field-input date-input" />
         </div>
-<<<<<<< HEAD
 
         <small class="field-error" *ngIf="formErrors['date']">
           {{ formErrors['date'] }}
@@ -121,11 +95,6 @@
 
 
       <!-- VICTIM -->
-=======
-        <small class="field-error" *ngIf="formErrors['date']">{{ formErrors['date'] }}</small>
-      </div>
-
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
       <div class="form-field victim-check">
         <label class="checkbox-label">
           <input type="checkbox" [(ngModel)]="isVictim" name="isVictim" />
@@ -137,28 +106,19 @@
         <label class="field-label">Victim Phone Number</label>
         <input type="text" [(ngModel)]="victimPhone" name="victimPhone" class="field-input"
           placeholder="Enter your phone number" />
-<<<<<<< HEAD
         <small class="field-error" *ngIf="formErrors['victimPhone']">
           {{ formErrors['victimPhone'] }}
         </small>
       </div>
 
       <!-- DESCRIPTION -->
-=======
-        <small class="field-error" *ngIf="formErrors['victimPhone']">{{ formErrors['victimPhone'] }}</small>
-      </div>
-
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
       <div class="form-field">
         <label class="field-label">Description</label>
         <textarea name="description" rows="4" [(ngModel)]="description" class="field-input textarea-input"
           placeholder="Describe what happened..."></textarea>
       </div>
 
-<<<<<<< HEAD
       <!-- FILE -->
-=======
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
       <div class="form-field">
         <label class="field-label">Evidence (optional)</label>
         <input type="file" (change)="onFileSelected($event)" class="file-input" />
@@ -167,19 +127,9 @@
       <button class="submit-btn" (click)="submitReport()">Submit Report</button>
 
     </div>
-<<<<<<< HEAD
-
-=======
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
     <div class="success-box" *ngIf="showSuccess">
       Report submitted successfully!
     </div>
 
-<<<<<<< HEAD
   </div>
-=======
-
-  </div>
-
->>>>>>> 8f8827280d621d8f87197b839db84389ba3b7c1e
 </div>
