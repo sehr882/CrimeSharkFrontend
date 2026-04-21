@@ -1,0 +1,21 @@
+<app-back-button></app-back-button>
+
+<div class="auth-page">
+  <div class="auth-card">
+
+    <div class="tabs">
+      <span class="tab" [class.active]="isLogin" (click)="toggleTab(true)">
+        Login
+      </span>
+      <span class="tab" [class.active]="!isLogin" (click)="toggleTab(false)">
+        Sign Up
+      </span>
+    </div>
+
+    <div class="tab-content">
+      <app-login *ngIf="isLogin" [redirectFrom]="redirectFrom"></app-login>
+      <app-signup *ngIf="!isLogin" [redirectFrom]="redirectFrom"></app-signup>
+    </div>
+
+  </div>
+</div>

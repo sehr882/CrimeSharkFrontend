@@ -1,0 +1,139 @@
+.case-page {
+    padding: 30px;
+    color: #ffffff;
+}
+
+.page-header h2 {
+    margin: 0;
+    margin-left: 30px;
+    font-size: 35px;
+    font-weight: 700;
+    color: #1e3a8a;
+    font-family: Inter, system-ui, sans-serif;
+}
+
+.page-header p {
+    opacity: 0.7;
+    margin-bottom: 25px;
+    margin-left: 30px;
+    color: black;
+    font-size: 18px;
+}
+
+.case-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.case-card {
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    transition: 0.3s ease;
+}
+
+.case-card:hover {
+    transform: translateY(-5px);
+}
+
+.case-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.status {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.pending {
+    background: #facc15;
+    color: #000;
+}
+
+.in-progress {
+    background: #3b82f6;
+    color: #fff;
+}
+
+.resolved {
+    background: #22c55e;
+    color: #fff;
+}
+
+.rejected {
+    background: #ef4444;
+    color: #fff;
+}
+
+.state-msg {
+    padding: 20px 30px;
+    color: #94a3b8;
+    font-size: 15px;
+}
+
+.error-msg {
+    margin: 10px 0;
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: #7f1d1d;
+    color: #fca5a5;
+    font-size: 14px;
+}
+
+.success-msg {
+    margin: 10px 0;
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: #14532d;
+    color: #86efac;
+    font-size: 14px;
+}
+
+.assigned-section {
+    margin-top: 15px;
+    padding: 10px;
+    background: #0f172a;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.officer-name {
+    font-weight: 600;
+    color: #38bdf8;
+    margin-left: 5px;
+}
+
+select {
+    width: 100%;
+    padding: 6px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
+}
+
+button {
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+.assigned-info {
+    margin-top: 8px;
+    font-size: 13px;
+}

@@ -1,0 +1,54 @@
+<div class="authority-page">
+  <div class="authority-card">
+
+    <div class="auth-header">
+      <h2>Authority Portal</h2>
+      <p class="warning">Authorized Personnel Only</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="login()">
+
+      <div class="form-group">
+        <label>CNIC</label>
+        <input type="text" formControlName="cnic" placeholder="Enter CNIC (e.g., 12345-6789012-3)">
+        <small class="field-error" *ngIf="form.get('cnic')?.touched && form.get('cnic')?.hasError('required')">
+          CNIC is required.
+        </small>
+        <small class="field-error" *ngIf="form.get('cnic')?.touched && form.get('cnic')?.hasError('pattern')">
+          CNIC must be in format 12345-6789012-3.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" formControlName="password" placeholder="Enter your password">
+        <small class="field-error" *ngIf="form.get('password')?.touched && form.get('password')?.hasError('required')">
+          Password is required.
+        </small>
+        <small class="field-error" *ngIf="form.get('password')?.touched && form.get('password')?.hasError('minlength')">
+          Password must be at least 6 characters.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label>Authority Access Code</label>
+        <input type="text" formControlName="accessCode" placeholder="Enter authority access code">
+        <small class="field-error" *ngIf="form.get('accessCode')?.touched && form.get('accessCode')?.hasError('required')">
+          Access code is required.
+        </small>
+      </div>
+
+      <p *ngIf="errorMessage" class="field-error">{{ errorMessage }}</p>
+
+      <button type="submit" class="btn-login">
+        Login
+      </button>
+
+    </form>
+
+    <p class="danger-text">
+      🛑 Unauthorized access is strictly prohibited.
+    </p>
+
+  </div>
+</div>

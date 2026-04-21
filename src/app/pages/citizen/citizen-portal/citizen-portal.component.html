@@ -1,0 +1,117 @@
+<app-back-button></app-back-button>
+
+<div class="portal-wrap">
+
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1>CrimeShark Safety Grid</h1>
+      <p>Real-time crime reports and community awareness</p>
+    </div>
+
+    <div class="hero-search">
+      <input [(ngModel)]="search" placeholder="Search crimes..." (keyup.enter)="onSearch()" />
+
+      <button (click)="onSearch()">
+        <span class="material-icons-outlined">search</span>
+      </button>
+    </div>
+  </section>
+
+
+  <section class="categories">
+    <div class="category-pill" *ngFor="let c of categories" [class.active]="selectedCategory === c"
+      (click)="setCategory(c)">
+      {{ c }}
+    </div>
+  </section>
+
+
+  <main class="main-grid">
+
+
+    <aside class="left-col">
+      <div class="ai-box">
+
+        <h3>🤖 Check Area Safety</h3>
+
+        <input [(ngModel)]="aiLocation" placeholder="Enter location (e.g. Rawalpindi)" />
+
+        <button (click)="checkSafety()">Check</button>
+
+        <div class="ai-result" *ngIf="aiResult">
+          <p><strong>Risk:</strong> {{ aiResult.risk }}</p>
+          <p><strong>Confidence:</strong> {{ aiResult.confidence }}</p>
+          <p>{{ aiResult.analysis }}</p>
+        </div>
+
+      </div>
+      <div class="map-card">
+        <div class="map-header">
+          <span>Crime Hotzones</span>
+
+
+          <button class="view-map-btn" (click)="goToLiveMap()">
+            View Full Map
+          </button>
+        </div>
+
+        <div id="mini-map" class="mini-map"></div>
+      </div>
+    </aside>
+
+    <!-- RIGHT SIDE -->
+    <section class="right-col">
+
+      <div class="feed-title">Live Alerts</div>
+
+      <article class="alert-card" *ngFor="let a of filteredAlerts()" [ngClass]="a.type">
+
+
+        <div class="alert-icon" [ngClass]="a.type">
+
+
+          <span *ngIf="a.type?.toLowerCase() === 'moving'" class="material-icons-outlined">
+            warning
+          </span>
+
+
+          <span *ngIf="a.type === 'static'" class="material-icons-outlined">
+            report
+          </span>
+
+
+          <span *ngIf="a.type === 'theft'" class="material-icons-outlined">
+            security
+          </span>
+
+
+          <span *ngIf="!a.type" class="material-icons-outlined">
+            warning
+          </span>
+
+        </div>
+
+        <div class="alert-content">
+          <div class="alert-header">
+            <h4>{{ a.title }}</h4>
+          </div>
+
+          <div class="alert-sub">{{ a.subtitle }}</div>
+
+          <div class="alert-meta">
+            <span class="material-icons-outlined">location_on</span>
+            {{ a.location }}
+          </div>
+        </div>
+
+      </article>
+
+      <div class="show-more" *ngIf="visibleCount < alerts.length">
+        <button (click)="showMore()">Show More</button>
+      </div>
+
+    </section>
+
+  </main>
+</div>

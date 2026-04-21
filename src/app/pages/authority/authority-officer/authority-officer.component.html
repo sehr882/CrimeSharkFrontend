@@ -1,0 +1,73 @@
+<app-back-button></app-back-button>
+
+<div class="officer-container">
+
+  <div *ngIf="role === 'ADMIN'">
+
+    <div class="header-row">
+      <h2 class="page-title">Officer Management</h2>
+
+      <button type="button" class="add-btn" routerLink="/authority/add-officer">
+        + Add Officer
+      </button>
+    </div>
+
+    <div *ngIf="officers.length === 0" class="empty-state">
+      <p>No officers added yet.</p>
+    </div>
+
+    <div class="officer-grid" *ngIf="officers.length > 0">
+
+      <div class="officer-card" *ngFor="let officer of officers">
+
+        <h3>{{ officer.name }}</h3>
+
+        <p><strong>Rank:</strong> {{ officer.rank }}</p>
+        <p><strong>Station:</strong> {{ officer.station }}</p>
+
+        <p>
+          <strong>Status:</strong>
+          <span [ngClass]="{
+              'active': officer.status === 'Active',
+              'suspended': officer.status === 'Suspended'
+            }">
+            {{ officer.status }}
+          </span>
+        </p>
+
+        <div class="actions">
+          <button (click)="editOfficer(officer)">Edit</button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div *ngIf="role !== 'ADMIN'">
+
+    <h2 class="page-title">My Profile</h2>
+
+    <div *ngIf="profileLoading" class="state-msg">Loading profile...</div>
+    <div *ngIf="profileError" class="error-msg">{{ profileError }}</div>
+
+    <div class="profile-card" *ngIf="officerProfile && !profileLoading">
+      <h3>{{ officerProfile.name }}</h3>
+      <p><strong>Rank:</strong> {{ officerProfile.rank }}</p>
+      <p><strong>Station:</strong> {{ officerProfile.station }}</p>
+      <p>
+        <strong>Status:</strong>
+        <span [ngClass]="{
+            'active': officerProfile.status === 'Active',
+            'suspended': officerProfile.status === 'Suspended'
+          }">
+          {{ officerProfile.status }}
+        </span>
+      </p>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,136 @@
+<app-back-button></app-back-button>
+<div class="report-page">
+
+  <div class="form-container">
+
+    <h2 class="page-title">Report a Crime</h2>
+    <div class="warning-box">
+      ⚠️ Please ensure that all information provided is accurate and truthful.
+      Submitting false reports, misleading information, or prank complaints
+      may result in strict legal action.
+    </div>
+
+    <div class="form-box">
+
+      <!-- CRIME TYPE -->
+      <div class="form-field">
+        <label class="field-label"
+          title="Static crimes happen at fixed locations like homes or shops. Moving crimes involve vehicles or public movement.">
+          Crime Type ⓘ
+        </label>
+
+        <select name="crimeType" [(ngModel)]="crimeType" (ngModelChange)="updateCrimeOptions()" class="field-input">
+          <option value="" disabled [selected]="!crimeType">-- Choose type --</option>
+          <option value="static">Static (جرائمِ ساکن)</option>
+          <option value="moving">Moving (جرائمِ متحرک)</option>
+        </select>
+        <small class="field-error" *ngIf="formErrors['crimeType']">{{ formErrors['crimeType'] }}</small>
+      </div>
+
+      <!-- CRIME -->
+      <div class="form-field">
+        <label class="field-label">Crime ⓘ</label>
+
+        <select name="selectedCrime" [(ngModel)]="selectedCrime" [disabled]="crimeOptions.length === 0"
+          class="field-input">
+          <option *ngIf="crimeOptions.length === 0" value="" disabled>Select crime...</option>
+
+          <option *ngFor="let crime of crimeOptions" [value]="crime.en">
+            {{ crime.en }} ({{ crime.ur }})
+          </option>
+          <option value="Other">Other</option>
+        </select>
+        <small class="field-error" *ngIf="formErrors['selectedCrime']">{{ formErrors['selectedCrime'] }}</small>
+      </div>
+
+      <!-- LOCATION -->
+      <div class="form-field">
+        <label class="field-label">Area of Crime</label>
+        <input #crimeLocationInput type="text" name="crimeArea" [(ngModel)]="crimeArea" class="field-input"
+          placeholder="Search location..." autocomplete="off" />
+      </div>
+
+      <!-- DATE -->
+      <div class="form-field">
+        <label class="field-label">Date of Crime</label>
+
+        <div class="date-row">
+          <input type="number" min="1" max="31" [(ngModel)]="crimeDay" placeholder="Day"
+            class="field-input date-input" />
+
+          <input type="number" min="1" max="12" [(ngModel)]="crimeMonth" placeholder="Month"
+            class="field-input date-input" />
+
+          <input type="number" [(ngModel)]="crimeYear" placeholder="Year" class="field-input date-input" />
+        </div>
+
+        <small class="field-error" *ngIf="formErrors['date']">
+          {{ formErrors['date'] }}
+        </small>
+      </div>
+
+      <!-- ✅ TIME OF CRIME -->
+      <div class="form-field">
+        <label class="field-label">Time of Crime</label>
+
+        <div class="time-row">
+
+          <!-- HH:MM INPUT -->
+          <input type="text" [(ngModel)]="crimeTime" (input)="validateTime()" placeholder="HH:MM" maxlength="5"
+            class="field-input time-input" />
+
+          <!-- AM PM DROPDOWN -->
+          <select [(ngModel)]="crimePeriod" class="field-input period-input">
+            <option value="" disabled selected>AM/PM</option>
+            <option value="AM">AM</option>
+            <option value="PM">PM</option>
+          </select>
+
+        </div>
+
+        <small class="field-error" *ngIf="formErrors['time']">
+          {{ formErrors['time'] }}
+        </small>
+      </div>
+
+
+      <!-- VICTIM -->
+      <div class="form-field victim-check">
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="isVictim" name="isVictim" />
+          I am the victim reporting this crime
+        </label>
+      </div>
+
+      <div class="form-field" *ngIf="isVictim">
+        <label class="field-label">Victim Phone Number</label>
+        <input type="text" [(ngModel)]="victimPhone" name="victimPhone" class="field-input"
+          placeholder="Enter your phone number" />
+        <small class="field-error" *ngIf="formErrors['victimPhone']">
+          {{ formErrors['victimPhone'] }}
+        </small>
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="form-field">
+        <label class="field-label">Description</label>
+        <textarea name="description" rows="4" [(ngModel)]="description" class="field-input textarea-input"
+          placeholder="Describe what happened..."></textarea>
+      </div>
+
+      <!-- FILE -->
+      <div class="form-field">
+        <label class="field-label">Evidence (optional)</label>
+        <input type="file" (change)="onFileSelected($event)" class="file-input" />
+      </div>
+
+      <button class="submit-btn" (click)="submitReport()">Submit Report</button>
+
+    </div>
+
+    <div class="success-box" *ngIf="showSuccess">
+      Report submitted successfully!
+    </div>
+
+  </div>
+</div>

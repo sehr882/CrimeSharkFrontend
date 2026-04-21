@@ -1,0 +1,119 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.navbar {
+  height: 95%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 20px 16px;
+
+  background: linear-gradient(180deg,
+      #0b1220 0%,
+      #101e36 50%,
+      #0b1220 100%);
+  color: #e5e7eb;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  margin-left: 12px;
+}
+
+.logo-img {
+  width: 44px;
+  height: 44px;
+}
+
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    color: #cbd5e1;
+    font-size: 18px;
+    text-decoration: none;
+    transition: background 0.2s;
+
+    span {
+      font-size: 20px;
+    }
+
+    &.active,
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+  }
+}
+
+
+.auth {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+
+.login-btn {
+  margin-left: 25px;
+  text-align: center;
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+
+.report-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  background: #e84545;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 20px;
+  cursor: pointer;
+
+  span {
+    font-size: 20px;
+  }
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-name {
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 500;
+  font-size: 18px;
+}

@@ -1,0 +1,50 @@
+<app-back-button></app-back-button>
+
+<div class="reports-container">
+
+    <h2 class="header">My Reports</h2>
+    <p class="subtitle">Track and manage your submitted crime reports.</p>
+
+    <!-- Loading state -->
+    <div *ngIf="loading">
+        <p>Loading reports...</p>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="!loading && reports.length === 0" class="empty-state">
+        <p>No reports found.</p>
+        <button routerLink="/citizen/report">Report a Crime</button>
+    </div>
+
+    <!-- Reports -->
+    <div class="cards" *ngIf="!loading && reports.length > 0">
+        <div class="report-card" *ngFor="let report of reports">
+
+            <div class="card-header">
+                <!--  changed crimeType → crimeTitle -->
+                <h3>{{ report.crimeTitle }}</h3>
+
+                <span class="status" [ngClass]="report.status?.toLowerCase()">
+                    {{ report.status }}
+                </span>
+            </div>
+
+            <p class="location">
+                <span class="material-icons-outlined">location_on</span>
+                {{ report.location }}
+            </p>
+
+            <p class="date">
+                <span class="material-icons-outlined">date_range</span>
+                <!--  changed createdAt → dateOfCrime -->
+                {{ report.dateOfCrime | date:'mediumDate' }}
+            </p>
+
+            <p class="description">
+                {{ report.description }}
+            </p>
+
+        </div>
+    </div>
+
+</div>

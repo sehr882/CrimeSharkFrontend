@@ -1,0 +1,94 @@
+<app-back-button></app-back-button>
+
+<div class="report-details" *ngIf="report">
+
+  <div class="header">
+    <h2>Report Details</h2>
+    <span class="badge" [class]="report.status?.toLowerCase()">
+      {{ report.status }}
+    </span>
+  </div>
+
+  <!-- Incident Information -->
+  <section class="card">
+    <h3>Incident Information</h3>
+
+    <div class="row">
+      <label>Report ID</label>
+      <span>{{ report._id }}</span>
+    </div>
+
+    <div class="row">
+      <label>Crime Type</label>
+      <span>{{ report.crimeType }}</span>
+    </div>
+
+    <div class="row">
+      <label>Crime Title</label>
+      <span>{{ report.crimeTitle }}</span>
+    </div>
+
+    <div class="row">
+      <label>Location</label>
+      <span>{{ report.location }}</span>
+    </div>
+
+    <div class="row">
+      <label>Date & Time</label>
+      <span>{{ report.dateOfCrime | date:'dd MMM yyyy — hh:mm a' }}</span>
+    </div>
+  </section>
+
+  <!-- Reported By -->
+  <section class="card">
+    <h3>Reported By</h3>
+
+    <div class="row">
+      <label>User ID</label>
+      <span>{{ report.reportedBy || 'Anonymous' }}</span>
+    </div>
+
+   <div class="row" *ngIf="report.victimPhone">
+      <label>Victim Phone</label>
+      <span>{{ report.victimPhone || 'Not Provided' }}</span>
+    </div>
+
+  </section>
+
+  <!-- Description -->
+  <section class="card">
+    <h3>Description</h3>
+    <p>{{ report.description }}</p>
+  </section>
+
+  <!-- Authority Action -->
+  <section class="card">
+    <h3>Update Status</h3>
+
+    <div class="status-update-row">
+      <select [(ngModel)]="selectedStatus" [disabled]="updating">
+        <option value="PENDING">Pending</option>
+        <option value="IN_PROGRESS">In Progress</option>
+        <option value="RESOLVED">Resolved</option>
+        <option value="REJECTED">Rejected</option>
+      </select>
+
+      <button class="save" (click)="updateStatus()" [disabled]="updating">
+        {{ updating ? 'Updating...' : 'Update Status' }}
+      </button>
+    </div>
+
+    <p class="success-msg" *ngIf="updateSuccess">
+      Status updated successfully.
+    </p>
+
+    <p class="error-msg" *ngIf="updateError">
+      {{ updateError }}
+    </p>
+  </section>
+
+</div>
+
+<div *ngIf="!report" style="padding:20px;">
+  Loading report...
+</div>

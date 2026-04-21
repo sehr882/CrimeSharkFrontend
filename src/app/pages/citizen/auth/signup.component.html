@@ -1,0 +1,32 @@
+<p class="info-text">
+  This portal is anonymous — no phone or email required.<br>
+  Please remember your password, as it cannot be recovered.
+</p>
+
+<form [formGroup]="form" (ngSubmit)="signup()">
+
+  <div class="form-group">
+    <label for="username">Username</label>
+    <input id="username" type="text" formControlName="username" placeholder="Enter your username" autocomplete="off" />
+    <small class="field-error" *ngIf="f['username'].touched && f['username'].errors?.['required']">Username is required</small>
+    <small class="field-error" *ngIf="f['username'].touched && f['username'].errors?.['minlength']">At least 3 characters required</small>
+    <small class="field-error" *ngIf="f['username'].touched && f['username'].errors?.['pattern']">Only letters, numbers, and underscores allowed</small>
+  </div>
+
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input id="password" type="password" formControlName="password" placeholder="Enter your password" />
+    <small class="field-error" *ngIf="f['password'].touched && f['password'].errors?.['required']">Password is required</small>
+    <small class="field-error" *ngIf="f['password'].touched && f['password'].errors?.['minlength']">Minimum 6 characters required</small>
+  </div>
+
+  <div class="form-group">
+    <label for="confirmPassword">Confirm Password</label>
+    <input id="confirmPassword" type="password" formControlName="confirmPassword" placeholder="Confirm your password" />
+    <small class="field-error" *ngIf="f['confirmPassword'].touched && f['confirmPassword'].errors?.['required']">Please confirm your password</small>
+    <small class="field-error" *ngIf="f['confirmPassword'].touched && !f['confirmPassword'].errors?.['required'] && form.errors?.['passwordMismatch']">Passwords do not match</small>
+  </div>
+
+  <button type="submit" class="btn-signup">Sign Up</button>
+
+</form>

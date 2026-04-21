@@ -1,0 +1,66 @@
+<app-back-button></app-back-button>
+<main class="content">
+
+  <div class="welcome-banner">
+    <div class="welcome-left">
+      <img src="assets/cs-officer.png" alt="Officer" class="officer-img" />
+    </div>
+
+    <div class="welcome-right">
+      <h1>Welcome, Officer</h1>
+      <p>CrimeShark Authority Control Panel</p>
+      <span class="tagline">Stay alert. Serve with integrity.</span>
+    </div>
+  </div>
+
+
+  <div class="stats-grid">
+
+    <div class="stat-card total">
+      <h3>Total Reports</h3>
+      <p class="value">{{ totalReports }}</p>
+    </div>
+
+    <div class="stat-card pending">
+      <h3>Pending Cases</h3>
+      <p class="value">{{ pendingReports }}</p>
+    </div>
+
+    <div class="stat-card resolved">
+      <h3>Resolved Cases</h3>
+      <p class="value">{{ resolvedReports }}</p>
+    </div>
+
+  </div>
+
+
+  <div class="table-container">
+    <h2>Recently Reported Crimes</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Type</th>
+          <th>Location</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let report of recentReports">
+          <td>{{ report.id }}</td>
+          <td>{{ report.type }}</td>
+          <td>{{ report.location }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="getStatusClass(report.status)">
+              {{ report.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+  </div>
+
+</main>

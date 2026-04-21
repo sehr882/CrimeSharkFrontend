@@ -1,0 +1,99 @@
+<app-back-button></app-back-button>
+
+<div class="form-container">
+    <div class="form-card">
+
+        <h2>{{ isEditMode ? 'Update Officer' : 'Add Officer' }}</h2>
+
+        <div *ngIf="message" [ngClass]="messageType === 'success' ? 'success-msg' : 'error-msg'">
+            {{ message }}
+        </div>
+
+        <form [formGroup]="officerForm" (ngSubmit)="onSubmit()">
+
+            <div class="form-grid">
+
+                <div>
+                    <label>CNIC</label>
+                    <input type="text" formControlName="cnic" placeholder="12345-6789023-5">
+                    <small class="field-error" *ngIf="officerForm.get('cnic')?.touched && officerForm.get('cnic')?.hasError('required')">CNIC is required.</small>
+                    <small class="field-error" *ngIf="officerForm.get('cnic')?.touched && officerForm.get('cnic')?.hasError('pattern')">CNIC must be in format 12345-6789012-3.</small>
+                </div>
+
+                <div>
+                    <label>Name</label>
+                    <input type="text" formControlName="name">
+                    <small class="field-error" *ngIf="officerForm.get('name')?.touched && officerForm.get('name')?.hasError('required')">Name is required.</small>
+                    <small class="field-error" *ngIf="officerForm.get('name')?.touched && officerForm.get('name')?.hasError('pattern')">Name must contain letters only.</small>
+                </div>
+
+                <div>
+                    <label>Email</label>
+                    <input type="email" formControlName="email">
+                    <small class="field-error" *ngIf="officerForm.get('email')?.touched && officerForm.get('email')?.hasError('email')">Enter a valid email address.</small>
+                </div>
+
+                <div>
+                    <label>Phone</label>
+                    <input type="text" formControlName="phone" placeholder="03XXXXXXXXX">
+                    <small class="field-error" *ngIf="officerForm.get('phone')?.touched && officerForm.get('phone')?.hasError('pattern')">Phone must start with 03 and be 11 digits.</small>
+                </div>
+
+                <div>
+                    <label>Rank</label>
+                    <select formControlName="rank">
+                        <option value="">Select Rank</option>
+                        <option *ngFor="let rank of ranks" [value]="rank">{{rank}}</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Station</label>
+                    <select formControlName="station">
+                        <option value="">Select Station</option>
+                        <option *ngFor="let station of stations" [value]="station">{{station}}</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Role</label>
+                    <select formControlName="role">
+                        <option value="">Select Role</option>
+                        <option *ngFor="let role of roles" [value]="role">{{role}}</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Password</label>
+                    <input type="password" formControlName="password">
+                    <small *ngIf="isEditMode" style="color:gray;">Leave blank to keep unchanged</small>
+                    <small class="field-error" *ngIf="officerForm.get('password')?.touched && officerForm.get('password')?.hasError('required')">Password is required.</small>
+                    <small class="field-error" *ngIf="officerForm.get('password')?.touched && officerForm.get('password')?.hasError('minlength')">Password must be at least 6 characters.</small>
+                </div>
+
+                <div>
+                    <label>Access Code</label>
+                    <input type="text" formControlName="accessCode">
+                    <small *ngIf="isEditMode" style="color:gray;">Leave blank to keep unchanged</small>
+                </div>
+
+                <div>
+                    <label>Status</label>
+                    <select formControlName="status">
+                        <option value="">Select Status</option>
+                        <option *ngFor="let status of statuses" [value]="status">{{status}}</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Created By</label>
+                    <input type="text" formControlName="createdBy" readonly>
+                </div>
+
+            </div>
+
+            <button type="submit" class="submit-btn">{{ isEditMode ? 'Update Officer' : 'Add Officer' }}</button>
+
+        </form>
+    </div>
+</div>

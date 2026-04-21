@@ -1,0 +1,53 @@
+.map-wrapper {
+  position: relative;
+  height: 90vh;
+  width: 95%;
+}
+
+.map-container {
+  width: 95%;
+  max-width: 1300px;
+  height: 680px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  padding: 15px;
+  display: flex;
+  margin-left: 60px;
+}
+
+.map-search {
+  position: absolute;
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  gap: 10px;
+  background: rgba(10, 15, 25, 0.95);
+  padding: 14px 18px;
+  border-radius: 14px;
+  width: 450px;
+}
+
+.map-search input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+}
+
+.map-search button {
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #e11d48;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+  border-radius: 12px;
+}
