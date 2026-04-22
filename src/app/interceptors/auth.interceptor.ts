@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import {
   HttpInterceptor,
   HttpRequest,
@@ -7,29 +7,27 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
-import { Inject, PLATFORM_ID } from '@angular/core';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (!isPlatformBrowser(this.platformId)) {
       return next.handle(req);
     }
 
-    const token = localStorage.getItem('token');
+    // Authority token takes priority; fall back to citizen token
+    const token =
+      localStorage.getItem('authority_token') ??
+      localStorage.getItem('token');
 
     if (token) {
-      const cloned = req.clone({
+      const authReq = req.clone({
         headers: req.headers.set('Authorization', `Bearer ${token}`)
       });
-      return next.handle(cloned);
+      return next.handle(authReq);
     }
 
     return next.handle(req);

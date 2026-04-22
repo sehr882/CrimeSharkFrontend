@@ -39,12 +39,15 @@ export class LoginComponent implements OnInit {
       return;
     }
 
+    // Capture synchronously — form may reset before the async callback fires
+    const username = this.f['username'].value as string;
+
     this.authService.login(this.form.value).subscribe({
       next: (res: any) => {
         if (typeof window !== 'undefined') {
           localStorage.setItem('token', res.token);
           localStorage.setItem('user', JSON.stringify({
-            username: this.f['username'].value,
+            username,
             loginTime: new Date().toISOString()
           }));
           localStorage.setItem('isLoggedIn', 'true');
