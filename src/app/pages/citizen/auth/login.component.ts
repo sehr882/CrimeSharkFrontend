@@ -46,6 +46,7 @@ export class LoginComponent implements OnInit {
       next: (res: any) => {
         if (typeof window !== 'undefined') {
           localStorage.setItem('token', res.token);
+          localStorage.removeItem('authority_token'); // prevent stale authority token from shadowing citizen token
           localStorage.setItem('user', JSON.stringify({
             username,
             loginTime: new Date().toISOString()

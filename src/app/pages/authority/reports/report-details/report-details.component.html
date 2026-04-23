@@ -61,6 +61,34 @@
     <p>{{ report.description }}</p>
   </section>
 
+  <!-- Evidence -->
+  <section class="card" *ngIf="report.evidence">
+    <h3>Evidence File</h3>
+
+    <div class="row">
+      <label>File Name</label>
+      <span>{{ report.evidenceOriginalName || report.evidence }}</span>
+    </div>
+
+    <div class="row" *ngIf="report.evidenceSize">
+      <label>Size</label>
+      <span>{{ (report.evidenceSize / 1024).toFixed(1) }} KB</span>
+    </div>
+
+    <div style="margin-top:12px;" *ngIf="evidenceUrl">
+      <!-- Inline image preview -->
+      <img *ngIf="evidenceIsImage"
+           [src]="evidenceUrl"
+           alt="Evidence"
+           style="max-width:100%;max-height:400px;border-radius:6px;display:block;margin-bottom:8px;" />
+
+      <!-- PDF or unknown: download link only -->
+      <a [href]="evidenceUrl" target="_blank" rel="noopener" download>
+        {{ evidenceIsPdf ? 'Open PDF' : 'Download Evidence' }}
+      </a>
+    </div>
+  </section>
+
   <!-- Authority Action -->
   <section class="card">
     <h3>Update Status</h3>

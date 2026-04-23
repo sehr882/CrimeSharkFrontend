@@ -91,49 +91,32 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
   miniMap: any;
 
   initMiniMap() {
-
     const islamabad = { lat: 33.6844, lng: 73.0479 };
 
     this.miniMap = new google.maps.Map(
-      document.getElementById("mini-map") as HTMLElement,
-      {
-        center: islamabad,
-        zoom: 12,
-        disableDefaultUI: true
-      }
+      document.getElementById('mini-map') as HTMLElement,
+      { center: islamabad, zoom: 12, disableDefaultUI: true }
     );
 
-    const hotzones = [
-      { lat: 33.7000, lng: 73.0500, radius: 400 },
-      { lat: 33.6900, lng: 73.0400, radius: 300 },
-      { lat: 33.7100, lng: 73.0600, radius: 350 },
-      { lat: 33.6700, lng: 73.0400, radius: 300 },
-      { lat: 33.6500, lng: 73.0800, radius: 320 },
-      { lat: 33.7200, lng: 73.0300, radius: 280 },
-      { lat: 33.6900, lng: 73.0700, radius: 320 },
-      { lat: 33.6800, lng: 73.0200, radius: 350 },
-      { lat: 33.7050, lng: 73.0900, radius: 380 },
-      { lat: 33.6600, lng: 73.0250, radius: 450 }
-    ];
-
-    hotzones.forEach(z => {
-
-      new google.maps.Circle({
-        strokeColor: "#ff0000",
-        strokeOpacity: 0.8,
-        strokeWeight: 1,
-        fillColor: "#ff0000",
-        fillOpacity: 0.35,
-        map: this.miniMap,
-        center: {
-          lat: z.lat,
-          lng: z.lng
-        },
-        radius: z.radius
-      });
-
+    // Fetch real crime hotspots from MongoDB instead of hardcoded circles
+    this.crimeService.getHotspots().subscribe({
+      next: (points) => {
+        points.forEach((point) => {
+          if (!point.latitude || !point.longitude) return;
+          new google.maps.Circle({
+            strokeColor: '#ff0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 1,
+            fillColor: '#ff0000',
+            fillOpacity: 0.35,
+            map: this.miniMap,
+            center: { lat: point.latitude, lng: point.longitude },
+            radius: 500,
+          });
+        });
+      },
+      error: () => { /* unauthenticated users see empty map — acceptable */ },
     });
-
   }
 
   fetchCrimes() {

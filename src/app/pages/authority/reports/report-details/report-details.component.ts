@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CrimeService } from 'src/app/services/crime.service';
 import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-report-details',
@@ -16,6 +17,19 @@ export class ReportDetailsComponent implements OnInit {
 
   report: any;
   selectedStatus = '';
+
+  get evidenceUrl(): string | null {
+    if (!this.report?.evidence) return null;
+    return `${environment.apiUrl}/uploads/${this.report.evidence}`;
+  }
+
+  get evidenceIsImage(): boolean {
+    return (this.report?.evidenceMimeType ?? '').startsWith('image/');
+  }
+
+  get evidenceIsPdf(): boolean {
+    return this.report?.evidenceMimeType === 'application/pdf';
+  }
 
   updating = false;
   updateSuccess = false;

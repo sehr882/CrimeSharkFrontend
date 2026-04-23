@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthorityAuthService {
 
-  private apiUrl = 'http://localhost:3000/authority';
+  private apiUrl = `${environment.apiUrl}/authority`;
 
   constructor(private http: HttpClient) {}
 
@@ -15,7 +16,9 @@ export class AuthorityAuthService {
     return this.http.post<any>(`${this.apiUrl}/login`, data).pipe(
       tap((response: any) => {
         localStorage.setItem('authority_token', response.access_token);
-        localStorage.setItem('authority_user', JSON.stringify(response.authority));
+        // authority login returns .authority; officer login returns .officer
+        const user = response.authority ?? response.officer ?? {};
+        localStorage.setItem('authority_user', JSON.stringify(user));
       })
     );
   }

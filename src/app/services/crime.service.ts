@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable, ReplaySubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class CrimeService {
 
-  private baseUrl = 'http://localhost:3000/crime';
+  private baseUrl = `${environment.apiUrl}/crime`;
 
   statusUpdated$ = new ReplaySubject<string>(1);
 
