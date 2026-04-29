@@ -25,7 +25,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'safety-tips',
+        path: 'smart-help',
         loadComponent: () =>
           import('./pages/citizen/safety-tips/safety-tips.component')
             .then(m => m.SafetyTipsComponent)

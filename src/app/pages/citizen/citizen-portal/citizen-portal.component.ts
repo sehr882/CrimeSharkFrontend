@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
-import { CrimeService } from '@app/services/crime.service'; // ✅ backend service
-import { AiService } from '@app/services/ai.service';
+import { CrimeService } from '@app/services/crime.service';
 
 declare const google: any;
+
 interface Alert {
   id: string;
   title: string;
@@ -32,73 +32,45 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
     private router: Router,
     private crimeService: CrimeService,
     private cdr: ChangeDetectorRef,
-    private aiService: AiService
-  ) { }
-  visibleCount = 4;
+  ) {}
 
-  aiLocation = '';
-  aiResult: any = null;
-
-  checkSafety() {
-
-    if (!this.aiLocation.trim()) {
-      alert('Enter location');
-      return;
-    }
-
-    this.aiService.checkSafety(this.aiLocation)
-      .subscribe({
-        next: (res) => {
-          this.aiResult = res;
-        },
-        error: (err) => {
-          console.error(err);
-          alert('AI service not working');
-        }
-      });
-  }
-  goToLiveMap() {
+  // ── Navigation ──────────────────────────────────────────────────────────────
+  goToLiveMap(): void {
     this.router.navigate(['/citizen/live-map']);
   }
 
-  ngOnInit() {
-    this.fetchCrimes();
-  }
-
-  goToReport() {
+  goToReport(): void {
     if (typeof window !== 'undefined') {
       const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-      if (isLoggedIn) {
-        this.router.navigate(['/citizen/report']);
-      } else {
-        this.router.navigate(['/citizen/auth']);
-      }
+      this.router.navigate([isLoggedIn ? '/citizen/report' : '/citizen/auth']);
     }
   }
 
+  // ── Crime feed ──────────────────────────────────────────────────────────────
+  visibleCount = 4;
   search = '';
   selectedCategory = '';
-
   categories = ['Moving', 'Static'];
-
   alerts: Alert[] = [];
   loading = true;
 
-  ngAfterViewInit() {
+  ngOnInit(): void {
+    this.fetchCrimes();
+  }
+
+  ngAfterViewInit(): void {
     this.initMiniMap();
   }
 
   miniMap: any;
 
-  initMiniMap() {
+  initMiniMap(): void {
     const islamabad = { lat: 33.6844, lng: 73.0479 };
-
     this.miniMap = new google.maps.Map(
       document.getElementById('mini-map') as HTMLElement,
       { center: islamabad, zoom: 12, disableDefaultUI: true }
     );
 
-    // Fetch real crime hotspots from MongoDB instead of hardcoded circles
     this.crimeService.getHotspots().subscribe({
       next: (points) => {
         points.forEach((point) => {
@@ -115,11 +87,11 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
           });
         });
       },
-      error: () => { /* unauthenticated users see empty map — acceptable */ },
+      error: () => {},
     });
   }
 
-  fetchCrimes() {
+  fetchCrimes(): void {
     this.loading = true;
     this.crimeService.getAllCrimes().subscribe({
       next: (data: any) => {
@@ -129,7 +101,7 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
           subtitle: crime.crimeType + ' - Reported',
           location: crime.location,
           time: new Date(crime.createdAt).toLocaleString(),
-          viewers: Math.floor(Math.random() * 200) + 50, // optional demo
+          viewers: Math.floor(Math.random() * 200) + 50,
           icon: crime.crimeType === 'theft' ? '🚨' : '🏠',
           description: crime.description,
           type: crime.crimeType?.toLowerCase().trim()
@@ -137,41 +109,33 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
         this.loading = false;
         this.cdr.markForCheck();
       },
-      error: (err) => {
-        console.error('Failed to fetch crimes', err);
+      error: () => {
         this.loading = false;
         this.cdr.markForCheck();
       }
     });
   }
 
-  setCategory(cat: string) {
+  setCategory(cat: string): void {
     this.selectedCategory = this.selectedCategory === cat ? '' : cat;
   }
 
-  onSearch() { }
+  onSearch(): void {}
 
-  filteredAlerts() {
-    let filtered = this.alerts.filter(alert => {
-      let matchesCategory = true;
-
-      if (this.selectedCategory === 'Moving') {
-        matchesCategory = alert.type?.toLowerCase() === 'moving';
-      }
-      else if (this.selectedCategory === 'Static') {
-        matchesCategory = alert.type?.toLowerCase() === 'static';
-      }
-
-      const matchesSearch = this.search
-        ? alert.title.toLowerCase().includes(this.search.toLowerCase())
-        : true;
-
-      return matchesCategory && matchesSearch;
-    });
-
-    return filtered.slice(0, this.visibleCount);
+  filteredAlerts(): Alert[] {
+    return this.alerts
+      .filter(alert => {
+        const matchesCategory =
+          !this.selectedCategory ||
+          alert.type?.toLowerCase() === this.selectedCategory.toLowerCase();
+        const matchesSearch = !this.search ||
+          alert.title.toLowerCase().includes(this.search.toLowerCase());
+        return matchesCategory && matchesSearch;
+      })
+      .slice(0, this.visibleCount);
   }
-  showMore() {
+
+  showMore(): void {
     this.visibleCount += 4;
   }
 }

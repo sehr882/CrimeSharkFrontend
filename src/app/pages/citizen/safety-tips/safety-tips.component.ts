@@ -1,170 +1,304 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
+import { FormsModule } from '@angular/forms';
+import { AiService, ChatMessage } from '@app/services/ai.service';
 
 @Component({
   selector: 'app-safety-tips',
   standalone: true,
-  imports: [CommonModule, BackButtonComponent],
+  imports: [CommonModule, FormsModule],
   template: `
-<app-back-button></app-back-button>
+<div class="smart-help-page">
 
-<div class="safety-page">
-
-  <div class="header">
-    <h1>🛡 Safety Intelligence</h1>
-    <p>
-      Stay alert. Stay informed. Stay safe.
-      CrimeShark helps you understand nearby risks and take smarter actions in real time.
-    </p>
+  <div class="chat-header">
+    <div class="chat-header__icon">🤖</div>
+    <div>
+      <h1>Smart Help</h1>
+      <p>Ask about safety in any area — just type a name, keyword, or question</p>
+    </div>
   </div>
 
-  <section>
-    <h2>🔎 By Crime Type</h2>
+  <div class="chat-wrap">
 
-    <div class="tip-section">
-      <h3>🚨 Robbery</h3>
-      <ul>
-        <li>Avoid using mobile phones in high-risk or crowded areas.</li>
-        <li>Stay alert near ATMs, banks, and marketplaces.</li>
-        <li>Walk confidently and stay aware of surroundings.</li>
-        <li>If confronted, do not resist — safety comes first.</li>
-        <li>Report suspicious behavior immediately.</li>
-      </ul>
+    <div class="chat-suggestions">
+      <span>Try:</span>
+      <button *ngFor="let s of suggestions" (click)="sendSuggestion(s)" class="suggestion-pill">
+        {{ s }}
+      </button>
     </div>
 
-    <div class="tip-section">
-      <h3>🏠 Burglary</h3>
-      <ul>
-        <li>Lock doors and windows, even briefly.</li>
-        <li>Use lighting and motion sensors where possible.</li>
-        <li>Avoid sharing travel plans publicly.</li>
-        <li>Inform trusted neighbors when away.</li>
-      </ul>
+    <div class="chat-messages" #chatScroll>
+      <div
+        *ngFor="let msg of messages"
+        [class]="'chat-msg chat-msg--' + msg.role"
+      >{{ msg.content }}</div>
+
+      <div *ngIf="loading" class="chat-msg chat-msg--assistant chat-msg--loading">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      </div>
     </div>
 
-    <div class="tip-section">
-      <h3>💻 Cybercrime</h3>
-      <ul>
-        <li>Never share OTPs or passwords.</li>
-        <li>Avoid unknown links or reward offers.</li>
-        <li>Use strong, unique passwords.</li>
-        <li>Verify online transactions carefully.</li>
-      </ul>
-    </div>
-  </section>
-
-  <section>
-    <h2>📍 Situation Awareness</h2>
-
-    <div class="tip-section">
-      <h3>🌙 Night Travel</h3>
-      <ul>
-        <li>Prefer populated and well-lit routes.</li>
-        <li>Use verified transport services.</li>
-        <li>Inform someone before heading out.</li>
-      </ul>
+    <div class="chat-input-row">
+      <input
+        #inputEl
+        [(ngModel)]="inputText"
+        (keyup.enter)="send()"
+        placeholder="Type an area name or ask a question..."
+        [disabled]="loading"
+        maxlength="300"
+      />
+      <button (click)="send()" [disabled]="loading || !inputText.trim()">
+        <span class="material-icons-outlined">send</span>
+      </button>
     </div>
 
-    <div class="tip-section">
-      <h3>🚶 Walking Alone</h3>
-      <ul>
-        <li>Share live location when possible.</li>
-        <li>Avoid isolated shortcuts.</li>
-        <li>Stay aware of movement around you.</li>
-      </ul>
-    </div>
-  </section>
-
-  <section>
-    <h2>🚑 Emergency Response</h2>
-    <ul class="simple-list">
-      <li>Move to a safe and crowded location.</li>
-      <li>Contact emergency services immediately.</li>
-      <li>Report through CrimeShark with accurate details.</li>
-    </ul>
-  </section>
-
-
+  </div>
 </div>
-`,
+  `,
   styles: [`
-
-.safety-page {
-  padding: 60px 8%;
+.smart-help-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #eef4fb 0%, #dde9f5 100%);
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  color: #1e293b;
+  background: #f4f7fb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px 20px;
+  font-family: Inter, system-ui, sans-serif;
 }
 
-.header {
-  text-align: center;
-  margin-bottom: 60px;
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+  text-align: left;
+
+  &__icon {
+    font-size: 48px;
+    line-height: 1;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 4px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    color: #64748b;
+  }
 }
 
-.header h1 {
-  font-size: 36px;
-  font-weight: 600;
-  color: #0f172a;
-  margin-bottom: 15px;
-  margin-top: -10px
+.chat-wrap {
+  width: 100%;
+  max-width: 720px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 580px;
 }
 
-.header p {
-  font-size: 17px;
-  max-width: 750px;
-  margin: 0 auto;
-  color: #475569;
-  line-height: 1.7;
+.chat-suggestions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 14px 18px;
+  border-bottom: 1px solid #f0f4f8;
+  background: #fafbfc;
+
+  span {
+    font-size: 12px;
+    color: #94a3b8;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
 }
 
-section {
-  margin-bottom: 55px;
+.suggestion-pill {
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  font-size: 12px;
+  color: #4f46e5;
+  cursor: pointer;
+  transition: 0.2s;
+  font-family: inherit;
+
+  &:hover {
+    background: #f0f0ff;
+    border-color: #6366f1;
+  }
 }
 
-h2 {
-  font-size: 24px;
-  margin-bottom: 25px;
-  color: #0f172a;
-  display: inline-block;
-  padding-bottom: 6px;
-  border-bottom: 2px solid #38bdf8;
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scroll-behavior: smooth;
+
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-thumb { background: #e0e8f2; border-radius: 4px; }
 }
 
-.tip-section {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(8px);
-  padding: 20px 25px;
+.chat-msg {
+  padding: 11px 15px;
   border-radius: 14px;
-  margin-bottom: 20px;
-  border: 1px solid rgba(15, 23, 42, 0.05);
-  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.tip-section:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
-}
-
-h3 {
-  font-size: 18px;
-  margin-bottom: 12px;
-  color: #0f172a;
-}
-
-ul {
-  margin-left: 20px;
-}
-
-li {
-  margin-bottom: 8px;
+  font-size: 14px;
   line-height: 1.6;
-  color: #334155;
+  max-width: 80%;
+  word-break: break-word;
+
+  &--user {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+
+  &--assistant {
+    background: #f1f5f9;
+    color: #1e293b;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+  }
+
+  &--loading {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: 14px 18px;
+  }
 }
 
+.chat-input-row {
+  display: flex;
+  gap: 10px;
+  padding: 14px 18px;
+  border-top: 1px solid #f0f4f8;
 
-`]
+  input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid #dde3ec;
+    border-radius: 12px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+
+    &:focus { border-color: #6366f1; }
+    &:disabled { background: #f8f9fa; cursor: not-allowed; }
+  }
+
+  button {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+
+    .material-icons-outlined { font-size: 20px; }
+
+    &:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(79, 70, 229, 0.4);
+    }
+
+    &:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+  }
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #94a3b8;
+  animation: bounce 1.2s infinite ease-in-out;
+
+  &:nth-child(2) { animation-delay: 0.2s; }
+  &:nth-child(3) { animation-delay: 0.4s; }
+}
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40%           { transform: translateY(-6px); }
+}
+  `]
 })
-export class SafetyTipsComponent { }
+export class SafetyTipsComponent {
+
+  @ViewChild('chatScroll') chatScroll!: ElementRef<HTMLDivElement>;
+
+  messages: ChatMessage[] = [
+    { role: 'assistant', content: 'Hi! I\'m your Safety Assistant. Ask me about any area — just type a name like "F-10" or ask "which area is most dangerous?"' }
+  ];
+  inputText = '';
+  loading = false;
+
+  suggestions = ['Safety tips', 'What is the high alert area?', 'Most dangerous area?', 'Safest area?', 'is rawalpindi safe?'];
+
+  constructor(private aiService: AiService, private cdr: ChangeDetectorRef) {}
+
+  sendSuggestion(text: string): void {
+    this.inputText = text;
+    this.send();
+  }
+
+  send(): void {
+    const text = this.inputText.trim();
+    if (!text || this.loading) return;
+
+    this.inputText = '';
+    this.messages = [...this.messages, { role: 'user', content: text }];
+    this.loading = true;
+    this.cdr.detectChanges();
+    this._scrollToBottom();
+
+    const history = this.messages.slice(1, -1);
+
+    this.aiService.chat(text, history).subscribe({
+      next: (res) => {
+        this.messages = [...this.messages, { role: 'assistant', content: res.reply }];
+        this.loading = false;
+        this.cdr.detectChanges();
+        this._scrollToBottom();
+      },
+      error: () => {
+        this.messages = [...this.messages, {
+          role: 'assistant',
+          content: 'Safety service is currently unavailable. Please try again shortly.'
+        }];
+        this.loading = false;
+        this.cdr.detectChanges();
+        this._scrollToBottom();
+      }
+    });
+  }
+
+  private _scrollToBottom(): void {
+    setTimeout(() => {
+      if (this.chatScroll?.nativeElement) {
+        this.chatScroll.nativeElement.scrollTop = this.chatScroll.nativeElement.scrollHeight;
+      }
+    }, 50);
+  }
+}

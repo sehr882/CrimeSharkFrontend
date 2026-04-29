@@ -31,21 +31,6 @@
 
 
     <aside class="left-col">
-      <div class="ai-box">
-
-        <h3>🤖 Check Area Safety</h3>
-
-        <input [(ngModel)]="aiLocation" placeholder="Enter location (e.g. Rawalpindi)" />
-
-        <button (click)="checkSafety()">Check</button>
-
-        <div class="ai-result" *ngIf="aiResult">
-          <p><strong>Risk:</strong> {{ aiResult.risk }}</p>
-          <p><strong>Confidence:</strong> {{ aiResult.confidence }}</p>
-          <p>{{ aiResult.analysis }}</p>
-        </div>
-
-      </div>
       <div class="map-card">
         <div class="map-header">
           <span>Crime Hotzones</span>
