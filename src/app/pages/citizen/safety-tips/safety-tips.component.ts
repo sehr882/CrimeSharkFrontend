@@ -2,12 +2,14 @@ import { Component, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/co
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AiService, ChatMessage } from '@app/services/ai.service';
+import { BackButtonComponent } from '@app/shared/back-button/back-button.component';
 
 @Component({
   selector: 'app-safety-tips',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, BackButtonComponent],
   template: `
+<app-back-button></app-back-button>
 <div class="smart-help-page">
 
   <div class="chat-header">

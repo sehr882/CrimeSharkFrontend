@@ -14,38 +14,31 @@ export class BackButtonComponent {
   constructor(private router: Router) { }
 
   goBack() {
-    const currentUrl = this.router.url;
+    const url = this.router.url.split('?')[0];
 
-    if (currentUrl.startsWith('/authority')) {
-
-      if (currentUrl === '/authority') {
+    if (url.startsWith('/authority')) {
+      if (url === '/authority') {
         this.router.navigate(['/']);
-      }
-      else {
+      } else if (/^\/authority\/reports\/.+/.test(url)) {
+        this.router.navigate(['/authority/reports']);
+      } else if (url.startsWith('/authority/add-officer')) {
+        this.router.navigate(['/authority/officers']);
+      } else {
         this.router.navigate(['/authority']);
       }
-    }
-    else if (currentUrl.startsWith('/officer')) {
-
-      if (currentUrl === '/officer') {
+    } else if (url.startsWith('/officer')) {
+      if (url === '/officer') {
         this.router.navigate(['/']);
       } else {
         this.router.navigate(['/officer']);
       }
-    }
-
-    else if (currentUrl.startsWith('/citizen')) {
-
-      if (currentUrl === '/citizen') {
+    } else if (url.startsWith('/citizen')) {
+      if (url === '/citizen') {
         this.router.navigate(['/']);
-      }
-      else {
+      } else {
         this.router.navigate(['/citizen']);
       }
-    }
-
-
-    else {
+    } else {
       this.router.navigate(['/']);
     }
   }
