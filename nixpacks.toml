@@ -1,0 +1,13 @@
+# Force Nixpacks to use the Node provider only.
+# Without this, Nixpacks auto-detects Angular and tries to serve /app/browser
+# as a static site — but this app is SSR (Node server), so that path doesn't exist.
+providers = ["node"]
+
+[phases.install]
+cmds = ["npm ci"]
+
+[phases.build]
+cmds = ["npm run build"]
+
+[start]
+cmd = "npm run serve:ssr:crime-shark-frontend"
