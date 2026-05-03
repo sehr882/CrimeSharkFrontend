@@ -40,7 +40,9 @@
               "entry": "src/server.ts"
             },
             "allowedCommonJsDependencies": [
-              "leaflet"
+              "leaflet",
+              "debug",
+              "xmlhttprequest-ssl"
             ]
           },
           "configurations": {
@@ -59,8 +61,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "8kB",
+                  "maximumError": "16kB"
                 }
               ],
               "outputHashing": "all"

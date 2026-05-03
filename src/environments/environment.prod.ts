@@ -1,6 +1,5 @@
 export const environment = {
   production: true,
-  // Set this to your production API URL, e.g. 'https://api.crimeshark.com'
-  // Leave empty string if frontend and backend share the same origin (reverse proxy)
-  apiUrl: '',
+  // Backend's public Railway URL. Update after deploying the backend service.
+  apiUrl: 'https://empowering-adaptation-production.up.railway.app',
 };
