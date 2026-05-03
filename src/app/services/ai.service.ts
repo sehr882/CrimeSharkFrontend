@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface ChatMessage {
   role: 'user' | 'assistant';
@@ -16,15 +17,16 @@ export interface ChatResponse {
 })
 export class AiService {
 
-  private readonly baseUrl = 'http://127.0.0.1:8000';
+  private readonly baseUrl = environment.aiUrl;
+  private readonly headers = new HttpHeaders({ 'ngrok-skip-browser-warning': 'true' });
 
   constructor(private http: HttpClient) {}
 
   checkSafety(location: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/predict`, { location });
+    return this.http.post(`${this.baseUrl}/predict`, { location }, { headers: this.headers });
   }
 
   chat(message: string, history: ChatMessage[]): Observable<ChatResponse> {
-    return this.http.post<ChatResponse>(`${this.baseUrl}/chat`, { message, history });
+    return this.http.post<ChatResponse>(`${this.baseUrl}/chat`, { message, history }, { headers: this.headers });
   }
 }
