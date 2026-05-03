@@ -1,64 +1,99 @@
 <app-back-button></app-back-button>
 <main class="content">
 
-  <div class="welcome-banner">
+  <section class="welcome-banner">
     <div class="welcome-left">
       <img src="assets/cs-officer.png" alt="Officer" class="officer-img" />
     </div>
 
     <div class="welcome-right">
-      <h1>Welcome, Officer</h1>
-      <p>CrimeShark Authority Control Panel</p>
-      <span class="tagline">Stay alert. Serve with integrity.</span>
+      <span class="eyebrow">
+        <span class="material-icons-outlined">verified_user</span>
+        Authority Control Panel
+      </span>
+      <h1>Welcome back, Officer</h1>
+      <p class="tagline">Stay alert. Serve with integrity.</p>
     </div>
-  </div>
+  </section>
 
-  <div class="stats-grid">
+  <section class="stats-grid">
 
     <div class="stat-card total">
-      <h3>Total Reports</h3>
-      <p class="value">{{ totalReports }}</p>
+      <div class="stat-icon">
+        <span class="material-icons-outlined">summarize</span>
+      </div>
+      <div class="stat-body">
+        <h3>Total Reports</h3>
+        <p class="value">{{ totalReports }}</p>
+        <span class="stat-meta">All time submissions</span>
+      </div>
     </div>
 
     <div class="stat-card pending">
-      <h3>Pending Cases</h3>
-      <p class="value">{{ pendingReports }}</p>
+      <div class="stat-icon">
+        <span class="material-icons-outlined">hourglass_top</span>
+      </div>
+      <div class="stat-body">
+        <h3>Pending Cases</h3>
+        <p class="value">{{ pendingReports }}</p>
+        <span class="stat-meta">Awaiting action</span>
+      </div>
     </div>
 
     <div class="stat-card resolved">
-      <h3>Resolved Cases</h3>
-      <p class="value">{{ resolvedReports }}</p>
+      <div class="stat-icon">
+        <span class="material-icons-outlined">verified</span>
+      </div>
+      <div class="stat-body">
+        <h3>Resolved Cases</h3>
+        <p class="value">{{ resolvedReports }}</p>
+        <span class="stat-meta">Closed and verified</span>
+      </div>
     </div>
 
-  </div>
+  </section>
 
-  <div class="table-container">
-    <h2>Recently Reported Crimes</h2>
+  <section class="table-container">
+    <header class="table-header">
+      <div>
+        <h2>Recently Reported Crimes</h2>
+        <p>Latest submissions from the public, ordered by report time.</p>
+      </div>
+      <span class="row-count" *ngIf="recentReports.length">
+        {{ recentReports.length }} entries
+      </span>
+    </header>
 
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Type</th>
-          <th>Location</th>
-          <th>Status</th>
-        </tr>
-      </thead>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Location</th>
+            <th>Status</th>
+          </tr>
+        </thead>
 
-      <tbody>
-        <tr *ngFor="let report of recentReports">
-          <td>{{ report.id }}</td>
-          <td>{{ report.type }}</td>
-          <td>{{ report.location }}</td>
-          <td>
-            <span class="status-badge" [ngClass]="getStatusClass(report.status)">
-              {{ report.status }}
-            </span>
-          </td>
-        </tr>
-      </tbody>
+        <tbody>
+          <tr *ngFor="let report of recentReports">
+            <td class="mono">{{ report.id }}</td>
+            <td><span class="type-pill">{{ report.type }}</span></td>
+            <td>{{ report.location }}</td>
+            <td>
+              <span class="status-badge" [ngClass]="getStatusClass(report.status)">
+                {{ report.status }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-    </table>
-  </div>
+      <div class="empty-state" *ngIf="!recentReports.length">
+        <span class="material-icons-outlined">inbox</span>
+        <p>No recent reports yet.</p>
+      </div>
+    </div>
+  </section>
 
 </main>

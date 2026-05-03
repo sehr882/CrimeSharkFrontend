@@ -1,18 +1,30 @@
-<div class="navbar">
+<aside class="navbar">
 
-  <div class="logo">
-    <img src="assets/cs-logo.png" class="logo-img" />
-    <span class="logo-text">CrimeShark</span>
+  <!-- Brand -->
+  <a [routerLink]="homeLink()" class="brand">
+    <img src="assets/cs-logo.png" class="brand-logo" alt="CrimeShark" />
+    <span class="brand-name">CrimeShark</span>
+  </a>
+
+  <!-- Status pill — signals authority/control panel -->
+  <div class="status-pill">
+    <span class="pulse-dot"></span>
+    {{ isSuperAdmin() ? 'Admin Console' : 'Officer Console' }}
   </div>
+
+  <!-- Section label -->
+  <p class="section-label">Menu</p>
 
   <nav class="menu">
 
     <a [routerLink]="homeLink()" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-      <span class="material-icons-outlined">dashboard</span>Home
+      <span class="material-icons-outlined">dashboard</span>
+      Home
     </a>
 
     <a [routerLink]="reportsLink()" routerLinkActive="active">
-      <span class="material-icons-outlined">report</span>Reports Management
+      <span class="material-icons-outlined">report</span>
+      Reports Management
     </a>
 
     <a [routerLink]="casesLink()" routerLinkActive="active">
@@ -26,17 +38,26 @@
     </a>
 
   </nav>
-  <button class="logout-btn" (click)="logout()">
-    <span class="material-icons-outlined">logout</span>
-    Logout
-  </button>
 
-  <div class="user-info">
-    <span class="material-icons-outlined">account_circle</span>
-    <div>
-      <p class="user-name">{{ userName() }}</p>
-      <p class="user-role">{{ userRole() }}</p>
+  <!-- Bottom: account + logout -->
+  <div class="bottom">
+    <p class="section-label">Account</p>
+
+    <div class="user-card">
+      <div class="user-avatar">
+        {{ (userName() || '?').charAt(0).toUpperCase() }}
+      </div>
+
+      <div class="user-info">
+        <span class="user-name" [title]="userName()">{{ userName() }}</span>
+        <span class="user-role">{{ userRole() }}</span>
+      </div>
     </div>
+
+    <button class="logout-btn" (click)="logout()">
+      <span class="material-icons-outlined">logout</span>
+      Sign out
+    </button>
   </div>
 
-</div>
+</aside>
