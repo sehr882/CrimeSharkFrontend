@@ -2,72 +2,130 @@
 
 <div class="officer-container">
 
-  <div *ngIf="role === 'ADMIN'">
+  <!-- ADMIN VIEW -->
+  <ng-container *ngIf="role === 'ADMIN'">
 
-    <div class="header-row">
-      <h2 class="page-title">Officer Management</h2>
+    <header class="page-header">
+      <div>
+        <h2 class="page-title">Officer Management</h2>
+        <p class="page-sub">Manage your station officers and their assignments.</p>
+      </div>
 
       <button type="button" class="add-btn" routerLink="/authority/add-officer">
-        + Add Officer
+        <span class="material-icons-outlined">person_add</span>
+        Add Officer
       </button>
+    </header>
+
+    <div class="meta-row" *ngIf="officers.length > 0">
+      <span class="count-pill">
+        {{ officers.length }} officer{{ officers.length === 1 ? '' : 's' }}
+      </span>
     </div>
 
     <div *ngIf="officers.length === 0" class="empty-state">
+      <span class="material-icons-outlined">groups</span>
       <p>No officers added yet.</p>
+      <button type="button" class="add-btn ghost" routerLink="/authority/add-officer">
+        Add your first officer
+      </button>
     </div>
 
     <div class="officer-grid" *ngIf="officers.length > 0">
 
-      <div class="officer-card" *ngFor="let officer of officers">
+      <article class="officer-card" *ngFor="let officer of officers">
 
-        <h3>{{ officer.name }}</h3>
+        <header class="card-header">
+          <div class="avatar">
+            {{ (officer.name || '?').charAt(0).toUpperCase() }}
+          </div>
 
-        <p><strong>Rank:</strong> {{ officer.rank }}</p>
-        <p><strong>Station:</strong> {{ officer.station }}</p>
+          <div class="identity">
+            <h3 [title]="officer.name">{{ officer.name }}</h3>
+            <span class="rank">{{ officer.rank || 'No rank assigned' }}</span>
+          </div>
 
-        <p>
-          <strong>Status:</strong>
-          <span [ngClass]="{
+          <span class="status-badge"
+            [ngClass]="{
               'active': officer.status === 'Active',
               'suspended': officer.status === 'Suspended'
             }">
+            <span class="status-dot"></span>
             {{ officer.status }}
           </span>
-        </p>
+        </header>
 
-        <div class="actions">
-          <button (click)="editOfficer(officer)">Edit</button>
-        </div>
+        <ul class="detail-list">
+          <li>
+            <span class="material-icons-outlined">apartment</span>
+            <div>
+              <span class="label">Station</span>
+              <span class="value">{{ officer.station || '—' }}</span>
+            </div>
+          </li>
+        </ul>
 
-      </div>
+        <footer class="card-footer">
+          <button type="button" class="edit-btn" (click)="editOfficer(officer)">
+            <span class="material-icons-outlined">edit</span>
+            Edit
+          </button>
+        </footer>
+
+      </article>
 
     </div>
 
-  </div>
+  </ng-container>
 
 
-  <div *ngIf="role !== 'ADMIN'">
+  <!-- OFFICER VIEW -->
+  <ng-container *ngIf="role !== 'ADMIN'">
 
-    <h2 class="page-title">My Profile</h2>
+    <header class="page-header">
+      <div>
+        <h2 class="page-title">My Profile</h2>
+        <p class="page-sub">Your officer details on file.</p>
+      </div>
+    </header>
 
-    <div *ngIf="profileLoading" class="state-msg">Loading profile...</div>
+    <div *ngIf="profileLoading" class="state-msg">Loading profile…</div>
     <div *ngIf="profileError" class="error-msg">{{ profileError }}</div>
 
-    <div class="profile-card" *ngIf="officerProfile && !profileLoading">
-      <h3>{{ officerProfile.name }}</h3>
-      <p><strong>Rank:</strong> {{ officerProfile.rank }}</p>
-      <p><strong>Station:</strong> {{ officerProfile.station }}</p>
-      <p>
-        <strong>Status:</strong>
-        <span [ngClass]="{
+    <article class="officer-card profile-card" *ngIf="officerProfile && !profileLoading">
+
+      <header class="card-header">
+        <div class="avatar">
+          {{ (officerProfile.name || '?').charAt(0).toUpperCase() }}
+        </div>
+
+        <div class="identity">
+          <h3>{{ officerProfile.name }}</h3>
+          <span class="rank">{{ officerProfile.rank || 'No rank assigned' }}</span>
+        </div>
+
+        <span class="status-badge"
+          [ngClass]="{
             'active': officerProfile.status === 'Active',
             'suspended': officerProfile.status === 'Suspended'
           }">
+          <span class="status-dot"></span>
           {{ officerProfile.status }}
         </span>
-      </p>
-    </div>
+      </header>
 
-  </div>
+      <ul class="detail-list">
+        <li>
+          <span class="material-icons-outlined">apartment</span>
+          <div>
+            <span class="label">Station</span>
+            <span class="value">{{ officerProfile.station || '—' }}</span>
+          </div>
+        </li>
+      </ul>
+
+    </article>
+
+  </ng-container>
 
 </div>
