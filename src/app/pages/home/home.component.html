@@ -11,24 +11,35 @@
       </div>
     </div>
 
-    <button routerLink="/live-alerts" class="map-btn">
+    <div class="nav-actions">
 
-          <svg class="btn-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2">
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        <span>System Live</span>
+      </div>
 
-            <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z"></path>
-            <circle cx="12" cy="10" r="3"></circle>
+      <button routerLink="/live-alerts" class="map-btn">
 
-          </svg>
+        <svg class="btn-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round">
 
-          Open Real Time Safety pulse
+          <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
 
-          <span class="arrow">→</span>
+        </svg>
 
-        </button>
+        <span>Real-Time Safety Pulse</span>
+
+        <span class="arrow">→</span>
+
+      </button>
+
+    </div>
 
   </header>
 
@@ -37,26 +48,49 @@
 
     <div class="hero-content">
 
+      <div class="eyebrow">
+        <span class="eyebrow-dot"></span>
+        Trusted by communities across Pakistan
+      </div>
+
       <h1 class="title">
         Crime Never Sleeps.<br>
         <span>You Stay Alert.</span>
       </h1>
 
       <p class="subtitle">
-        A real-time crime reporting and monitoring system
-        built for citizens and law-enforcement authorities.
+        A real-time crime reporting and monitoring platform built
+        for citizens and law-enforcement authorities — secure,
+        anonymous, and intelligent.
       </p>
 
       <!-- FEATURES -->
       <div class="mini-features">
 
-        <div class="feature-item">🛡 Secure</div>
-        <div class="divider"></div>
+        <div class="feature-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          Secure
+        </div>
 
-        <div class="feature-item">🔒 Anonymous</div>
-        <div class="divider"></div>
+        <div class="feature-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          Anonymous
+        </div>
 
-        <div class="feature-item">⚡ Real-Time</div>
+        <div class="feature-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          Real-Time
+        </div>
 
       </div>
 
@@ -69,14 +103,16 @@
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2">
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round">
 
             <circle cx="12" cy="8" r="4"></circle>
             <path d="M4 21v-1a7 7 0 0 1 14 0v1"></path>
 
           </svg>
 
-          Access Citizen Portal
+          <span>Access Citizen Portal</span>
 
           <span class="arrow">→</span>
 
@@ -92,7 +128,6 @@
 
         </div>
 
-
       </div>
 
     </div>
@@ -104,7 +139,12 @@
 
     <div class="info-card">
 
-      <div class="icon red">🛡</div>
+      <div class="icon icon-red">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+      </div>
 
       <div>
         <h3>Report Anonymously</h3>
@@ -117,7 +157,13 @@
 
     <div class="info-card">
 
-      <div class="icon blue">🔔</div>
+      <div class="icon icon-blue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+      </div>
 
       <div>
         <h3>Real-Time Alerts</h3>
@@ -130,7 +176,14 @@
 
     <div class="info-card">
 
-      <div class="icon blue">📊</div>
+      <div class="icon icon-amber">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10"></line>
+          <line x1="12" y1="20" x2="12" y2="4"></line>
+          <line x1="6" y1="20" x2="6" y2="14"></line>
+        </svg>
+      </div>
 
       <div>
         <h3>Smart Insights</h3>
@@ -143,7 +196,15 @@
 
     <div class="info-card">
 
-      <div class="icon red">👥</div>
+      <div class="icon icon-emerald">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+      </div>
 
       <div>
         <h3>Stronger Together</h3>
@@ -160,7 +221,11 @@
     <div class="footer-line"></div>
 
     <div class="footer-center">
-      🛡 Together for a Safer Pakistan
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      </svg>
+      Together for a Safer Pakistan
     </div>
 
     <div class="footer-line"></div>
