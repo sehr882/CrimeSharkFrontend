@@ -1,48 +1,170 @@
 <div class="home-wrap">
 
+  <!-- NAVBAR -->
   <header class="top-bar">
+
     <div class="logo-area">
-      <img src="assets/cs-logo.png" class="logo-img" alt="CrimeShark Logo">
-      <span class="logo-text">CRIME<span class="logo-accent">SHARK</span></span>
+      <img src="assets/cs-logo-upd.png" class="logo-img" alt="CrimeShark Logo">
+
+      <div class="logo-text">
+        Crime<span class="logo-accent">Shark</span>
+      </div>
     </div>
+
+    <button routerLink="/live-alerts" class="map-btn">
+
+          <svg class="btn-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2">
+
+            <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+
+          </svg>
+
+          Open Real Time Safety pulse
+
+          <span class="arrow">→</span>
+
+        </button>
+
   </header>
 
+  <!-- HERO -->
   <section class="hero-section">
+
     <div class="hero-content">
+
       <h1 class="title">
-        Crime Never Sleeps.<br />
+        Crime Never Sleeps.<br>
         <span>You Stay Alert.</span>
       </h1>
 
       <p class="subtitle">
-        A real-time crime reporting and monitoring system built for citizens and law-enforcement authorities.
+        A real-time crime reporting and monitoring system
+        built for citizens and law-enforcement authorities.
       </p>
 
-      <div class="action-buttons">
-        <button routerLink="/citizen" class="btn citizen-btn">
-          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="8" r="4"></circle>
-            <path d="M4 21v-1a7 7 0 0 1 14 0v1"></path>
-          </svg>
-          Access Citizen Portal
-        </button>
+      <!-- FEATURES -->
+      <div class="mini-features">
 
-        <p class="authority-prompt">
-          Are you an authority?
-          <a routerLink="/authority/login">Login here ›</a>
-        </p>
+        <div class="feature-item">🛡 Secure</div>
+        <div class="divider"></div>
+
+        <div class="feature-item">🔒 Anonymous</div>
+        <div class="divider"></div>
+
+        <div class="feature-item">⚡ Real-Time</div>
+
       </div>
 
-      <a routerLink="/live-alerts" class="live-alerts-link">
-        <span class="pulse-dot"></span>
-        Open Real-Time Safety Pulse
-      </a>
+      <!-- ACTIONS -->
+      <div class="action-area">
+
+        <button routerLink="/citizen" class="citizen-btn">
+
+          <svg class="btn-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2">
+
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 21v-1a7 7 0 0 1 14 0v1"></path>
+
+          </svg>
+
+          Access Citizen Portal
+
+          <span class="arrow">→</span>
+
+        </button>
+
+        <div class="authority-link">
+
+          Are you an authority?
+
+          <a routerLink="/authority/login">
+            Login here →
+          </a>
+
+        </div>
+
+
+      </div>
+
     </div>
+
   </section>
 
+  <!-- INFO STRIP -->
+  <section class="info-strip">
 
+    <div class="info-card">
+
+      <div class="icon red">🛡</div>
+
+      <div>
+        <h3>Report Anonymously</h3>
+        <p>Your identity stays protected.</p>
+      </div>
+
+    </div>
+
+    <div class="strip-divider"></div>
+
+    <div class="info-card">
+
+      <div class="icon blue">🔔</div>
+
+      <div>
+        <h3>Real-Time Alerts</h3>
+        <p>Stay informed, stay safe.</p>
+      </div>
+
+    </div>
+
+    <div class="strip-divider"></div>
+
+    <div class="info-card">
+
+      <div class="icon blue">📊</div>
+
+      <div>
+        <h3>Smart Insights</h3>
+        <p>AI-powered analysis for safer communities.</p>
+      </div>
+
+    </div>
+
+    <div class="strip-divider"></div>
+
+    <div class="info-card">
+
+      <div class="icon red">👥</div>
+
+      <div>
+        <h3>Stronger Together</h3>
+        <p>Helping build a safer Pakistan.</p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
   <footer class="footer">
-    © 2025 CrimeShark — Vigilance. Protection. Trust.
+
+    <div class="footer-line"></div>
+
+    <div class="footer-center">
+      🛡 Together for a Safer Pakistan
+    </div>
+
+    <div class="footer-line"></div>
+
   </footer>
 
 </div>

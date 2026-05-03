@@ -37,6 +37,7 @@ export class AuthorityPortalComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => this.loadDashboardData());
 
+
     this.router.events.pipe(
       filter(e => e instanceof NavigationEnd),
       filter((e: any) => {
@@ -73,6 +74,7 @@ export class AuthorityPortalComponent implements OnInit, OnDestroy {
           c => String(c.status).toUpperCase() === 'RESOLVED'
         ).length;
 
+
         const sorted = [...data].sort((a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
@@ -98,6 +100,7 @@ export class AuthorityPortalComponent implements OnInit, OnDestroy {
   }
 
   getStatusClass(status: string): string {
+
     return status.toLowerCase().replace(/_/g, '-').replace(/ /g, '-');
   }
 }
