@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, AfterViewInit, OnInit, ChangeDetectorRef, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
@@ -7,17 +7,52 @@ import { CrimeService } from '@app/services/crime.service';
 
 declare const google: any;
 
+// Major Pakistani cities scanned for in the raw `location` string.
+// Locations in the DB are messy ("G-13/4 G 13/4 G-13, Pakistan"); a literal
+// last-segment split returns "Pakistan" for every row, which is useless as a
+// filter. This list lets us tag rows with a real city when one is mentioned
+// anywhere in the location text.
+const PK_CITIES: ReadonlyArray<string> = [
+  'Islamabad',
+  'Rawalpindi',
+  'Lahore',
+  'Karachi',
+  'Peshawar',
+  'Quetta',
+  'Multan',
+  'Faisalabad',
+  'Sialkot',
+  'Hyderabad',
+  'Gujranwala',
+];
+
+function extractCity(location: string): string {
+  if (!location) return 'Unknown';
+  const lower = location.toLowerCase();
+  for (const city of PK_CITIES) {
+    if (lower.includes(city.toLowerCase())) return city;
+  }
+  // Fallback: use the segment before the country tag.
+  const segments = location.split(',').map(s => s.trim()).filter(Boolean);
+  if (segments.length >= 2 && segments[segments.length - 1].toLowerCase() === 'pakistan') {
+    return segments[segments.length - 2];
+  }
+  return segments[segments.length - 1] ?? 'Unknown';
+}
+
 interface Alert {
   id: string;
   title: string;
   subtitle: string;
   location: string;
+  city: string;
+  createdAt: number; // epoch ms — used for sort
   time: string;
-  viewers?: number;
-  icon?: string;
-  description?: string;
   type?: string;
+  description?: string;
 }
+
+const PAGE_SIZE = 5;
 
 @Component({
   selector: 'app-citizen-portal',
@@ -39,20 +74,46 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/citizen/live-map']);
   }
 
-  goToReport(): void {
-    if (typeof window !== 'undefined') {
-      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-      this.router.navigate([isLoggedIn ? '/citizen/report' : '/citizen/auth']);
-    }
-  }
-
-  // ── Crime feed ──────────────────────────────────────────────────────────────
-  visibleCount = 4;
-  search = '';
-  selectedCategory = '';
-  categories = ['Moving', 'Static'];
-  alerts: Alert[] = [];
+  // ── Crime feed state ────────────────────────────────────────────────────────
+  // Signals so the template stays purely reactive — sort once on load,
+  // filter + paginate are computed from search/city/page signals.
+  readonly alerts = signal<Alert[]>([]);
+  readonly search = signal('');
+  readonly selectedCity = signal<string>(''); // '' means All
+  readonly page = signal(0);
   loading = true;
+
+  // Up to 8 cities derived from the data — keeps the filter row scannable.
+  readonly cities = computed<string[]>(() => {
+    const set = new Set<string>();
+    for (const a of this.alerts()) {
+      if (a.city) set.add(a.city);
+    }
+    return Array.from(set).sort().slice(0, 8);
+  });
+
+  readonly filteredAlerts = computed<Alert[]>(() => {
+    const term = this.search().trim().toLowerCase();
+    const city = this.selectedCity();
+    return this.alerts().filter(a => {
+      if (city && a.city !== city) return false;
+      if (!term) return true;
+      return (
+        a.title.toLowerCase().includes(term) ||
+        a.location.toLowerCase().includes(term) ||
+        (a.type ?? '').toLowerCase().includes(term)
+      );
+    });
+  });
+
+  readonly totalPages = computed(() =>
+    Math.max(1, Math.ceil(this.filteredAlerts().length / PAGE_SIZE)),
+  );
+
+  readonly pagedAlerts = computed<Alert[]>(() => {
+    const start = this.page() * PAGE_SIZE;
+    return this.filteredAlerts().slice(start, start + PAGE_SIZE);
+  });
 
   ngOnInit(): void {
     this.fetchCrimes();
@@ -76,10 +137,10 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
         points.forEach((point) => {
           if (!point.latitude || !point.longitude) return;
           new google.maps.Circle({
-            strokeColor: '#ff0000',
+            strokeColor: '#dc2626',
             strokeOpacity: 0.8,
             strokeWeight: 1,
-            fillColor: '#ff0000',
+            fillColor: '#ef4444',
             fillOpacity: 0.35,
             map: this.miniMap,
             center: { lat: point.latitude, lng: point.longitude },
@@ -95,17 +156,29 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
     this.loading = true;
     this.crimeService.getAllCrimes().subscribe({
       next: (data: any) => {
-        this.alerts = data.map((crime: any) => ({
-          id: crime._id,
-          title: crime.crimeTitle,
-          subtitle: crime.crimeType + ' - Reported',
-          location: crime.location,
-          time: new Date(crime.createdAt).toLocaleString(),
-          viewers: Math.floor(Math.random() * 200) + 50,
-          icon: crime.crimeType === 'theft' ? '🚨' : '🏠',
-          description: crime.description,
-          type: crime.crimeType?.toLowerCase().trim()
-        }));
+        const mapped: Alert[] = (data ?? []).map((crime: any) => {
+          const created = crime.createdAt
+            ? new Date(crime.createdAt).getTime()
+            : 0;
+          const city = extractCity(crime.location ?? '');
+          return {
+            id: crime._id,
+            title: crime.crimeTitle ?? 'Untitled',
+            subtitle: `${crime.crimeType ?? 'Report'} · Reported`,
+            location: crime.location ?? '',
+            city,
+            createdAt: created,
+            time: created ? new Date(created).toLocaleString() : '',
+            type: crime.crimeType?.toLowerCase().trim(),
+            description: crime.description,
+          };
+        });
+
+        // Newest first.
+        mapped.sort((a, b) => b.createdAt - a.createdAt);
+
+        this.alerts.set(mapped);
+        this.page.set(0);
         this.loading = false;
         this.cdr.markForCheck();
       },
@@ -116,26 +189,26 @@ export class CitizenPortalComponent implements OnInit, AfterViewInit {
     });
   }
 
-  setCategory(cat: string): void {
-    this.selectedCategory = this.selectedCategory === cat ? '' : cat;
+  // ── Filter / pagination actions ─────────────────────────────────────────────
+  setCity(city: string): void {
+    this.selectedCity.set(this.selectedCity() === city ? '' : city);
+    this.page.set(0);
   }
 
-  onSearch(): void {}
-
-  filteredAlerts(): Alert[] {
-    return this.alerts
-      .filter(alert => {
-        const matchesCategory =
-          !this.selectedCategory ||
-          alert.type?.toLowerCase() === this.selectedCategory.toLowerCase();
-        const matchesSearch = !this.search ||
-          alert.title.toLowerCase().includes(this.search.toLowerCase());
-        return matchesCategory && matchesSearch;
-      })
-      .slice(0, this.visibleCount);
+  onSearchInput(value: string): void {
+    this.search.set(value);
+    this.page.set(0);
   }
 
-  showMore(): void {
-    this.visibleCount += 4;
+  prevPage(): void {
+    this.page.update(p => Math.max(0, p - 1));
+  }
+
+  nextPage(): void {
+    this.page.update(p => Math.min(this.totalPages() - 1, p + 1));
+  }
+
+  trackById(_: number, a: Alert): string {
+    return a.id;
   }
 }

@@ -1,10 +1,45 @@
+/* === Design tokens — used across all pages so the app reads as one brand === */
+:root {
+  --cs-accent:        #ef4444;
+  --cs-accent-strong: #dc2626;
+  --cs-accent-soft:   rgba(239, 68, 68, 0.12);
+
+  --cs-surface-dark:    #0b1220;
+  --cs-surface-dark-2:  #101e36;
+  --cs-surface-light:   #f4f7fb;
+  --cs-surface-card:    #ffffff;
+
+  --cs-text-strong:  #0f172a;
+  --cs-text:         #334155;
+  --cs-text-muted:   #64748b;
+
+  --cs-text-inverse: #f1f5f9;
+  --cs-text-inverse-muted: #94a3b8;
+
+  --cs-border-light: rgba(15, 23, 42, 0.08);
+  --cs-border-dark:  rgba(255, 255, 255, 0.08);
+
+  --cs-radius-sm: 8px;
+  --cs-radius:    12px;
+  --cs-radius-lg: 16px;
+
+  --cs-shadow-card: 0 8px 24px rgba(15, 23, 42, 0.06);
+  --cs-shadow-pop:  0 16px 40px rgba(15, 23, 42, 0.10);
+  --cs-shadow-cta:  0 8px 24px rgba(239, 68, 68, 0.30);
+
+  --cs-risk-high:   #ef4444;
+  --cs-risk-medium: #f59e0b;
+  --cs-risk-low:    #22c55e;
+}
+
 #map {
   height: 100vh;
   width: 100%;
 }
 
 * {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
 }
 
 html,
@@ -12,6 +47,55 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
+  background: var(--cs-surface-light);
+  color: var(--cs-text-strong);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* You can add global styles to this file, and also import other style files */
+/* Subtle, themed scrollbars so dark sidebars don't show ugly default ones */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.35);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.55);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* === Shared form bits — used by login/signup and any future form === */
+.form-switch {
+  margin: 18px 0 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--cs-text-muted);
+
+  a {
+    margin-left: 4px;
+    color: var(--cs-accent-strong);
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.form-error {
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--cs-accent-soft);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: var(--cs-accent-strong);
+  font-size: 13px;
+  font-weight: 500;
+}

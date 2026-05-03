@@ -24,15 +24,8 @@ export class AuthComponent {
   isLogin = true;
 
   toggleTab(val: boolean) {
+    // *ngIf already destroys/recreates the inactive form — no flicker hack needed.
     this.isLogin = val;
-
-    // 🔥 force component recreation
-    if (val) {
-      this.isLogin = false;
-      setTimeout(() => {
-        this.isLogin = true;
-      });
-    }
   }
 }
 

@@ -13,8 +13,16 @@
     </div>
 
     <div class="tab-content">
-      <app-login *ngIf="isLogin" [redirectFrom]="redirectFrom"></app-login>
-      <app-signup *ngIf="!isLogin" [redirectFrom]="redirectFrom"></app-signup>
+      <app-login
+        *ngIf="isLogin"
+        [redirectFrom]="redirectFrom"
+        (switchToSignup)="toggleTab(false)"
+      ></app-login>
+      <app-signup
+        *ngIf="!isLogin"
+        [redirectFrom]="redirectFrom"
+        (switchToLogin)="toggleTab(true)"
+      ></app-signup>
     </div>
 
   </div>

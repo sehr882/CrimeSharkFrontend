@@ -27,6 +27,15 @@
     <small class="field-error" *ngIf="f['confirmPassword'].touched && !f['confirmPassword'].errors?.['required'] && form.errors?.['passwordMismatch']">Passwords do not match</small>
   </div>
 
-  <button type="submit" class="btn-signup">Sign Up</button>
+  <p class="form-error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <button type="submit" class="btn-signup" [disabled]="submitting">
+    {{ submitting ? 'Creating account…' : 'Sign Up' }}
+  </button>
+
+  <p class="form-switch">
+    Already have an account?
+    <a (click)="goToLogin()" tabindex="0">Sign in</a>
+  </p>
 
 </form>

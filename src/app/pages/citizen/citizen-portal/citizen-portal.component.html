@@ -2,7 +2,6 @@
 
 <div class="portal-wrap">
 
-
   <section class="hero">
     <div class="hero-text">
       <h1>CrimeShark Safety Grid</h1>
@@ -10,91 +9,111 @@
     </div>
 
     <div class="hero-search">
-      <input [(ngModel)]="search" placeholder="Search crimes..." (keyup.enter)="onSearch()" />
-
-      <button (click)="onSearch()">
+      <input
+        [ngModel]="search()"
+        (ngModelChange)="onSearchInput($event)"
+        placeholder="Search by title, type, or location…"
+      />
+      <button type="button" aria-label="Search">
         <span class="material-icons-outlined">search</span>
       </button>
     </div>
   </section>
 
+  <!-- City filter — auto-derived from the data, capped at 8 -->
+  <section class="categories" *ngIf="cities().length">
+    <button
+      type="button"
+      class="category-pill"
+      [class.active]="selectedCity() === ''"
+      (click)="setCity('')"
+    >
+      All cities
+    </button>
 
-  <section class="categories">
-    <div class="category-pill" *ngFor="let c of categories" [class.active]="selectedCategory === c"
-      (click)="setCategory(c)">
+    <button
+      type="button"
+      class="category-pill"
+      *ngFor="let c of cities()"
+      [class.active]="selectedCity() === c"
+      (click)="setCity(c)"
+    >
       {{ c }}
-    </div>
+    </button>
   </section>
 
-
   <main class="main-grid">
-
 
     <aside class="left-col">
       <div class="map-card">
         <div class="map-header">
           <span>Crime Hotzones</span>
-
-
-          <button class="view-map-btn" (click)="goToLiveMap()">
-            View Full Map
-          </button>
+          <button class="view-map-btn" (click)="goToLiveMap()">View Full Map</button>
         </div>
-
         <div id="mini-map" class="mini-map"></div>
       </div>
     </aside>
 
-    <!-- RIGHT SIDE -->
     <section class="right-col">
 
-      <div class="feed-title">Live Alerts</div>
+      <div class="feed-header">
+        <h3 class="feed-title">Recent Reports</h3>
+        <span class="feed-count" *ngIf="filteredAlerts().length">
+          {{ filteredAlerts().length }} report{{ filteredAlerts().length === 1 ? '' : 's' }}
+        </span>
+      </div>
 
-      <article class="alert-card" *ngFor="let a of filteredAlerts()" [ngClass]="a.type">
-
-
+      <article
+        class="alert-card"
+        *ngFor="let a of pagedAlerts(); trackBy: trackById"
+        [ngClass]="a.type"
+      >
         <div class="alert-icon" [ngClass]="a.type">
-
-
-          <span *ngIf="a.type?.toLowerCase() === 'moving'" class="material-icons-outlined">
-            warning
-          </span>
-
-
-          <span *ngIf="a.type === 'static'" class="material-icons-outlined">
-            report
-          </span>
-
-
-          <span *ngIf="a.type === 'theft'" class="material-icons-outlined">
-            security
-          </span>
-
-
-          <span *ngIf="!a.type" class="material-icons-outlined">
-            warning
-          </span>
-
+          <span class="material-icons-outlined">report</span>
         </div>
 
         <div class="alert-content">
           <div class="alert-header">
             <h4>{{ a.title }}</h4>
           </div>
-
           <div class="alert-sub">{{ a.subtitle }}</div>
-
           <div class="alert-meta">
             <span class="material-icons-outlined">location_on</span>
             {{ a.location }}
           </div>
         </div>
-
       </article>
 
-      <div class="show-more" *ngIf="visibleCount < alerts.length">
-        <button (click)="showMore()">Show More</button>
+      <!-- Empty state -->
+      <div class="feed-empty" *ngIf="!loading && filteredAlerts().length === 0">
+        <span class="material-icons-outlined">inbox</span>
+        <p>No reports match your filters.</p>
       </div>
+
+      <!-- Pagination -->
+      <nav class="pagination" *ngIf="totalPages() > 1" aria-label="Recent reports pagination">
+        <button
+          type="button"
+          class="page-btn"
+          [disabled]="page() === 0"
+          (click)="prevPage()"
+        >
+          <span class="material-icons-outlined">chevron_left</span>
+          Previous
+        </button>
+
+        <span class="page-status">Page {{ page() + 1 }} of {{ totalPages() }}</span>
+
+        <button
+          type="button"
+          class="page-btn"
+          [disabled]="page() >= totalPages() - 1"
+          (click)="nextPage()"
+        >
+          Next
+          <span class="material-icons-outlined">chevron_right</span>
+        </button>
+      </nav>
 
     </section>
 

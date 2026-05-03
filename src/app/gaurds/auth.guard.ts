@@ -1,16 +1,16 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { AuthStore } from '../state/auth.store';
 
 export const authGuard: CanActivateFn = () => {
-  const auth = inject(AuthService);
+  const authStore = inject(AuthStore);
   const router = inject(Router);
 
-  if (auth.isLoggedIn()) {
+  if (authStore.isLoggedIn()) {
     return true;
   }
 
   alert('Please login to report a crime');
-  router.navigate(['/auth']);
+  router.navigate(['/citizen/auth']);
   return false;
 };

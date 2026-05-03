@@ -13,6 +13,13 @@
     <small class="field-error" *ngIf="f['password'].touched && f['password'].errors?.['minlength']">Minimum 6 characters required</small>
   </div>
 
+  <p class="form-error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
   <button type="submit" class="btn-login">Login</button>
+
+  <p class="form-switch">
+    New here?
+    <a (click)="goToSignup()" tabindex="0">Create an account</a>
+  </p>
 
 </form>

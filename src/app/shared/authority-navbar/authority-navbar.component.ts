@@ -1,7 +1,6 @@
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { isPlatformBrowser } from '@angular/common';
-import { Router } from '@angular/router';
+import { Component, computed, inject } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
+import { AuthStore } from '../../state/auth.store';
 
 @Component({
   selector: 'app-authority-navbar',
@@ -10,41 +9,29 @@ import { Router } from '@angular/router';
   templateUrl: './authority-navbar.component.html',
   styleUrls: ['./authority-navbar.component.scss']
 })
-export class AuthorityNavbarComponent implements OnInit {
+export class AuthorityNavbarComponent {
+  private readonly router = inject(Router);
+  private readonly authStore = inject(AuthStore);
 
-  userName = '';
-  userRole = '';
-  isSuperAdmin = false;
+  readonly userName = computed(() => this.authStore.displayName() ?? 'Authority');
+  readonly userRole = computed(
+    () => this.authStore.authority()?.role ?? (this.authStore.isAdmin() ? 'ADMIN' : 'Officer'),
+  );
+  readonly isSuperAdmin = this.authStore.isAdmin;
 
-  homeLink = '/authority';
-  reportsLink = '/authority/reports';
-  casesLink = '/authority/case-assignment';
-  profileLink = '/authority/officers';
-
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private router: Router) { }
+  readonly homeLink = computed(() => (this.isSuperAdmin() ? '/authority' : '/officer'));
+  readonly reportsLink = computed(() =>
+    this.isSuperAdmin() ? '/authority/reports' : '/officer/reports',
+  );
+  readonly casesLink = computed(() =>
+    this.isSuperAdmin() ? '/authority/case-assignment' : '/officer/cases',
+  );
+  readonly profileLink = computed(() =>
+    this.isSuperAdmin() ? '/authority/officers' : '/officer/profile',
+  );
 
   logout() {
+    this.authStore.logout();
     this.router.navigate(['/authority/login']);
-  }
-  ngOnInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      const user = JSON.parse(localStorage.getItem('authority_user') || '{}');
-
-      this.userName = user?.name || 'Authority';
-      this.userRole = user?.role || 'Officer';
-      this.isSuperAdmin = (user?.role ?? '').toUpperCase() === 'ADMIN';
-
-      if (this.isSuperAdmin) {
-        this.homeLink = '/authority';
-        this.reportsLink = '/authority/reports';
-        this.casesLink = '/authority/case-assignment';
-        this.profileLink = '/authority/officers';
-      } else {
-        this.homeLink = '/officer';
-        this.reportsLink = '/officer/reports';
-        this.casesLink = '/officer/cases';
-        this.profileLink = '/officer/profile';
-      }
-    }
   }
 }

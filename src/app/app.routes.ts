@@ -11,6 +11,19 @@ export const routes: Routes = [
   { path: '', component: HomeComponent },
 
   {
+    path: 'live-alerts',
+    component: CitizenLayoutComponent,
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./pages/live-alerts/live-alerts.component')
+            .then(m => m.LiveAlertsComponent)
+      }
+    ]
+  },
+
+  {
     path: 'citizen',
     component: CitizenLayoutComponent,
     children: [

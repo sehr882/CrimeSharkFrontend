@@ -1,0 +1,68 @@
+<div class="live-alerts-page">
+
+  <app-back-button></app-back-button>
+
+  <header class="page-header">
+    <div class="title-block">
+      <h1>Live Crime Alerts</h1>
+    </div>
+
+    <div class="connection-pill" [class.online]="connected()" [class.offline]="!connected()">
+      <span class="dot"></span>
+      {{ connected() ? 'Live' : 'Connecting…' }}
+    </div>
+  </header>
+
+  <section class="risk-summary" *ngIf="hasAlerts()">
+    <div class="risk-chip high">
+      <span class="dot"></span> {{ riskCounts().high }} High
+    </div>
+    <div class="risk-chip medium">
+      <span class="dot"></span> {{ riskCounts().medium }} Medium
+    </div>
+    <div class="risk-chip low">
+      <span class="dot"></span> {{ riskCounts().low }} Low
+    </div>
+  </section>
+
+  <section class="feed" *ngIf="hasAlerts(); else emptyState">
+    <article
+      class="alert-card"
+      *ngFor="let a of alerts(); trackBy: trackById"
+      [attr.data-risk]="a.aiRisk ?? 'unknown'"
+    >
+      <div class="alert-top">
+        <span class="risk-pill" [attr.data-risk]="a.aiRisk ?? 'unknown'">
+          <span class="dot"></span>
+          {{ riskLabel(a.aiRisk) }}
+        </span>
+
+        <span class="time-ago" [title]="a.dateOfCrime">
+          {{ a.dateOfCrime | timeAgo }}
+        </span>
+      </div>
+
+      <h3 class="alert-title">{{ a.crimeTitle }}</h3>
+
+      <p class="alert-meta">
+        <span class="meta-type">{{ a.crimeType }}</span>
+        <span class="meta-sep">·</span>
+        <span class="meta-area">{{ a.area }}, {{ a.city }}</span>
+      </p>
+
+      <p class="alert-analysis" *ngIf="a.aiAnalysis">{{ a.aiAnalysis }}</p>
+
+      <p class="alert-confidence" *ngIf="a.aiConfidence != null">
+        AI assessment · {{ confidencePct(a.aiConfidence) }}
+      </p>
+    </article>
+  </section>
+
+  <ng-template #emptyState>
+    <div class="empty">
+      <span class="empty-icon material-icons-outlined">campaign</span>
+      <p>No active alerts right now. New reports will appear here in real time.</p>
+    </div>
+  </ng-template>
+
+</div>

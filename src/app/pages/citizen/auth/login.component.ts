@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '@app/services/auth.service';
+import { AuthStore } from '@app/state/auth.store';
 
 @Component({
   selector: 'app-login',
@@ -15,14 +15,17 @@ export class LoginComponent implements OnInit {
 
   @Input() redirectFrom: string | null = null;
 
-  form: FormGroup;
+  @Output() switchToSignup = new EventEmitter<void>();
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private route: ActivatedRoute,
-    private authService: AuthService
-  ) {
+  form: FormGroup;
+  errorMessage = '';
+
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly authStore = inject(AuthStore);
+
+  constructor() {
     this.form = this.fb.group({
       username: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]]
@@ -33,33 +36,28 @@ export class LoginComponent implements OnInit {
 
   get f() { return this.form.controls; }
 
+  goToSignup() {
+    this.switchToSignup.emit();
+  }
+
   login() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    // Capture synchronously — form may reset before the async callback fires
-    const username = this.f['username'].value as string;
+    this.errorMessage = '';
 
-    this.authService.login(this.form.value).subscribe({
-      next: (res: any) => {
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('token', res.token);
-          localStorage.removeItem('authority_token'); // prevent stale authority token from shadowing citizen token
-          localStorage.setItem('user', JSON.stringify({
-            username,
-            loginTime: new Date().toISOString()
-          }));
-          localStorage.setItem('isLoggedIn', 'true');
-        }
-        alert('Login successful!');
+    // AuthStore handles token persistence and session shape — components
+    // no longer touch localStorage directly.
+    this.authStore.loginCitizen(this.form.value).subscribe({
+      next: () => {
         this.form.reset();
         this.router.navigate([this.redirectFrom ?? '/citizen']);
       },
       error: err => {
         const msg = err.error?.message;
-        alert(Array.isArray(msg) ? msg.join(', ') : msg || 'Login failed');
+        this.errorMessage = Array.isArray(msg) ? msg.join(', ') : msg || 'Login failed';
       }
     });
   }

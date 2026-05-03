@@ -1,12 +1,22 @@
-<div class="navbar">
+<aside class="navbar">
 
-  <div class="logo">
-    <img src="assets/cs-logo.png" class="logo-img" />
-    <span class="logo-text">CrimeShark</span>
+  <!-- Brand -->
+  <a routerLink="/" class="brand">
+    <img src="assets/cs-logo.png" class="brand-logo" alt="CrimeShark" />
+    <span class="brand-name">CrimeShark</span>
+  </a>
+
+  <!-- Live status badge — signals the app is real-time -->
+  <div class="live-status">
+    <span class="pulse-dot"></span>
+    Live · Public Safety Pulse
   </div>
 
+  <!-- Section label -->
+  <p class="section-label">Menu</p>
+
   <nav class="menu">
-    <a routerLink="/citizen" routerLinkActive="active">
+    <a routerLink="/citizen" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
       <span class="material-icons-outlined">dashboard</span>
       Home
     </a>
@@ -16,42 +26,60 @@
       Hotzones
     </a>
 
+    <a routerLink="/live-alerts" routerLinkActive="active" class="menu-link">
+      <span class="material-icons-outlined">campaign</span>
+      Live Alerts
+      <span class="alert-badge" *ngIf="badgeText()" [attr.aria-label]="unreadCount() + ' new alerts'">
+        {{ badgeText() }}
+      </span>
+    </a>
+
     <a routerLink="/citizen/smart-help" routerLinkActive="active">
       <span class="material-icons-outlined">smart_toy</span>
       Smart Help
     </a>
 
-    <a (click)="goTomyreports()">
+    <a (click)="goTomyreports()" class="menu-link" tabindex="0">
       <span class="material-icons-outlined">history</span>
       My Reports
     </a>
-
   </nav>
 
-  <div class="auth">
-    <a *ngIf="!isLoggedIn" class="login-btn" routerLink="/citizen/auth">
-      Login / Sign Up
-    </a>
+  <!-- Bottom: account + primary CTA -->
+  <div class="bottom">
+    <p class="section-label">Account</p>
 
-    <div *ngIf="isLoggedIn" class="user-section">
+    <ng-container *ngIf="isLoggedIn(); else loggedOut">
+      <div class="user-card">
+        <div class="user-avatar">
+          {{ (loggedInUsername() || '?').charAt(0).toUpperCase() }}
+        </div>
 
-      <div class="user-name">
-        <span class="material-icons-outlined">account_circle</span>
-        {{ loggedInUsername }}
+        <div class="user-info">
+          <span class="user-name" [title]="loggedInUsername() || ''">
+            {{ loggedInUsername() }}
+          </span>
+          <span class="user-role">Citizen</span>
+        </div>
       </div>
 
-      <button class="login-btn logout-btn" (click)="logout()">
+      <button class="logout-btn" (click)="logout()">
         <span class="material-icons-outlined">logout</span>
-        Logout
+        Sign out
       </button>
+    </ng-container>
 
-    </div>
+    <ng-template #loggedOut>
+      <a class="login-btn" routerLink="/citizen/auth">
+        <span class="material-icons-outlined">login</span>
+        Sign in
+      </a>
+    </ng-template>
 
+    <button class="report-btn" (click)="goToReport()">
+      <span class="material-icons-outlined">add_circle</span>
+      Report a Crime
+    </button>
   </div>
 
-  <button class="report-btn" (click)="goToReport()">
-    <span class="material-icons-outlined">add</span>
-    Report a Crime
-  </button>
-
-</div>
+</aside>

@@ -1,0 +1,247 @@
+/* Live Alerts — light theme matching the citizen portal.
+   Sits inside the citizen layout, so the dark sidebar handles branding;
+   this page only owns content. */
+
+.live-alerts-page {
+  min-height: 100vh;
+  background: var(--cs-surface-light);
+  color: var(--cs-text-strong);
+  padding: 24px clamp(20px, 3vw, 36px) 64px;
+  position: relative;
+}
+
+.live-alerts-page::before {
+  content: "";
+  position: absolute;
+  top: -200px;
+  right: -200px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.08), transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 8px 0 18px;
+  position: relative;
+  z-index: 1;
+
+  .title-block h1 {
+    margin: 0;
+    font-size: clamp(26px, 3vw, 34px);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--cs-text-strong);
+  }
+
+  .connection-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    &.online {
+      background: rgba(34, 197, 94, 0.12);
+      color: #15803d;
+      border: 1px solid rgba(34, 197, 94, 0.25);
+
+      .dot {
+        background: #22c55e;
+        box-shadow: 0 0 8px #22c55e;
+        animation: cs-pulse 1.4s infinite;
+      }
+    }
+
+    &.offline {
+      background: rgba(100, 116, 139, 0.12);
+      color: #475569;
+      border: 1px solid rgba(100, 116, 139, 0.2);
+
+      .dot { background: #94a3b8; }
+    }
+  }
+}
+
+.risk-summary {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.risk-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--cs-surface-card);
+  border: 1px solid var(--cs-border-light);
+  color: var(--cs-text);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  &.high   .dot { background: var(--cs-risk-high); }
+  &.medium .dot { background: var(--cs-risk-medium); }
+  &.low    .dot { background: var(--cs-risk-low); }
+}
+
+/* === Feed === */
+.feed {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  position: relative;
+  z-index: 1;
+}
+
+.alert-card {
+  background: var(--cs-surface-card);
+  border: 1px solid var(--cs-border-light);
+  border-left: 4px solid var(--cs-text-muted);
+  border-radius: var(--cs-radius-lg);
+  padding: 16px 18px 14px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--cs-shadow-pop);
+  }
+
+  &[data-risk="high"]    { border-left-color: var(--cs-risk-high); }
+  &[data-risk="medium"]  { border-left-color: var(--cs-risk-medium); }
+  &[data-risk="low"]     { border-left-color: var(--cs-risk-low); }
+  &[data-risk="unknown"] { border-left-color: #94a3b8; }
+}
+
+.alert-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.risk-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  &[data-risk="high"]    { background: rgba(239, 68, 68, 0.12); color: #b91c1c; .dot { background: var(--cs-risk-high); } }
+  &[data-risk="medium"]  { background: rgba(245, 158, 11, 0.12); color: #b45309; .dot { background: var(--cs-risk-medium); } }
+  &[data-risk="low"]     { background: rgba(34, 197, 94, 0.12); color: #15803d; .dot { background: var(--cs-risk-low); } }
+  &[data-risk="unknown"] { background: rgba(100, 116, 139, 0.12); color: #475569; .dot { background: #94a3b8; } }
+}
+
+.time-ago {
+  color: var(--cs-text-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.alert-title {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cs-text-strong);
+}
+
+.alert-meta {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: var(--cs-text-muted);
+
+  .meta-type {
+    color: var(--cs-text);
+    font-weight: 600;
+  }
+
+  .meta-sep {
+    margin: 0 6px;
+    opacity: 0.5;
+  }
+}
+
+.alert-analysis {
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--cs-text);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.alert-confidence {
+  margin: 0;
+  font-size: 11px;
+  color: var(--cs-text-muted);
+  letter-spacing: 0.2px;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 64px 20px;
+  background: var(--cs-surface-card);
+  border: 1px dashed var(--cs-border-light);
+  border-radius: var(--cs-radius-lg);
+  color: var(--cs-text-muted);
+  position: relative;
+  z-index: 1;
+
+  .empty-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    opacity: 0.5;
+  }
+
+  p {
+    max-width: 420px;
+    font-size: 14px;
+  }
+}
+
+@keyframes cs-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.55; transform: scale(1.4); }
+}

@@ -3,7 +3,7 @@
   <header class="top-bar">
     <div class="logo-area">
       <img src="assets/cs-logo.png" class="logo-img" alt="CrimeShark Logo">
-      <span class="logo-text">CrimeShark</span>
+      <span class="logo-text">CRIME<span class="logo-accent">SHARK</span></span>
     </div>
   </header>
 
@@ -20,13 +20,23 @@
 
       <div class="action-buttons">
         <button routerLink="/citizen" class="btn citizen-btn">
-          Continue as Citizen
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 21v-1a7 7 0 0 1 14 0v1"></path>
+          </svg>
+          Access Citizen Portal
         </button>
 
-        <button routerLink="/authority/login" class="btn authority-btn">
-          Authority Access
-        </button>
+        <p class="authority-prompt">
+          Are you an authority?
+          <a routerLink="/authority/login">Login here ›</a>
+        </p>
       </div>
+
+      <a routerLink="/live-alerts" class="live-alerts-link">
+        <span class="pulse-dot"></span>
+        Open Real-Time Safety Pulse
+      </a>
     </div>
   </section>
 
